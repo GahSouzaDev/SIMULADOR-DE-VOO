@@ -1,11 +1,96 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gah Souza Games</title>
+
+    <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
-    
+    <header>
+        <div class="container">
+
+            <div id="titulo">
+                <img src="logo-removebg-preview-removebg-preview001.png" alt="Logo do site" class="logo">
+                <a href="#home" id="inicio">
+                    <h1>Gah Souza Games</h1>
+                </a>
+            </div>
+
+            <nav>
+                <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
+                <ul id="menu" class="menu">                    
+                    
+                    <li><a href="#content">Jogo 1</a></li>
+                    <li><a href="#content reverse">Jogo 2</a></li>
+                    <li><a href="#jogo 3">Jogo 3</a></li>
+                    <li><a href="#jogo 4">Jogo 4</a></li>
+                    <li><a href="#contact" id="contato-nav">Contato</a></li>
+                    
+                </ul>
+            </nav>
+
+        </div>
+
+    </header>
+
+    <main>      
+        
+        <div class="container1">
+            <!-- Primeira div: Imagem à direita, texto à esquerda -->
+            <section class="content">
+                <div class="text">
+                    <h2>Título 1</h2>
+                    <p>Este é o texto da primeira seção. A imagem está posicionada à direita.</p>
+                </div>
+                <div class="image">
+                    <img src="imagem1.jpg" alt="Imagem 1">
+                </div>
+            </section>
+        
+            <!-- Segunda div: Imagem à esquerda, texto à direita -->
+            <section class="content reverse">
+                <div class="image">
+                    <img src="imagem2.jpg" alt="Imagem 2">
+                </div>
+                <div class="text">
+                    <h2>Título 2</h2>
+                    <p>Este é o texto da segunda seção. A imagem está posicionada à esquerda.</p>
+                </div>
+            </section>
+        </div>
+        
+        
+        <section id="contact">
+
+            <h2>Contato</h2>
+            <form id="form">
+                
+                <label for="from_name">Nome:</label>
+                <input type="text" placeholder="Seu Nome" id="from_name" name="from_name" required>
+                
+                <label for="email_id">Email:</label>
+                <input type="email" id="email_id" placeholder="Seu Email" name="email_id" required>
+                
+                <label for="mensagem">Mensagem:</label>
+                <textarea id="mensagem" placeholder="Como posso ajudar?" name="mensagem"></textarea>               
+                
+                <button type="submit" id="button">Enviar</button>
+            </form>            
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Gah Souza Games. Todos os direitos reservados.</p>
+    </footer>
+    <script src="script.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+      
+      <script type="text/javascript">
+        emailjs.init('NQZvwCNXkOscBas-G')
+      </script>
 </body>
 </html>

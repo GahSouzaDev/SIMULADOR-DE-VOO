@@ -1,0 +1,313 @@
+/* Reset básico e box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    --cor1: #F2059F;
+    --cor2: #0E0D40;
+    --cor3: #30D98A;
+    --cor4: #F2B705;
+    --cor5: #F28705;
+    --cor6: #ffffff;
+    --cor7: #000000;
+}
+#inicio{
+    text-decoration: none;
+    color: var(--cor4);
+}
+
+/* Estilização geral do corpo */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilização do cabeçalho fixo */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--cor2);
+    color: var(--cor6);
+    padding: 15px 20px;
+    z-index: 1000;
+}
+
+/* Container para centralizar itens no cabeçalho */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--cor4);
+}
+
+/* Estilização da logo */
+.logo {
+    width: 50px; /* Ajuste o tamanho da logo conforme necessário */
+    height: auto;
+    margin-right: 10px; /* Espaçamento entre a logo e o título */
+    vertical-align: middle; /* Alinha verticalmente com o título */
+}
+
+/* Estilização do título */
+h1 {
+    font-size: 24px;
+}
+
+/* Estilização do menu de navegação */
+nav {
+    position: relative;    
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: var(--cor4);
+}
+
+.menu {
+    list-style: none;
+    display: flex;    
+}
+
+.menu li {
+    margin-left: 20px;
+}
+
+.menu a {
+    color: var(--cor6);
+    text-decoration: none;
+    font-size: 18px;
+    color: var(--cor4);
+}
+
+/* Estilização das seções */
+.section {
+    margin-top: 100px;
+    padding: 20px;
+}
+
+/* Estilização específica das seções Sobre e Contato */
+#sobre, #contato {
+    padding: 40px;
+    background-color: var(--cor6);
+    border-radius: 8px;
+    margin: 20px auto; /* Centraliza horizontalmente */
+}
+
+/* Estilização do formulário de contato */
+#form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px; /* Define a largura máxima do formulário */
+    background-color: var(--cor6);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* Centraliza horizontalmente */
+    color: var(--cor4);
+}
+
+/* Estilização dos rótulos (labels) */
+#form label {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+/* Estilização dos inputs e textarea */
+#form input,
+#form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--cor6);
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Garante que padding seja incluído na largura */
+}
+
+/* Estilização do botão */
+#button {
+    background-color: var(--cor4);
+    color: var(--cor6);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+}
+
+#button:hover {
+    background-color: var(--cor5); /* Cor de destaque ao passar o mouse */
+}
+#contact{
+    margin-top: 100px;
+    text-align: center;
+    color: var(--cor5);
+}
+footer{
+    margin-top: 20px;
+    text-align: center;
+}
+#titulo{
+    display: flex; /* Define que os itens dentro serão organizados em linha */
+    justify-content: space-between; /* Espaça os itens com espaço igual entre eles */
+    align-items: center; /* Alinha os itens verticalmente no centro */
+}
+
+#contato-nav{
+    color: var(--cor5);
+}
+#portfolio {
+    padding: 20px;
+    background-color: var(--cor8);
+    border-radius: 8px;
+}
+
+.portfolio-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.portfolio-item .portfolio-text, 
+.portfolio-item .portfolio-image {
+    flex: 1;
+    padding: 10px;
+}
+
+.portfolio-item .portfolio-image {
+    text-align: right;
+}
+
+.portfolio-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.portfolio-item.reversed {
+    flex-direction: row-reverse;
+}
+
+.portfolio-item.reversed .portfolio-text {
+    text-align: left;
+}
+
+.portfolio-item.reversed .portfolio-image {
+    text-align: left;
+}
+/* Estilo para o container */
+.container1 {
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Espaço entre as divs */
+    margin: 150px 0 0 0;
+}
+
+/* Estilo padrão para as divs de conteúdo */
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Estilo para o texto */
+.text {
+    flex: 1;
+    padding: 20px;
+}
+
+.text h2 {
+    margin-bottom: 10px;
+}
+
+/* Estilo para as imagens */
+.image {
+    flex: 1;
+    text-align: center;
+}
+
+.image img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Para inverter a ordem das divs (imagem à esquerda, texto à direita) */
+.reverse {
+    flex-direction: row-reverse;
+}
+
+
+
+
+/* Menu hamburguer para telas pequenas */
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .reverse {
+        flex-direction: column; /* Mantém a ordem das divs no mobile */
+    }
+
+    .text {
+        text-align: center;
+    }
+    .menu-toggle {
+        display: block;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--cor7);
+        width: 200px;
+        max-height: 0; /* Inicialmente escondido */
+        overflow: hidden;
+        transition: max-height 0.5s ease-out; /* Transição suave */
+    }
+
+    .menu.expanded {
+        max-height: 500px; /* Ajuste conforme necessário */
+    }
+
+    .menu li {
+        margin: 0;
+        padding: 10px 20px;
+        border-top: 1px solid var(--cor2);
+    }
+    
+    .menu a {
+        color: var(--cor6);
+        text-align: left;
+    }
+}
+
+
+/* Ajustes para telas menores */
+@media (max-width: 600px) {
+    #form {
+        padding: 15px;
+    }
+
+    #form input,
+    #form textarea {
+        padding: 8px;
+    }
+
+    #button {
+        padding: 10px;
+    }
+    
+}
