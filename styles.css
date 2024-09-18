@@ -269,6 +269,7 @@ footer {
 #img-jogo1-mobile, #aprensetacao-mobile {
     display: none;
 }
+
 /* Ajustes de layout para telas menores */
 @media screen and (max-width: 768px) {
     .jogo {
@@ -291,6 +292,7 @@ footer {
     #img-jogo1-mobile, #aprensetacao-mobile {
         display: block;
     }  
+    
 
     /* Menu mobile */
     
