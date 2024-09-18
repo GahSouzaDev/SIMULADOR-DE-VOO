@@ -16,8 +16,7 @@
 #principal {
     font-family: Arial, sans-serif;
     text-align: center;    
-    
-    padding: 50px;       
+         
 }
 legend{
     color: var(--cor5);
@@ -79,7 +78,7 @@ input[type="text"], input[type="button"] {
 }
 #jogadores {
     width: 320px;
-    margin:  auto;
+    margin: auto;
     padding: 20px;
     border: 2px solid var(--cor1);
     margin-top: 100px;
