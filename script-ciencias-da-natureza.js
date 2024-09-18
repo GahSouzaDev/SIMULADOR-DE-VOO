@@ -8,9 +8,9 @@ let perguntas = [
     { pergunta: "Qual é a principal fonte de energia para a Terra?", respostas: ["Vento", "Água", "Carvão", "Sol"], correta: 3 },
 
     { pergunta: "Qual é o maior órgão do corpo humano?", respostas: ["Coração", "Fígado", "Pele", "Pulmão"], correta: 2 },
-
-    { pergunta: "Qual é o processo pelo qual as plantas fazem seu próprio alimento?", respostas: ["Respiração", "Fotossíntese", "Digestão", "Fermentação"], correta: 1 },
-
+      
+    { pergunta: "Qual é o maior oceano do planeta?", respostas: ["Atlântico","Pacífico", "Índico",  "Ártico"], correta: 1 },
+      
     { pergunta: "Qual é o habitat natural dos peixes?", respostas: ["Oceano","Floresta", "Deserto",  "Montanha"], correta: 0 },
 
     { pergunta: "Qual é o gás essencial para a respiração humana?", respostas: ["Oxigênio", "Hidrogênio", "Nitrogênio", "Dióxido de carbono"], correta: 0 },
