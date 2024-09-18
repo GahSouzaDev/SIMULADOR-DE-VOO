@@ -40,7 +40,7 @@ function mostrarPergunta() {
 function verificarResposta(resposta) {
     if (resposta === perguntas[perguntaAtual].correta) {
         document.getElementById('somCerto').play();       
-
+        
         // Adiciona um delay de 1 segundo antes de mostrar a próxima pergunta
         setTimeout(() => {
             perguntaAtual++;
