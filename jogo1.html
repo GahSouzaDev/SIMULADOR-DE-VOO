@@ -1,27 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corrida do Encanador</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="shortcut icon" href="logo-removebg-preview.png" type="image.png">
+    <link rel="stylesheet" href="jogo1.css">
+    <link rel="shortcut icon" href="logo-removebg-preview.png" type="image/png">
 </head>
 <body>
     <header>
         <div class="container">
-
             <div id="titulo">
                 <img src="logo-removebg-preview-removebg-preview001.png" alt="Logo do site" class="logo">
                 <a href="index.html" id="inicio">
                     <h1>Gah Souza Games</h1>
                 </a>
             </div>
-
-            
-
         </div>
+    </header>
+    <main>
+        <section id="jogo">
+            <div class="game-board">
+                <div id="pontuacao"></div>
+                <audio id="jumpSound" src="pulo-jogo.mp3"></audio>
+                <audio id="backgroundMusic" src="musica-jogo.mp3" loop></audio>
+                <audio id="gameOverSound" src="game-over-jogo-som.mp3"></audio>
 
-    
+                <img src="clouds.png" alt="nuvens do jogo" class="clouds1">
+                <img src="clouds.png" alt="nuvens do jogo" class="clouds">
+                <img src="mario.gif" alt="Imagem do personagem" id="personagem">
+                <img src="pipe.png" alt="Imagem tubo jogo" id="pipe">
+                <button id="startButton" class="botaooff"><img src="botao-jogo-inicio.png" alt="Botão iniciar jogo" id="botao-jogo-inicio"></button>
+                <button id="restartButton" class="botaooff"><img src="botao-jogo-reiniciar.png" alt="Botão de reiniciar" id="botao-jogo-reiniciar"></button>
+            </div>
+        </section>
+    </main>
+    <script src="script-jogo1.js"></script>
 </body>
 </html>
