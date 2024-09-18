@@ -5,13 +5,13 @@ const resposta3 = document.getElementById('resposta3');
 const resposta4 = document.getElementById('resposta4');
 
 let perguntas = [
-    { pergunta: "Qual é a principal fonte de energia para a Terra?", respostas: ["Vento", "Água", "Sol", "Carvão"], correta: 2 },
+    { pergunta: "Qual é a principal fonte de energia para a Terra?", respostas: ["Vento", "Água", "Carvão", "Sol"], correta: 3 },
 
     { pergunta: "Qual é o maior órgão do corpo humano?", respostas: ["Coração", "Fígado", "Pele", "Pulmão"], correta: 2 },
 
     { pergunta: "Qual é o processo pelo qual as plantas fazem seu próprio alimento?", respostas: ["Respiração", "Fotossíntese", "Digestão", "Fermentação"], correta: 1 },
 
-    { pergunta: "Qual é o habitat natural dos peixes?", respostas: ["Floresta", "Deserto", "Oceano", "Montanha"], correta: 2 },
+    { pergunta: "Qual é o habitat natural dos peixes?", respostas: ["Oceano","Floresta", "Deserto",  "Montanha"], correta: 0 },
 
     { pergunta: "Qual é o gás essencial para a respiração humana?", respostas: ["Oxigênio", "Hidrogênio", "Nitrogênio", "Dióxido de carbono"], correta: 0 },
 
@@ -19,7 +19,7 @@ let perguntas = [
 
     { pergunta: "Qual é o nome do ciclo que descreve a movimentação da água na Terra?", respostas: ["Ciclo do Carbono", "Ciclo da Água", "Ciclo do Nitrogênio", "Ciclo do Oxigênio"], correta: 1 },
 
-    { pergunta: "Qual é o nome do processo pelo qual os seres vivos se reproduzem?", respostas: ["Metabolismo", "Reprodução", "Fotossíntese", "Respiração"], correta: 1 },
+    { pergunta: "Qual é o nome do processo pelo qual os seres vivos se reproduzem?", respostas: ["Reprodução","Metabolismo",  "Fotossíntese", "Respiração"], correta: 0 },
 
     { pergunta: "Qual é o nome do planeta conhecido como o Planeta Vermelho?", respostas: ["Terra", "Marte", "Júpiter", "Saturno"], correta: 1 },
 

@@ -7,7 +7,7 @@ const resposta4 = document.getElementById('resposta4');
 let perguntas = [
     { pergunta: "Qual é o resultado de 5 + 3?", respostas: ["6", "7", "8", "9"], correta: 2 },
 
-    { pergunta: "Qual é a unidade básica de medida de comprimento no sistema métrico?", respostas: ["Metro", "Litro", "Quilograma", "Segundo"], correta: 0 },
+    { pergunta: "Qual é a unidade básica de medida de comprimento no sistema métrico?", respostas: ["Litro", "Quilograma", "Segundo", "Metro"], correta: 3 },
 
     { pergunta: "Quantos lados tem um triângulo?", respostas: ["3", "4", "5", "6"], correta: 0 },
 
@@ -17,13 +17,13 @@ let perguntas = [
 
     { pergunta: "Quantos segundos há em um minuto?", respostas: ["30", "45", "60", "90"], correta: 2 },
 
-    { pergunta: "Qual é a operação matemática inversa da multiplicação?", respostas: ["Adição", "Subtração", "Divisão", "Potenciação"], correta: 2 },
+    { pergunta: "Qual é a operação matemática inversa da multiplicação?", respostas: ["Divisão","Subtração","Adição", "Potenciação"], correta: 0 },
 
     { pergunta: "Qual é o maior número primo menor que 10?", respostas: ["2", "3", "5", "7"], correta: 3 },
 
     { pergunta: "Qual é a força que nos mantém no chão?", respostas: ["Magnetismo", "Gravidade", "Fricção", "Inércia"], correta: 1 },
 
-    { pergunta: "Qual é o nome do processo pelo qual as plantas produzem seu próprio alimento?", respostas: ["Respiração", "Fotossíntese", "Digestão", "Fermentação"], correta: 1 },
+    { pergunta: "Qual é o nome do processo pelo qual as plantas produzem seu próprio alimento?", respostas: ["Respiração",  "Digestão", "Fermentação", "Fotossíntese"], correta: 3 },
 ];
 
 let perguntaAtual = 0;
@@ -39,11 +39,12 @@ function mostrarPergunta() {
 
 function verificarResposta(resposta) {
     if (resposta === perguntas[perguntaAtual].correta) {
-        document.getElementById('somCerto').play();
+        document.getElementById('somCerto').play();       
 
         // Adiciona um delay de 1 segundo antes de mostrar a próxima pergunta
         setTimeout(() => {
             perguntaAtual++;
+            
             if (perguntaAtual < perguntas.length) {
                 mostrarPergunta();
             } else {

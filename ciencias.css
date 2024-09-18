@@ -21,7 +21,7 @@ body {
 #pergunta {
     font-size: 24px;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     color: var(--cor5);
     
 }
@@ -38,10 +38,13 @@ button {
 button:hover{
     background-color:var(--cor4);
     color: var(--cor7);
+    transition: background-color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out;
 }
+
 footer
 {
-    margin-top: 100px;
+    margin-top: 180px;
 }
 #img-ciencias{
     border-radius: 50%;
@@ -70,3 +73,23 @@ main{
     transition: opacity 0.5s ease-in-out; /* Adiciona uma transição suave */
     padding: 30px;
   }
+  #resposta1:active,#resposta2:active,#resposta3:active,#resposta4:active{
+    
+    background-color: var(--cor1);
+
+  }
+  #resposta1:hover,#resposta2:hover,#resposta3:hover,#resposta4:hover {
+    animation: changeColor 1s forwards;
+}
+
+@keyframes changeColor {
+    0% {
+        
+        background-color:var(--cor4);
+        color: var(--cor7);
+    }
+    100% {
+        background-color:var(--cor2);
+        color: var(--cor4);
+    }
+}
