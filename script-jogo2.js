@@ -22,9 +22,11 @@ function initGame() {
 
     setLabelJogadorAtual();
     document.getElementById('game').style.display = 'block';
+    document.getElementById('jogadores').style.display = 'none';
+    
 }
 
-function setLabelJogadorAtual() {
+function setLabelJogadorAtual() {    
     document.getElementById('jogadorAtual').textContent = 'Jogador atual: ' + jogadorAtual.nome;
 }
 
@@ -66,6 +68,6 @@ function setOnCeil(cel, pos) {
 }
 
 function reset() {
-    window.location.reload();
+    window.location.href='https://gahsouzadev.github.io/JOGOS/jogo2.html'
 }
 
