@@ -13,11 +13,14 @@
     --cor4: #F2B705;
     --cor5: #F28705;
     --cor6: #ffffff;
-    --cor7: #000000;    
+    --cor7: #000000;  
+    --cor8: #ffffff7d;  
+    --cor9: #0e0d40c8;
 }
 
 a {
     text-decoration: none;
+    color: var(--cor2);
 }
 
 
@@ -28,10 +31,16 @@ a {
 }
 
 /* Estilização geral do corpo */
-body {
+#fundo-inicio {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;    
+    background-image: url(fundo.png);
+    background-position: cover;
+    background-repeat: repeat-y; /* Repete a imagem verticalmente */
+    background-attachment: fixed; /* Para o efeito parallax */
+    background-position:  center; /* Alinha à lateral esquerda */
+    
 }
 
 /* Estilização do cabeçalho fixo */
@@ -40,7 +49,7 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: var(--cor2);
+    background-color: var(--cor9);
     color: var(--cor6);
     padding: 15px 20px;
     z-index: 1000;
@@ -59,7 +68,7 @@ header {
 
 /*titulo do home*/
 #titulo-home {
-    margin-bottom: 20px;
+    margin-bottom: 20px;    
 }
 
 /* Container para centralizar itens no cabeçalho */
@@ -135,7 +144,7 @@ nav {
 /* Estilização específica das seções Sobre e Contato */
 #sobre, #contato {
     padding: 40px;
-    background-color: var(--cor6);
+    background-color: var(--cor8);
     border-radius: 8px;
     margin: 20px auto;
 }
@@ -146,7 +155,7 @@ nav {
     flex-direction: column;
     width: 100%;
     max-width: 500px;
-    background-color: var(--cor6);
+    background-color: var(--cor8);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -165,14 +174,14 @@ nav {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid var(--cor6);
+    border: 1px solid var(--cor8);
     border-radius: 5px;
     font-size: 1rem;
     box-sizing: border-box;
 }
 
 #button {
-    background-color: var(--cor4);
+    background-color: var(--cor5);
     color: var(--cor7);
     padding: 12px 20px;
     border: none;
@@ -183,7 +192,8 @@ nav {
 }
 
 #button:hover {
-    background-color: var(--cor5);
+    background-color: var(--cor2);
+    color: var(--cor6);
 }
 
 #contact {
@@ -215,10 +225,11 @@ footer {
     justify-content: space-between;
     margin: 20px;
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--cor6);
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     line-height: 1.5;    
+    background-color: var(--cor8);
 }
 
 .jogo .texto, 
@@ -279,4 +290,21 @@ footer {
     /* Menu mobile */
     
 }
+.intro{
+    font-size: 20px;
+    color: var(--cor7);
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+::-webkit-scrollbar {
+    width: 12px; /* Largura da barra de rolagem */
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cor2); /* Cor do fundo da trilha da barra de rolagem */
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--cor4); /* Cor da parte móvel da barra de rolagem */
+    border-radius: 6px; /* Arredondamento das bordas da parte móvel */
+}
