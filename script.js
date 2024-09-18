@@ -1,7 +1,13 @@
 function toggleMenu() {
     const menu = document.getElementById('menu');
     menu.classList.toggle('expanded');
-}
+  }
+  
+  document.getElementById('menu').addEventListener('click', function(event) {
+    if (event.target.tagName === 'A') {
+      toggleMenu();
+    }
+  });
 
 document.addEventListener('DOMContentLoaded', function() {
     // Seleciona todos os links de navegação

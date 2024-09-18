@@ -26,7 +26,7 @@
                 <ul id="menu" class="menu">                    
                     
                     <li><a href="#home" id="inicio-nav">Inicio</a></li>
-                    <li><a href="#jogo1">Jogo 1</a></li>
+                    <li><a href="#corrida-do-encanador">Corrida do Encanador</a></li>
                     <li><a href="#jogo2">Jogo 2</a></li>
                     <li><a href="#jogo3">Jogo 3</a></li>
                     <li><a href="#jogo4">Jogo 4</a></li>
@@ -43,19 +43,21 @@
              
         <section id="home" >
             <div class="texto">
-                <h1 id="titulo-home">Titulo</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, esse autem? Suscipit dicta voluptate harum perferendis unde quaerat modi repudiandae ipsum incidunt? Officia blanditiis itaque dolores incidunt? Sit, ullam debitis?</p>
+                <h1 id="titulo-home">Gah Souza Games</h1>
+                <p>Aqui você encontrará alguns jogos que desenvolvi utilizando HTML, CSS e JavaScript. Para começar a jogar, basta clicar na imagem do jogo desejado. Ao terminar, clique no logo do site para voltar à página inicial.</p>
             </div>            
         </section> 
+        <section id="corrida-do-encanador"></section>
 
-        <section id="jogo1" class="jogo" onclick='window.location.href="jogo1.html"'>
+        <section id="jogo1" class="jogo" >
 
-            <div class="imagem">
-                <img src="logo.png" alt="Imagem do Jogo 1" >
+            <div class="imagem" onclick='window.location.href="jogo1.html"'>
+                <img src="img-jogo1-mobile.png" id="img-jogo1-mobile" alt="Imagem do Jogo 1" >
+                <img src="img-jogo1-desktop.png" id="img-jogo1-desktop" alt="Imagem do Jogo 1" >
             </div>
 
             <div class="texto">
-                <p> <h1>Descrição do Jogo:</h1> Experimente a emoção de um clássico com um toque moderno! Nesse jogo, um encanador está correndo por uma fase repleta de canos. Sua missão é simples: pular os canos para evitar bater e continuar avançando.</p> <br>
+                <p> <h1>Corrida do Encanador:</h1> Experimente a emoção de um clássico com um toque moderno! Nesse jogo, um encanador está correndo por uma fase repleta de canos. Sua missão é simples: pular os canos para evitar bater e continuar avançando.</p> <br>
                 
                 <h1>Como Jogar?</h1>
                     
@@ -63,13 +65,13 @@
                 <p> <h4>No computador:</h4> Aperte qualquer tecla do teclado para saltar.</p> <br>
                 <p>Conforme você avança, a fase acelera, tornando o jogo cada vez mais desafiador. Teste suas habilidades e veja até onde você consegue ir!</p> <br>
                     
-                <p><h2>Clique aqui para jogar!</h2></p>
+                <p><h2>Clique na imagem para jogar!</h2></p>
             </div>
            
         </section> 
     
-        <section id="jogo2" class="jogo" onclick='window.location.href="jogo2.html"'>
-            <div class="imagem">
+        <section id="jogo2" class="jogo">
+            <div class="imagem" onclick='window.location.href="jogo2.html"'>
                 <img src="logo.png" alt="Imagem do Jogo 2">
             </div>
             <div class="texto">
@@ -77,9 +79,9 @@
             </div>
         </section> 
     
-        <section id="jogo3" class="jogo" onclick="window.location.href='jogo3.html'">
+        <section id="jogo3" class="jogo">
 
-            <div class="imagem">
+            <div class="imagem" onclick='window.location.href="jogo3.html"'>
                 <img src="logo.png" alt="Imagem do Jogo 3">
             </div>
 
@@ -89,8 +91,8 @@
            
         </section> 
     
-        <section id="jogo4" class="jogo" onclick="window.location.href='jogo4.html'">
-            <div class="imagem">
+        <section id="jogo4" class="jogo">
+            <div class="imagem" onclick="window.location.href='jogo4.html'">
                 <img src="logo.png" alt="Imagem do Jogo 4">
             </div>
             <div class="texto">
@@ -117,7 +119,10 @@
         </section>
     </main>
     <footer>
-        <p>&copy; 2024 Gah Souza Games. Todos os direitos reservados.</p>
+        <p>&copy; 2024 Gah Souza Dev. Todos os direitos reservados.</p> <br>
+        <a href="https://gahsouza.com.br/">
+            <p>www.gahsouza.com.br</p>
+        </a>
     </footer>
     <script src="script.js"></script>
     <script type="text/javascript"

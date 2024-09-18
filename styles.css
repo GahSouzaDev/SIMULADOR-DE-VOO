@@ -13,7 +13,7 @@
     --cor4: #F2B705;
     --cor5: #F28705;
     --cor6: #ffffff;
-    --cor7: #000000;
+    --cor7: #000000;    
 }
 
 a {
@@ -29,7 +29,7 @@ a {
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
+    padding: 0;    
 }
 
 /* Estilização do cabeçalho fixo */
@@ -177,6 +177,7 @@ nav {
 footer {
     margin-top: 20px;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 #titulo {
@@ -199,7 +200,7 @@ footer {
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    line-height: 1.5;
+    line-height: 1.5;    
 }
 
 .jogo .texto, 
@@ -231,6 +232,9 @@ footer {
     flex-direction: row;
 }
 
+#img-jogo1-mobile {
+    display: none;
+}
 /* Ajustes de layout para telas menores */
 @media screen and (max-width: 768px) {
     .jogo {
@@ -247,6 +251,12 @@ footer {
     .jogo .texto {
         padding: 10px;
     }
+    #img-jogo1-desktop {
+        display: none;
+    }
+    #img-jogo1-mobile {
+        display: block;
+    }  
 
     /* Menu mobile */
     .menu-toggle {
@@ -280,3 +290,4 @@ footer {
         text-align: left;
     }
 }
+

@@ -23,7 +23,7 @@ body {
     overflow: hidden; /* Garante que não haja rolagem */
 }
 
-#jogo {
+#jogo-encanador {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,14 +61,14 @@ body {
 
 .clouds {
     position: absolute;
-    margin-top: 50px;
+    margin-top: -10px;
     width: 500px;
     animation: clouds 30s infinite linear;
 }
 
 .clouds1 {
     position: absolute;
-    margin-top: 50px;
+    margin-top: -10px;
     width: 750px;
     animation: clouds1 50s infinite linear;
 }
@@ -130,7 +130,7 @@ body {
     transform: translate(-50%, -50%);
     font-size: 48px;
     font-weight: bold;
-    color: black;
+    color: black;    
 }
 
 #restartButton {
@@ -144,4 +144,16 @@ body {
 
 #botao-jogo-inicio, #botao-jogo-reiniciar {
     width: 200px;
+}
+@media screen and (max-width: 768px) {
+
+}
+
+#pontuacao{
+    margin-top: 200px;
+}
+
+button{
+    background: none;
+    border: none;
 }
