@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo 2</title>
+    <title>Jogo da Velha - MULTPLAYER</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="jogo1.css">
+    <link rel="stylesheet" href="jogo2.css">
     <link rel="shortcut icon" href="logo-removebg-preview.png" type="image/png">
 </head>
-<body>
+<body id="inicio">
     <header>
         <div class="container">
             <div id="titulo">
@@ -20,9 +20,45 @@
             
         </div>
     </header>
-    <main>
-        
+    <main id="principal">
+        <fieldset id="jogadores">
+            <legend>Jogadores</legend>
+            <label for="jogador1">Jogador 1:</label>
+            <input type="text" id="jogador1">
+            <label for="jogador2">Jogador 2:</label>
+            <input type="text" id="jogador2">
+            <a href="#iniciar"><input type="button" value="Iniciar" onclick="initGame()" id="iniciar"></a>
+        </fieldset>
+    
+        <h3 id="jogadorAtual"></h3>
+    
+        <div id="game" style="display:none;">
+            <table>
+                <tr>
+                    <td onclick="setOnCeil(this, 0)"></td>
+                    <td onclick="setOnCeil(this, 1)"></td>
+                    <td onclick="setOnCeil(this, 2)"></td>
+                </tr>
+                <tr>
+                    <td onclick="setOnCeil(this, 3)"></td>
+                    <td onclick="setOnCeil(this, 4)"></td>
+                    <td onclick="setOnCeil(this, 5)"></td>
+                </tr>
+                <tr>
+                    <td onclick="setOnCeil(this, 6)"></td>
+                    <td onclick="setOnCeil(this, 7)"></td>
+                    <td onclick="setOnCeil(this, 8)"></td>
+                </tr>
+            </table>
+        </div>
     </main>
+    <footer>
+        <p>&copy; 2024 Gah Souza Dev. Todos os direitos reservados.</p> <br>
+        <a href="https://gahsouza.com.br/">
+            <p>www.gahsouza.com.br</p>
+        </a>
+    </footer>
+<script src="script-jogo2.js"></script>
 
 </body>
 </html>

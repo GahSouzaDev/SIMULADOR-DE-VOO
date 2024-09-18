@@ -1,0 +1,99 @@
+:root {
+    --cor1: #F2059F;
+    --cor2: #0E0D40;
+    --cor3: #30D98A;
+    --cor4: #F2B705;
+    --cor5: #F28705;
+    --cor6: #ffffff;
+    --cor7: #000000;  
+    --cor8: #0e0d40ec;  
+    
+}
+#inicio {
+    display: 100vh;
+    background-color: var(--cor8);
+}
+#principal {
+    font-family: Arial, sans-serif;
+    text-align: center;    
+    
+    padding: 50px;       
+}
+legend{
+    color: var(--cor5);
+    padding: 20px;
+}
+
+#iniciar {
+    background-color: var(--cor4);
+    color: var(--cor7);
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);;
+}
+#iniciar:hover {
+    background-color: var(--cor5);
+  
+}
+
+.logo {
+    width: 50px;
+    vertical-align: middle;
+}
+
+#titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    width: 300px;
+    height: 300px;
+    border-collapse: collapse;
+    margin: 20px auto;
+    
+}
+
+table td {
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--cor5);
+    font-size: 46px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-sizing: border-box;
+    color: var(--cor1);    
+}
+
+table td:hover {
+    background-color: var(--cor5);
+}
+
+input[type="text"], input[type="button"] {
+    padding: 10px;
+    margin: 10px;
+    font-size: 18px;
+}
+#jogadores {
+    width: 320px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid var(--cor1);
+    margin-top: 100px;
+}
+
+#jogadorAtual {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+td:empty {
+    background-color: var(--cor4);
+    
+}
+#jogadorAtual{
+    color: var(--cor5);
+}
