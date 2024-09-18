@@ -3,6 +3,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    text-align: center;
+}
+
+:root {
     --cor1: #F2059F;
     --cor2: #0E0D40;
     --cor3: #30D98A;
@@ -11,7 +15,12 @@
     --cor6: #ffffff;
     --cor7: #000000;
 }
-#inicio{
+
+a {
+    text-decoration: none;
+}
+
+#inicio {
     text-decoration: none;
     color: var(--cor4);
 }
@@ -35,6 +44,22 @@ header {
     z-index: 1000;
 }
 
+/*inicio do site*/
+#home {
+    margin-top: 100px;
+    text-align: center;
+    color: var(--cor7);
+    padding: 30px;
+}
+#inicio-nav {
+    color: var(--cor5);
+}
+
+/*titulo do home*/
+#titulo-home {
+    margin-bottom: 20px;
+}
+
 /* Container para centralizar itens no cabeçalho */
 .container {
     display: flex;
@@ -45,10 +70,10 @@ header {
 
 /* Estilização da logo */
 .logo {
-    width: 50px; /* Ajuste o tamanho da logo conforme necessário */
+    width: 50px;
     height: auto;
-    margin-right: 10px; /* Espaçamento entre a logo e o título */
-    vertical-align: middle; /* Alinha verticalmente com o título */
+    margin-right: 10px;
+    vertical-align: middle;
 }
 
 /* Estilização do título */
@@ -78,10 +103,9 @@ nav {
 }
 
 .menu a {
-    color: var(--cor6);
+    color: var(--cor4);
     text-decoration: none;
     font-size: 18px;
-    color: var(--cor4);
 }
 
 /* Estilização das seções */
@@ -95,7 +119,7 @@ nav {
     padding: 40px;
     background-color: var(--cor6);
     border-radius: 8px;
-    margin: 20px auto; /* Centraliza horizontalmente */
+    margin: 20px auto;
 }
 
 /* Estilização do formulário de contato */
@@ -103,23 +127,21 @@ nav {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 500px; /* Define a largura máxima do formulário */
+    max-width: 500px;
     background-color: var(--cor6);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-    margin: 0 auto; /* Centraliza horizontalmente */
-    color: var(--cor4);
+    margin: 0 auto;
+    color: var(--cor2);
 }
 
-/* Estilização dos rótulos (labels) */
 #form label {
     font-size: 1rem;
     margin-bottom: 8px;
     font-weight: bold;
 }
 
-/* Estilização dos inputs e textarea */
 #form input,
 #form textarea {
     width: 100%;
@@ -128,13 +150,12 @@ nav {
     border: 1px solid var(--cor6);
     border-radius: 5px;
     font-size: 1rem;
-    box-sizing: border-box; /* Garante que padding seja incluído na largura */
+    box-sizing: border-box;
 }
 
-/* Estilização do botão */
 #button {
     background-color: var(--cor4);
-    color: var(--cor6);
+    color: var(--cor7);
     padding: 12px 20px;
     border: none;
     border-radius: 5px;
@@ -144,142 +165,108 @@ nav {
 }
 
 #button:hover {
-    background-color: var(--cor5); /* Cor de destaque ao passar o mouse */
+    background-color: var(--cor5);
 }
-#contact{
+
+#contact {
     margin-top: 100px;
     text-align: center;
-    color: var(--cor5);
+    color: var(--cor7);
 }
-footer{
+
+footer {
     margin-top: 20px;
     text-align: center;
 }
-#titulo{
-    display: flex; /* Define que os itens dentro serão organizados em linha */
-    justify-content: space-between; /* Espaça os itens com espaço igual entre eles */
-    align-items: center; /* Alinha os itens verticalmente no centro */
-}
 
-#contato-nav{
-    color: var(--cor5);
-}
-#portfolio {
-    padding: 20px;
-    background-color: var(--cor8);
-    border-radius: 8px;
-}
-
-.portfolio-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.portfolio-item .portfolio-text, 
-.portfolio-item .portfolio-image {
-    flex: 1;
-    padding: 10px;
-}
-
-.portfolio-item .portfolio-image {
-    text-align: right;
-}
-
-.portfolio-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-.portfolio-item.reversed {
-    flex-direction: row-reverse;
-}
-
-.portfolio-item.reversed .portfolio-text {
-    text-align: left;
-}
-
-.portfolio-item.reversed .portfolio-image {
-    text-align: left;
-}
-/* Estilo para o container */
-.container1 {
-    display: flex;
-    flex-direction: column;
-    gap: 40px; /* Espaço entre as divs */
-    margin: 150px 0 0 0;
-}
-
-/* Estilo padrão para as divs de conteúdo */
-.content {
+#titulo {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Estilo para o texto */
-.text {
+#contato-nav {
+    color: var(--cor5);
+}
+
+/* Estilo geral para os jogos */
+.jogo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    line-height: 1.5;
+}
+
+.jogo .texto, 
+.jogo .imagem {
     flex: 1;
+}
+
+.jogo .texto {
     padding: 20px;
 }
 
-.text h2 {
-    margin-bottom: 10px;
+.jogo .imagem {
+    display: flex;
+    justify-content: center;
 }
 
-/* Estilo para as imagens */
-.image {
-    flex: 1;
-    text-align: center;
-}
-
-.image img {
-    max-width: 100%;
+.jogo .imagem img {
+    max-width: 60%;
     height: auto;
+    border-radius: 10px;
 }
 
-/* Para inverter a ordem das divs (imagem à esquerda, texto à direita) */
-.reverse {
+/* Alternância entre texto e imagem */
+#jogo1, #jogo3 {
     flex-direction: row-reverse;
 }
 
+#jogo2, #jogo4 {
+    flex-direction: row;
+}
 
-
-
-/* Menu hamburguer para telas pequenas */
-@media (max-width: 768px) {
-    .content {
+/* Ajustes de layout para telas menores */
+@media screen and (max-width: 768px) {
+    .jogo {
         flex-direction: column;
-        align-items: center;
-    }
-
-    .reverse {
-        flex-direction: column; /* Mantém a ordem das divs no mobile */
-    }
-
-    .text {
         text-align: center;
+        margin: 20px 0;
     }
+
+    .jogo .imagem img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .jogo .texto {
+        padding: 10px;
+    }
+
+    /* Menu mobile */
     .menu-toggle {
         display: block;
     }
 
     .menu {
-        display: flex;
         flex-direction: column;
         position: absolute;
         top: 100%;
         right: 0;
         background-color: var(--cor7);
         width: 200px;
-        max-height: 0; /* Inicialmente escondido */
+        max-height: 0;
         overflow: hidden;
-        transition: max-height 0.5s ease-out; /* Transição suave */
+        transition: max-height 0.5s ease-out;
     }
 
     .menu.expanded {
-        max-height: 500px; /* Ajuste conforme necessário */
+        max-height: 500px;
     }
 
     .menu li {
@@ -287,27 +274,9 @@ footer{
         padding: 10px 20px;
         border-top: 1px solid var(--cor2);
     }
-    
+
     .menu a {
         color: var(--cor6);
         text-align: left;
     }
-}
-
-
-/* Ajustes para telas menores */
-@media (max-width: 600px) {
-    #form {
-        padding: 15px;
-    }
-
-    #form input,
-    #form textarea {
-        padding: 8px;
-    }
-
-    #button {
-        padding: 10px;
-    }
-    
 }

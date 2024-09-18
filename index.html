@@ -7,6 +7,7 @@
     <title>Gah Souza Games</title>
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="logo-removebg-preview.png" type="image.png">
 
 </head>
 <body>
@@ -15,7 +16,7 @@
 
             <div id="titulo">
                 <img src="logo-removebg-preview-removebg-preview001.png" alt="Logo do site" class="logo">
-                <a href="#home" id="inicio">
+                <a href="index.html" id="inicio">
                     <h1>Gah Souza Games</h1>
                 </a>
             </div>
@@ -24,10 +25,11 @@
                 <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
                 <ul id="menu" class="menu">                    
                     
-                    <li><a href="#content">Jogo 1</a></li>
-                    <li><a href="#content reverse">Jogo 2</a></li>
-                    <li><a href="#jogo 3">Jogo 3</a></li>
-                    <li><a href="#jogo 4">Jogo 4</a></li>
+                    <li><a href="#home" id="inicio-nav">Inicio</a></li>
+                    <li><a href="#jogo1">Jogo 1</a></li>
+                    <li><a href="#jogo2">Jogo 2</a></li>
+                    <li><a href="#jogo3">Jogo 3</a></li>
+                    <li><a href="#jogo4">Jogo 4</a></li>
                     <li><a href="#contact" id="contato-nav">Contato</a></li>
                     
                 </ul>
@@ -38,31 +40,63 @@
     </header>
 
     <main>      
-        
-        <div class="container1">
-            <!-- Primeira div: Imagem à direita, texto à esquerda -->
-            <section class="content">
-                <div class="text">
-                    <h2>Título 1</h2>
-                    <p>Este é o texto da primeira seção. A imagem está posicionada à direita.</p>
-                </div>
-                <div class="image">
-                    <img src="imagem1.jpg" alt="Imagem 1">
-                </div>
-            </section>
-        
-            <!-- Segunda div: Imagem à esquerda, texto à direita -->
-            <section class="content reverse">
-                <div class="image">
-                    <img src="imagem2.jpg" alt="Imagem 2">
-                </div>
-                <div class="text">
-                    <h2>Título 2</h2>
-                    <p>Este é o texto da segunda seção. A imagem está posicionada à esquerda.</p>
-                </div>
-            </section>
-        </div>
-        
+             
+        <section id="home" >
+            <div class="texto">
+                <h1 id="titulo-home">Titulo</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, esse autem? Suscipit dicta voluptate harum perferendis unde quaerat modi repudiandae ipsum incidunt? Officia blanditiis itaque dolores incidunt? Sit, ullam debitis?</p>
+            </div>            
+        </section> 
+
+        <section id="jogo1" class="jogo" onclick='window.location.href="jogo1.html"'>
+
+            <div class="imagem">
+                <img src="logo.png" alt="Imagem do Jogo 1" >
+            </div>
+
+            <div class="texto">
+                <p> <h1>Descrição do Jogo:</h1> Experimente a emoção de um clássico com um toque moderno! Nesse jogo, um encanador está correndo por uma fase repleta de canos. Sua missão é simples: pular os canos para evitar bater e continuar avançando.</p> <br>
+                
+                <h1>Como Jogar?</h1>
+                    
+                <p> <h4>No celular:</h4> Toque na tela para fazer o encanador pular.</p> 
+                <p> <h4>No computador:</h4> Aperte qualquer tecla do teclado para saltar.</p> <br>
+                <p>Conforme você avança, a fase acelera, tornando o jogo cada vez mais desafiador. Teste suas habilidades e veja até onde você consegue ir!</p> <br>
+                    
+                <p><h2>Clique aqui para jogar!</h2></p>
+            </div>
+           
+        </section> 
+    
+        <section id="jogo2" class="jogo" onclick='window.location.href="jogo2.html"'>
+            <div class="imagem">
+                <img src="logo.png" alt="Imagem do Jogo 2">
+            </div>
+            <div class="texto">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt tempore nihil tempora facere similique expedita nesciunt, cumque repudiandae officia eius molestiae! Non, debitis doloribus ut illum tempore quos eligendi recusandae?</p>
+            </div>
+        </section> 
+    
+        <section id="jogo3" class="jogo" onclick="window.location.href='jogo3.html'">
+
+            <div class="imagem">
+                <img src="logo.png" alt="Imagem do Jogo 3">
+            </div>
+
+            <div class="texto">
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe, cum facere dolorum mollitia expedita maxime, vero debitis esse commodi enim quisquam explicabo in, illum voluptatem dolorem quia nesciunt hic voluptatibus.</p>
+            </div>
+           
+        </section> 
+    
+        <section id="jogo4" class="jogo" onclick="window.location.href='jogo4.html'">
+            <div class="imagem">
+                <img src="logo.png" alt="Imagem do Jogo 4">
+            </div>
+            <div class="texto">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore tempora rerum debitis hic, eius quos? Ea repudiandae dolorem sit quis dolore iusto, similique, nemo facilis maiores dolores velit excepturi nisi.</p>
+            </div>
+        </section> 
         
         <section id="contact">
 
