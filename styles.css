@@ -36,6 +36,7 @@ a {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;    
+    background-color: var(--cor4);
     background-image: url(fundo.png);
     background-position: cover;
     background-repeat: repeat-y; /* Repete a imagem verticalmente */
