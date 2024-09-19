@@ -23,7 +23,7 @@ let perguntas = [
 
     { pergunta: "Qual continente é conhecido como o berço da civilização?", respostas: ["Europa", "Ásia", "África", "América"], correta: 2 },
 
-    { pergunta: "Qual é o nome do instrumento musical típico do Brasil?", respostas: ["Violino", "Flauta", "Bateria", "Berimbaui"], correta: 3 },
+    { pergunta: "Qual é o nome do instrumento musical típico do Brasil?", respostas: ["Violino", "Flauta", "Bateria", "Berimbau"], correta: 3 },
 ];
 
 let perguntaAtual = 0;
