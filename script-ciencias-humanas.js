@@ -21,7 +21,7 @@ let perguntas = [
 
     { pergunta: "Qual é a principal festa popular do Brasil?", respostas: ["Halloween", "Carnaval", "Natal", "Páscoa"], correta: 1 },
 
-    { pergunta: "Qual continente é conhecido como o berço da civilização?", respostas: ["Europa", "África", "Ásia", "América"], correta: 0 },
+    { pergunta: "Qual continente é conhecido como o berço da civilização?", respostas: ["Europa", "Ásia", "África", "América"], correta: 2 },
 
     { pergunta: "Qual é o nome do instrumento musical típico do Brasil?", respostas: ["Violino", "Flauta", "Bateria", "Berimbaui"], correta: 3 },
 ];
