@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inicialmente oculta os elementos 'personagem' e 'pipe'
     personagem.style.display = 'none';
+    
     pipe.style.display = 'none';
     restartButton.style.display = 'none'; // Inicialmente oculta o botão de reinício
 
@@ -86,10 +87,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 personagem.style.animation = 'none';
                 personagem.style.bottom = `${personagemPosition}px`;
 
-                personagem.src = 'game-over.png';
-                personagem.style.width = '95px';
-                personagem.style.marginLeft = '50px';
-
+                personagem.src = 'explosion.gif';
+                personagem.style.width = '905px';
+                personagem.style.marginLeft = '-300px';
+                personagem.style.marginBottom = '-30px';
+                setTimeout(() => {
+                    personagem.src = 'imagem-original.png'; // Substitua pelo caminho da imagem original
+                    personagem.style.width = 'initial';
+                    personagem.style.marginLeft = 'initial';
+                    
+                }, 2800);
                 clearInterval(loop);
                 clearInterval(intervalId);
                 clearInterval(animationInterval); // Para a atualização da duração da animação
@@ -98,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 backgroundMusic.pause();
                 backgroundMusic.currentTime = 0; // Reinicia a música de fundo
                 gameOverSound.play(); // Reproduz a música de game over
+                jumpSound.volume = 0;
 
                 // Mostrar o botão de reinício somente quando o jogo estiver em game over
                 restartButton.style.display = 'block';
