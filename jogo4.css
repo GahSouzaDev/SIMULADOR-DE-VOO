@@ -69,3 +69,13 @@ h1 {
 #jogo-memoria{
     color: var(--cor5);
 }
+@media screen and (max-width: 768px) {
+    .game-board {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-gap: 10px;
+        border: 2px solid var(--cor1);    
+        margin: 0px;
+        
+    }
+}
