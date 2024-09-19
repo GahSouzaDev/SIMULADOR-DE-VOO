@@ -7,7 +7,7 @@ const resposta4 = document.getElementById('resposta4');
 let perguntas = [
     { pergunta: "Qual destes monumentos é um símbolo da França?", respostas: ["Coliseu", "Estátua da Liberdade", "Torre Eiffel", "Muralha da China"], correta: 2 },
 
-    { pergunta: "Qual a capital do Brasil?", respostas: ["São Paulo", "Rio de Janeiro", "Brasília", "Parana"], correta: 2 },
+    { pergunta: "Qual a capital do Brasil?", respostas: ["São Paulo", "Rio de Janeiro", "Brasília", "Paraná"], correta: 2 },
 
     { pergunta: "Quem foi a primeira mulher a ser presidente do Brasil?", respostas: ["Dilma Rousseff", "Maria da Penha", "Anita Garibaldia", "Princesa Isabel"], correta: 0 },
 
