@@ -266,7 +266,7 @@ footer {
     flex-direction: row;
 }
 
-#img-jogo1-mobile, #aprensetacao-mobile {
+#img-jogo-mobile, #aprensetacao-mobile {
     display: none;
 }
 
@@ -286,10 +286,10 @@ footer {
     .jogo .texto {
         padding: 10px;
     }
-    #img-jogo1-desktop, #aprensetacao-desktop{
+    #img-jogo-desktop, #aprensetacao-desktop{
         display: none;
     }
-    #img-jogo1-mobile, #aprensetacao-mobile {
+    #img-jogo-mobile, #aprensetacao-mobile {
         display: block;
     }  
     
