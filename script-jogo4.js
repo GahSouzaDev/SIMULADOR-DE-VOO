@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cardsChosenId.push(cardId);
         this.querySelector('img').style.display = 'block';
         if (cardsChosen.length === 2) {
-            setTimeout(checkForMatch, 500);
+            setTimeout(checkForMatch, 300);
         }
     }
 
