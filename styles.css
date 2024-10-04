@@ -271,7 +271,7 @@ footer {
 }
 
 /* Ajustes de layout para telas menores */
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 768px) {
     .jogo {
         flex-direction: column;
         text-align: center;
@@ -292,7 +292,17 @@ footer {
     #img-jogo-mobile, #aprensetacao-mobile {
         display: block;
     }  
+    .menu-toggle {
+        display: none;
+        font-size: 30px;
+        cursor: pointer;
+        color: var(--cor4);
+        margin-left: -55px;
+    }
     
+    .menu-toggle {
+        display: block;
+    }
 
     /* Menu mobile */
     
