@@ -271,7 +271,7 @@ footer {
 }
 
 /* Ajustes de layout para telas menores */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 720px) {
     .jogo {
         flex-direction: column;
         text-align: center;
