@@ -413,12 +413,41 @@ function animate() {
     // Fator de amplificação baseado na velocidade
     const speedMultiplier = Math.min(speed / maxSpeed, 1) * speedFactor;
 
-    // Rotação do avião no eixo Y (yaw) - mais rápida com maior velocidade
-    const rotationSpeed = baseRotationSpeed + (baseRotationSpeed * speedMultiplier);
-    if (velocity > 0.01) {
-        if (keys.a) plane.rotation.y += rotationSpeed;
-        if (keys.d) plane.rotation.y -= rotationSpeed;
+// Suavidade da rotação
+const smoothFactor = 0.1; // Quanto menor, mais suave a transição
+
+// Ângulos alvo de inclinação (roll)
+let targetRoll = 0;
+let targetYaw = plane.rotation.y;
+
+// Rotação do avião no eixo Y (yaw) - mais rápida com maior velocidade
+const rotationSpeed = baseRotationSpeed + (baseRotationSpeed * speedMultiplier);
+
+if (velocity > 0.01) {
+    if (keys.a) {
+        plane.rotation.y += rotationSpeed; // Rotação para a esquerda (yaw)
+        targetYaw += rotationSpeed;
+        
+        // Só inclina se a velocidade for maior que 0.3
+        if (velocity > 0.3) {
+            targetRoll = 0.5; // Inclinação fixa para a esquerda (roll negativo)
+        }
     }
+    if (keys.d) {
+        plane.rotation.y -= rotationSpeed; // Rotação para a direita (yaw)
+        targetYaw -= rotationSpeed;
+
+        // Só inclina se a velocidade for maior que 0.3
+        if (velocity > 0.3) {
+            targetRoll = -0.5; // Inclinação fixa para a direita (roll positivo)
+        }
+    }
+}
+
+// Suaviza os movimentos usando interpolação linear (lerp)
+plane.rotation.y += (targetYaw - plane.rotation.y) * smoothFactor;
+plane.rotation.z += (targetRoll - plane.rotation.z) * smoothFactor; // Suaviza a inclinação
+
 
     // Calcular movimento proposto no sistema global
     const directionX = Math.sin(plane.rotation.y);
