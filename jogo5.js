@@ -550,7 +550,7 @@ function ajustarControlesMobile() {
             botao.style.height = "120px";
             botao.style.fontSize = "30px";
         });
-        acelerador.style.width = "150px";
+        acelerador.style.width = "160px";
         acelerarador.style.height = "110px";
          // Ajusta o HUD proporcionalmente   
         
@@ -558,7 +558,7 @@ function ajustarControlesMobile() {
         botoes.forEach(botao => {
             botao.style.width = "60px";
             botao.style.height = "60px";
-            botao.style.fontSize = "24px";
+            botao.style.fontSize = "18px";
         });
         acelerador.style.width = "100px";
         acelerador.style.height = "60px";
