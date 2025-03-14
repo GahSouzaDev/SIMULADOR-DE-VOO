@@ -526,3 +526,53 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
+// ... (seu código JavaScript existente permanece igual até o final)
+
+// Adicionar controles para mobile
+const controls = document.getElementById('controls');
+const upBtn = document.getElementById('up-btn');
+const leftBtn = document.getElementById('left-btn');
+const rightBtn = document.getElementById('right-btn');
+const downBtn = document.getElementById('down-btn');
+const acceleratorBtn = document.getElementById('accelerator-btn');
+
+// Funções para simular pressionamento de teclas
+function setKey(key, value) {
+    keys[key] = value;
+}
+
+function setAccelerating(value) {
+    isAccelerating = value;
+}
+
+// Eventos para botões (touch e mouse)
+function addButtonEvents(button, keyOrAction, isKey = true) {
+    const startEvent = (e) => {
+        e.preventDefault();
+        if (isKey) setKey(keyOrAction, true);
+        else setAccelerating(true);
+        button.style.background = 'rgba(200, 200, 200, 0.8)';
+    };
+    
+    const endEvent = (e) => {
+        e.preventDefault();
+        if (isKey) setKey(keyOrAction, false);
+        else setAccelerating(false);
+        button.style.background = 'rgba(255, 255, 255, 0.8)';
+    };
+
+    button.addEventListener('mousedown', startEvent);
+    button.addEventListener('touchstart', startEvent);
+    button.addEventListener('mouseup', endEvent);
+    button.addEventListener('touchend', endEvent);
+    button.addEventListener('touchcancel', endEvent);
+}
+
+// Associar eventos aos botões
+addButtonEvents(upBtn, 'w');
+addButtonEvents(leftBtn, 'a');
+addButtonEvents(rightBtn, 'd');
+addButtonEvents(downBtn, 's');
+addButtonEvents(acceleratorBtn, null, false);
+
+// ... (o resto do seu código, incluindo animate() e resize listener, permanece igual)

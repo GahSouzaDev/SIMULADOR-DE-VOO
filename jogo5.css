@@ -21,3 +21,75 @@ canvas {
     padding: 10px;
     border-radius: 5px;
 }
+
+/* Estilos dos controles para mobile */
+.mobile-controls {
+    display: none; /* Oculto por padrão em desktop */
+    position: fixed;
+    bottom: 15%;
+    width: 100%;
+    z-index: 100;
+    pointer-events: none; /* Permite interação apenas com os botões */
+}
+
+.direction-controls {
+    position: absolute;
+    left: 50px; /* Ajustei de 200px para 20px para ficar mais à esquerda */
+    pointer-events: auto;
+}
+
+/* Posicionamento individual dos botões direcionais */
+#up-btn {
+    position: absolute;
+    left: 60px; /* Centraliza horizontalmente em relação ao grupo */
+    top: 0px;   /* Posição superior */
+}
+
+#left-btn {
+    position: absolute;
+    left: 0px;  /* À esquerda do botão "up" */
+    top: 60px;  /* Alinhado verticalmente com o "down" e "right" */
+}
+
+#right-btn {
+    position: absolute;
+    left: 120px; /* À direita do botão "up" */
+    top: 60px;   /* Alinhado verticalmente com o "left" e "down" */
+}
+
+#down-btn {
+    position: absolute;
+    left: 60px;  /* Centraliza horizontalmente em relação ao grupo */
+    top: 120px;  /* Abaixo do botão "up" */
+}
+
+.accelerator-control {
+    position: absolute;
+    right: 20px;
+    pointer-events: auto;
+}
+
+.mobile-controls button {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid #333;
+    border-radius: 10px;
+    cursor: pointer;
+    touch-action: manipulation; /* Melhora a resposta em touch */
+}
+
+#accelerator-btn {
+    width: 100px;
+    height: 60px;
+    font-size: 18px;
+}
+
+/* Mostrar controles apenas em mobile */
+@media (max-width: 768px) or (pointer: coarse) {
+    .mobile-controls {
+        display: flex;
+        justify-content: space-between;
+    }
+}
