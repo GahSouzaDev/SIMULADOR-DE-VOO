@@ -526,9 +526,9 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
-// ... (seu código JavaScript existente permanece igual até o final)
 
 // Adicionar controles para mobile
+
 const controls = document.getElementById('controls');
 const upBtn = document.getElementById('up-btn');
 const leftBtn = document.getElementById('left-btn');
@@ -551,14 +551,14 @@ function addButtonEvents(button, keyOrAction, isKey = true) {
         e.preventDefault();
         if (isKey) setKey(keyOrAction, true);
         else setAccelerating(true);
-        button.style.background = 'rgba(200, 200, 200, 0.8)';
+        button.style.background = 'rgba(83, 85, 237, 0.8)';
     };
     
     const endEvent = (e) => {
         e.preventDefault();
         if (isKey) setKey(keyOrAction, false);
         else setAccelerating(false);
-        button.style.background = 'rgba(255, 255, 255, 0.8)';
+        button.style.background = 'rgba(255, 255, 255, 0.36)';
     };
 
     button.addEventListener('mousedown', startEvent);
