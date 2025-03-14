@@ -26,15 +26,15 @@ canvas {
 .mobile-controls {
     display: none; /* Oculto por padrão em desktop */
     position: fixed;
-    bottom: 15%;
+    bottom: 35%;
     width: 100%;
     z-index: 100;
     pointer-events: none; /* Permite interação apenas com os botões */
 }
 
 .direction-controls {
-    position: absolute;
-    left: 50px; /* Ajustei de 200px para 20px para ficar mais à esquerda */
+    position: absolute;    
+    left: 2%; /* Ajustei de 200px para 20px para ficar mais à esquerda */
     pointer-events: auto;
 }
 
@@ -65,6 +65,7 @@ canvas {
 
 .accelerator-control {
     position: absolute;
+    bottom: -100px;
     right: 20px;
     pointer-events: auto;
 }
