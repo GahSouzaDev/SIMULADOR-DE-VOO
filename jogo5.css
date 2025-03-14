@@ -26,7 +26,7 @@ canvas {
 .mobile-controls {
     display: none; /* Oculto por padrão em desktop */
     position: fixed;
-    bottom: 26%;
+    bottom: 30%;
     width: 100%;
     z-index: 100;
     pointer-events: none; /* Permite interação apenas com os botões */
@@ -63,9 +63,35 @@ canvas {
     top: 120px;  /* Abaixo do botão "up" */
 }
 
+/* Ajuste de posição para botões grandes (largura > 500px) */
+@media (min-width: 501px) {
+    #up-btn {
+        left: 120px; /* Aumenta o espaçamento */
+        top: 0px;
+    }
+
+    #left-btn {
+        left: 0px;
+        top: 120px; /* Aumenta o espaçamento vertical */
+    }
+
+    #right-btn {
+        left: 240px; /* Aumenta o espaçamento horizontal */
+        top: 120px;
+    }
+
+    #down-btn {
+        left: 120px;
+        top: 240px; /* Aumenta o espaçamento vertical */
+    }
+    #hud {
+        font-size: 40px;
+    }
+}
+
 .accelerator-control {
     position: absolute;
-    bottom: -100px;
+    bottom: -170px;
     right: 5px;
     pointer-events: auto;
 }

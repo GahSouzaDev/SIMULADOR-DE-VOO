@@ -528,6 +528,47 @@ window.addEventListener('resize', () => {
 });
 
 // Adicionar controles para mobile
+function ajustarControlesMobile() {
+    const largura = window.innerWidth;
+    const altura = window.innerHeight;
+    const controles = document.querySelector(".mobile-controls");
+    const botoes = document.querySelectorAll(".mobile-controls button");
+    const acelerador = document.getElementById("accelerator-btn");
+    
+
+    // Mostrar controles se altura for maior que a largura
+    if (altura > largura) {
+        controles.style.display = "flex";
+    } else {
+        controles.style.display = "none";
+    }
+
+    // Ajustar tamanho dos botões se largura for maior que 800px
+    if (largura > 500) {
+        botoes.forEach(botao => {
+            botao.style.width = "120px";
+            botao.style.height = "120px";
+            botao.style.fontSize = "30px";
+        });
+        acelerador.style.width = "150px";
+        acelerarador.style.height = "110px";
+         // Ajusta o HUD proporcionalmente   
+        
+    } else {
+        botoes.forEach(botao => {
+            botao.style.width = "60px";
+            botao.style.height = "60px";
+            botao.style.fontSize = "24px";
+        });
+        acelerador.style.width = "100px";
+        acelerador.style.height = "60px";
+        
+    }
+}
+// Ajustar ao carregar e ao redimensionar a tela
+window.addEventListener("load", ajustarControlesMobile);
+window.addEventListener("resize", ajustarControlesMobile);
+
 
 const controls = document.getElementById('controls');
 const upBtn = document.getElementById('up-btn');
