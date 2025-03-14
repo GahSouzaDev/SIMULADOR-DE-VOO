@@ -9,6 +9,7 @@ document.body.appendChild(renderer.domElement);
 // Adicionar luz
 const light = new THREE.AmbientLight(0xffffff, 0.8);
 scene.add(light);
+
 function createGradientTexture() {
     const canvas = document.createElement("canvas");
     canvas.width = 256;
@@ -73,7 +74,7 @@ const lakeGeometry = new THREE.ShapeGeometry(lakeShape);
 // Carregar a textura da água
 const waterTexture = textureLoader.load('https://threejs.org/examples/textures/waternormals.jpg');
 waterTexture.wrapS = waterTexture.wrapT = THREE.RepeatWrapping;
-waterTexture.repeat.set(1, 1);// Ajuste fino da textura
+waterTexture.repeat.set(1, 1); // Ajuste fino da textura
 
 // Criar o material do lago
 const lakeMaterial = new THREE.MeshStandardMaterial({
@@ -88,7 +89,7 @@ const lakeMaterial = new THREE.MeshStandardMaterial({
 // Criar o Mesh do lago
 const lake = new THREE.Mesh(lakeGeometry, lakeMaterial);
 lake.rotation.x = -Math.PI / 2; // Deixar o lago na horizontal
-lake.position.set(-130, 0.02 , -130); // Ajuste de posição
+lake.position.set(-130, 0.02, -130); // Ajuste de posição
 
 // Adicionar o lago à cena
 scene.add(lake);
@@ -113,7 +114,7 @@ const stripe14 = createRunwayStripe(4, 2, 0.5, 2);
 const plane = new THREE.Group();
 const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
 const planeTailMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-const gearMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 }); // Cinza escuro para as rpdas dp trem de pouso
+const gearMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 }); // Cinza escuro para as rodas do trem de pouso
 const cabinMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa }); // Cinza claro para a cabine
 
 // Corpo
@@ -211,7 +212,6 @@ leftWheel.rotation.z = Math.PI / 2;
 leftWheel.position.x = -0.25;
 leftWheel.position.y = -0.1;
 leftWheel.position.z = -0.5;
-
 plane.add(leftWheel);
 
 // Roda direita
@@ -221,7 +221,6 @@ rightWheel.rotation.z = Math.PI / 2;
 rightWheel.position.x = 0.25;
 rightWheel.position.y = -0.1;
 rightWheel.position.z = -0.5;
-
 plane.add(rightWheel);
 
 // Cabine em forma de cilindro
@@ -231,6 +230,7 @@ cabin.rotation.x = Math.PI / 2; // Rotacionada para alinhar ao corpo
 cabin.position.y = 0.70; // Acima do corpo (0.5 + ajuste para raio)
 cabin.position.z = -0.5; // Centralizado na parte frontal do corpo
 plane.add(cabin);
+
 // Posicionar o avião na pista
 plane.position.set(0, 0, 2);
 scene.add(plane);
@@ -379,7 +379,22 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
-// Função de animação
+// Função para reiniciar o jogo
+function resetGame() {
+    plane.position.set(0, 0, 2);
+    plane.rotation.set(0, 0, 0); // Resetar rotações
+    speed = 0;
+    velocity = 0;
+    isCrashed = false;
+    crashTimer = 0;
+    pitchAngle = 0;
+    keys = { w: false, s: false, a: false, d: false };
+    isAccelerating = false;
+    renderer.domElement.style.filter = 'none'; // Remover o desfoque
+    renderer.render(scene, position);
+}
+
+// Função de animação atualizada
 function animate() {
     requestAnimationFrame(animate);
 
@@ -400,10 +415,10 @@ function animate() {
 
     // Rotação do avião no eixo Y (yaw) - mais rápida com maior velocidade
     const rotationSpeed = baseRotationSpeed + (baseRotationSpeed * speedMultiplier);
-if (velocity > 0.01) {
-    if (keys.a) plane.rotation.y += rotationSpeed;
-    if (keys.d) plane.rotation.y -= rotationSpeed;
-}
+    if (velocity > 0.01) {
+        if (keys.a) plane.rotation.y += rotationSpeed;
+        if (keys.d) plane.rotation.y -= rotationSpeed;
+    }
 
     // Calcular movimento proposto no sistema global
     const directionX = Math.sin(plane.rotation.y);
@@ -452,12 +467,17 @@ if (velocity > 0.01) {
             pitchAngle = maxPitchAngle;
             plane.rotation.x = pitchAngle;
         }
-        crashTimer += 1 / 60;
+        crashTimer += 1 / 30; // Incrementa o timer em segundos (assumindo 60 FPS)
         if (crashTimer >= crashDuration) {
-            isCrashed = false;
-            crashTimer = 0;
-            pitchAngle = 0;
-            plane.rotation.x = 0;
+            // Após o tempo de crash, aplicar o desfoque e agendar o reset
+            if (crashTimer >= crashDuration + 5) { // 5 segundos extras após o crash para reiniciar
+                resetGame();
+            } else if (crashTimer >= crashDuration) {
+                // Calcular o progresso do desfoque (0 a 1) ao longo de 2 segundos
+                const blurProgress = (crashTimer - crashDuration) / 2; // Normaliza entre 0 e 1
+                const blurAmount = blurProgress * 5; // Escala de 0px a 5px
+                renderer.domElement.style.filter = `blur(${blurAmount}px)`;
+            }
         }
     }
 
@@ -473,6 +493,8 @@ if (velocity > 0.01) {
             if (!isCrashed) {
                 isCrashed = true;
                 crashTimer = 0;
+                speed = 0; // Parar o movimento imediatamente ao colidir
+                velocity = 0;
             }
             break;
         }
@@ -518,6 +540,7 @@ if (velocity > 0.01) {
 
     renderer.render(scene, camera);
 }
+
 animate();
 
 // Ajustar o tamanho da tela se a janela mudar
@@ -534,16 +557,18 @@ function ajustarControlesMobile() {
     const controles = document.querySelector(".mobile-controls");
     const botoes = document.querySelectorAll(".mobile-controls button");
     const acelerador = document.getElementById("accelerator-btn");
-    
 
-    // Mostrar controles se altura for maior que a largura
+    // Mostrar controles e ajustar FOV da câmera se altura for maior que a largura (mobile)
     if (altura > largura) {
         controles.style.display = "flex";
+        camera.fov = 105; // FOV para mobile
     } else {
         controles.style.display = "none";
+        camera.fov = 75; // FOV padrão para desktop
     }
+    camera.updateProjectionMatrix(); // Atualizar a projeção da câmera após mudar o FOV
 
-    // Ajustar tamanho dos botões se largura for maior que 800px
+    // Ajustar tamanho dos botões se largura for maior que 500px
     if (largura > 500) {
         botoes.forEach(botao => {
             botao.style.width = "120px";
@@ -551,9 +576,7 @@ function ajustarControlesMobile() {
             botao.style.fontSize = "30px";
         });
         acelerador.style.width = "160px";
-        acelerarador.style.height = "110px";
-         // Ajusta o HUD proporcionalmente   
-        
+        acelerador.style.height = "110px"; // Corrigido "acelerarador" para "acelerador"
     } else {
         botoes.forEach(botao => {
             botao.style.width = "60px";
@@ -562,13 +585,19 @@ function ajustarControlesMobile() {
         });
         acelerador.style.width = "100px";
         acelerador.style.height = "60px";
-        
     }
 }
+
 // Ajustar ao carregar e ao redimensionar a tela
 window.addEventListener("load", ajustarControlesMobile);
 window.addEventListener("resize", ajustarControlesMobile);
-
+window.addEventListener('resize', () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    ajustarControlesMobile(); // Reajustar FOV e controles
+});
 
 const controls = document.getElementById('controls');
 const upBtn = document.getElementById('up-btn');
@@ -615,5 +644,3 @@ addButtonEvents(leftBtn, 'a');
 addButtonEvents(rightBtn, 'd');
 addButtonEvents(downBtn, 's');
 addButtonEvents(acceleratorBtn, null, false);
-
-// ... (o resto do seu código, incluindo animate() e resize listener, permanece igual)
