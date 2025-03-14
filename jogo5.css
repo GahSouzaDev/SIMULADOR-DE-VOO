@@ -63,6 +63,13 @@ canvas {
     top: 120px;  /* Abaixo do botão "up" */
 }
 
+.accelerator-control {
+    position: absolute;
+    bottom: -115px;
+    right: 5px;
+    pointer-events: auto;
+}
+
 /* Ajuste de posição para botões grandes (largura > 500px) */
 @media (min-width: 501px) {
     #up-btn {
@@ -87,13 +94,9 @@ canvas {
     #hud {
         font-size: 40px;
     }
-}
-
-.accelerator-control {
-    position: absolute;
-    bottom: -170px;
-    right: 5px;
-    pointer-events: auto;
+    .accelerator-control {
+        bottom: -230px;
+    }
 }
 
 .mobile-controls button {
