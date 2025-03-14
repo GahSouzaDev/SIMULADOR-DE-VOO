@@ -1,7 +1,7 @@
 // Configuração da cena
 const scene = new THREE.Scene();
 scene.background = createGradientTexture();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -470,7 +470,7 @@ function animate() {
         crashTimer += 1 / 30; // Incrementa o timer em segundos (assumindo 60 FPS)
         if (crashTimer >= crashDuration) {
             // Após o tempo de crash, aplicar o desfoque e agendar o reset
-            if (crashTimer >= crashDuration + 5) { // 5 segundos extras após o crash para reiniciar
+            if (crashTimer >= crashDuration + 4) { // 5 segundos extras após o crash para reiniciar
                 resetGame();
             } else if (crashTimer >= crashDuration) {
                 // Calcular o progresso do desfoque (0 a 1) ao longo de 2 segundos
@@ -564,7 +564,7 @@ function ajustarControlesMobile() {
         camera.fov = 105; // FOV para mobile
     } else {
         controles.style.display = "none";
-        camera.fov = 75; // FOV padrão para desktop
+        camera.fov = 85; // FOV padrão para desktop
     }
     camera.updateProjectionMatrix(); // Atualizar a projeção da câmera após mudar o FOV
 

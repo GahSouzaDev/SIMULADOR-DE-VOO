@@ -92,7 +92,7 @@ canvas {
         top: 240px; /* Aumenta o espaçamento vertical */
     }
     #hud {
-        font-size: 40px;
+        font-size: 30px;
     }
     .accelerator-control {
         bottom: -230px;
