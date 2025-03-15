@@ -94,6 +94,39 @@ lake.position.set(-130, 0.02, -130); // Ajuste de posição
 // Adicionar o lago à cena
 scene.add(lake);
 
+// Definir pontos para o formato irregular do Lago 2
+const lakeShape2 = new THREE.Shape();
+lakeShape2.moveTo(0, 0);
+lakeShape2.bezierCurveTo(80, -40, 100, 50, 60, 60); // Primeira curva
+lakeShape2.bezierCurveTo(70, 120, -20, 80, -50, 50); // Segunda curva
+lakeShape2.bezierCurveTo(-100, 20, -80, -50, 0, 0); // Fechamento
+
+// Criar a geometria do Lago 2
+const lakeGeometry2 = new THREE.ShapeGeometry(lakeShape2);
+
+// Carregar a textura da água
+const waterTexture2 = textureLoader.load('https://threejs.org/examples/textures/waternormals.jpg');
+waterTexture2.wrapS = waterTexture2.wrapT = THREE.RepeatWrapping;
+waterTexture2.repeat.set(1.2, 1.2); // Repetição ajustada
+
+// Criar o material do Lago 2
+const lakeMaterial2 = new THREE.MeshStandardMaterial({
+    map: waterTexture2,
+    transparent: true,
+    opacity: 0.9,
+    roughness: 0.25,
+    metalness: 0.7,
+    side: THREE.DoubleSide
+});
+
+// Criar o Mesh do Lago 2
+const lake2 = new THREE.Mesh(lakeGeometry2, lakeMaterial2);
+lake2.rotation.x = -Math.PI / 2; // Deixar o lago na horizontal
+lake2.position.set(165, 0.01, -10); // Nova posição centralizada sob a ponte
+
+// Adicionar o Lago 2 à cena
+scene.add(lake2);
+
 // Adicionar faixas brancas na pista
 const stripe1 = createRunwayStripe(0, -42, 2, 5);
 const stripe2 = createRunwayStripe(0, -32, 2, 5);
@@ -547,15 +580,59 @@ const building49 = createBuilding(1, 5, 1, 180, 20, 0xFF4500);
 const building50 = createBuilding(1, 5, 1, 170, -120, 0xFF4500);
 const building51 = createBuilding(1, 5, 1, 170, 20, 0xFF4500);
 
-const building45 = createBuilding(10, 1, 100, 175, -50, 0x1a1a1a);
+//pista
+const building45 = createBuilding(10, 1, 100, 175, -50,  0x4D4D4D);
 building45.position.y = 8;
-const building46 = createBuilding(10, 1, 30, 175, -113, 0x1a1a1a);
+const building46 = createBuilding(10, 1, 30, 175, -113,  0x4D4D4D);
 building46.rotation.x = 6;
 building46.position.y = 4;
-const building47 = createBuilding(10, 1, 30, 175, 13, 0x1a1a1a);
+const building47 = createBuilding(10, 1, 30, 175, 13, 0x4D4D4D);
 building47.rotation.x = -6;
 building47.position.y = 4;
 
+//estrutura horizontal
+const building53 = createBuilding(1, 1, 150, 170, -50, 0xFF4500);
+const building54 = createBuilding(1, 1, 150, 180, -50, 0xFF4500);
+const building55 = createBuilding(1, 1, 20, 170, -50, 0xFF4500);
+building55.position.y = 20;
+const building56 = createBuilding(1, 1, 20, 180, -50, 0xFF4500);
+building56.position.y = 20;
+const building57 = createBuilding(1, 1, 20, 170, -30, 0xFF4500);
+building57.position.y = 17;
+building57.rotation.x = -6;
+const building58 = createBuilding(1, 1, 20, 180, -30, 0xFF4500);
+building58.position.y = 17;
+building58.rotation.x = -6;
+const building59 = createBuilding(1, 1, 20, 170, -70, 0xFF4500);
+building59.position.y = 17;
+building59.rotation.x = 6;
+const building60 = createBuilding(1, 1, 20, 180, -70, 0xFF4500);
+building60.position.y = 17;
+building60.rotation.x = 6;
+const building61 = createBuilding(1, 1, 20, 170, -90, 0xFF4500);
+building61.position.y = 13;
+building61.rotation.x = 6.15;
+const building62 = createBuilding(1, 1, 20, 180, -90, 0xFF4500);
+building62.position.y = 13;
+building62.rotation.x = 6.15;
+const building63 = createBuilding(1, 1, 20, 170, -10, 0xFF4500);
+building63.position.y = 13;
+building63.rotation.x = -6.15;
+const building64 = createBuilding(1, 1, 20, 180, -10, 0xFF4500);
+building64.position.y = 13;
+building64.rotation.x = -6.15;
+const building65 = createBuilding(1, 1, 21, 170, -110, 0xFF4500);
+building65.position.y = 8;
+building65.rotation.x = 5.92;
+const building66 = createBuilding(1, 1, 21, 180, -110, 0xFF4500);
+building66.position.y = 8;
+building66.rotation.x = 5.92;
+const building67 = createBuilding(1, 1, 21, 170, 10, 0xFF4500);
+building67.position.y = 8;
+building67.rotation.x = -5.92;
+const building68 = createBuilding(1, 1, 21, 180, 10, 0xFF4500);
+building68.position.y = 8;
+building68.rotation.x = -5.92;
 
 
 // Função para criar nuvens
@@ -592,7 +669,7 @@ plane.geometry.computeBoundingBox();
 const planeBox = new THREE.Box3().setFromObject(plane);
 
 // Lista de prédios para verificar colisão (nuvens não entram aqui)
-const buildings = [building1, building2, building3, building4, building5, building6, building7, building8, building9, building10, building11, building12, building13, building14, building15, building16, building17, building18, building19, building20, building21, building22, building23, building24, building25, building26, building27, building28, building29, building30, building31, building32, building33, building34, building35, building36, building37, building38, building39, building40, building41,building45, building46, building47];
+const buildings = [building1, building2, building3, building4, building5, building6, building7, building8, building9, building10, building11, building12, building13, building14, building15, building16, building17, building18, building19, building20, building21, building22, building23, building24, building25, building26, building27, building28, building29, building30, building31, building32, building33, building34, building35, building36, building37, building38, building39, building40, building41,building45, building46, building47,building55, building56,building57, building58,building59, building60,building61, building62,building63, building64,building65, building66,building67, building68];
 
 // Posicionar a câmera
 camera.position.set(0, 5, 10);
