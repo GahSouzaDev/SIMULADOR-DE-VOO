@@ -41,11 +41,11 @@ ground.rotation.x = -Math.PI / 2;
 scene.add(ground);
 
 // Criar a pista
-const runwayGeometry = new THREE.PlaneGeometry(10, 60);
+const runwayGeometry = new THREE.PlaneGeometry(9.5, 100);
 const runwayMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1a1a });
 const runway = new THREE.Mesh(runwayGeometry, runwayMaterial);
 runway.rotation.x = -Math.PI / 2;
-runway.position.set(0, 0.01, -27);
+runway.position.set(0, 0.01, -46.5);
 scene.add(runway);
 
 // Adicionar faixas brancas na pista
@@ -100,7 +100,11 @@ const stripe2 = createRunwayStripe(0, -32, 2, 5);
 const stripe3 = createRunwayStripe(0, -22, 2, 5);
 const stripe4 = createRunwayStripe(0, -12, 2, 5);
 const stripe5 = createRunwayStripe(0, -2, 2, 5);
+const stripe16 = createRunwayStripe(0, -62, 2, 5);
 const stripe15 = createRunwayStripe(0, -52, 2, 5);
+const stripe17 = createRunwayStripe(0, -72, 2, 5);
+const stripe18 = createRunwayStripe(0, -82, 2, 5);
+const stripe19 = createRunwayStripe(0, -92, 2, 5);
 const stripe6 = createRunwayStripe(-4, 2, 0.5, 2);
 const stripe7 = createRunwayStripe(-3, 2, 0.5, 2);
 const stripe8 = createRunwayStripe(-2, 2, 0.5, 2);
@@ -110,6 +114,7 @@ const stripe11 = createRunwayStripe(1, 2, 0.5, 2);
 const stripe12 = createRunwayStripe(2, 2, 0.5, 2);
 const stripe13 = createRunwayStripe(3, 2, 0.5, 2);
 const stripe14 = createRunwayStripe(4, 2, 0.5, 2);
+
 
 const plane = new THREE.Group();
 const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
@@ -186,6 +191,9 @@ plane.add(frontWheel);
 // Suporte das rodas principais
 const mainGearSupportGeometry = new THREE.BoxGeometry(0.05, 0.6, 0.05);
 
+// Suporte das rodas principais
+const mainGearSupportGeometry12 = new THREE.BoxGeometry(0.05, 1.2, 0.05);
+
 // Suporte esquerdo
 const leftGearSupport = new THREE.Mesh(mainGearSupportGeometry, cabinMaterial);
 leftGearSupport.position.x = -0.2;
@@ -201,6 +209,22 @@ rightGearSupport.position.y = 0.2;
 rightGearSupport.position.z = -0.5;
 rightGearSupport.rotation.z = -Math.PI / -12; // Inclinação de -15 graus para fora (ajuste conforme necessário)
 plane.add(rightGearSupport);
+
+// Suporte assa esquerdo
+const leftGearSupport1 = new THREE.Mesh(mainGearSupportGeometry12, cabinMaterial);
+leftGearSupport1.position.x = 0.5;
+leftGearSupport1.position.y = 0.65;
+leftGearSupport1.position.z = -0.7;
+leftGearSupport1.rotation.z = Math.PI / -3; // Inclinação de 15 graus para fora (ajuste conforme necessário)
+plane.add(leftGearSupport1);
+
+// Suporte assa direito
+const rightGearSupport1 = new THREE.Mesh(mainGearSupportGeometry12, cabinMaterial);
+rightGearSupport1.position.x = -0.5;
+rightGearSupport1.position.y = 0.65;
+rightGearSupport1.position.z = -0.7;
+rightGearSupport1.rotation.z = -Math.PI / -3; // Inclinação de -15 graus para fora (ajuste conforme necessário)
+plane.add(rightGearSupport1);
 
 // Rodas principais
 const mainWheelGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.15, 16);
@@ -259,30 +283,197 @@ function createBuilding(width, height, depth, x, z, color) {
     return building;
 }
 
-// Adicionar prédios com cores diferentes
-const building1 = createBuilding(5, 10, 5, 25, 10, 0x888888);
-const building2 = createBuilding(8, 15, 8, 25, -1, 0x4682B4);
+// Prédios aeroporto
+const building1 = createBuilding(6, 10, 6, 25, -15, 0x888888);
+const building2 = createBuilding(3, 18, 3, 25, -1, 0x4682B4);
+
+// Criar um grupo de texturas único para os Prédios do Aeroporto
+const textureLoader4 = new THREE.TextureLoader();
+const buildingTexture4 = textureLoader.load('torre-de-controle.png'); // Substitua pelo caminho da sua imagem
+
+const buildingsAeroporto = [building2];
+
+buildingsAeroporto.forEach(building => {
+    const width = building.geometry.parameters.width;  // Largura do prédio (5 ou 8)
+    const height = building.geometry.parameters.height; // Altura do prédio (10 ou 15)
+    const depth = building.geometry.parameters.depth;  // Profundidade do prédio (5 ou 8)
+
+    // Material compartilhado para todos os planos
+    const textMaterial = new THREE.MeshBasicMaterial({ 
+        map: buildingTexture4, 
+        transparent: true, // Opcional, caso a imagem tenha transparência
+        side: THREE.DoubleSide // Para ser visível de ambos os lados
+    });
+
+    // 1. Plano na frente (face frontal)
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02); // Frente do prédio
+    frontMesh.rotation.y = 0;
+    building.add(frontMesh);
+
+    // 2. Plano à direita (face lateral direita)
+    const rightGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0); // Lado direito do prédio
+    rightMesh.rotation.y = -Math.PI / 2; // Rotaciona 90° para alinhar à direita
+    building.add(rightMesh);
+
+    // 3. Plano à esquerda (face lateral esquerda)
+    const leftGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0); // Lado esquerdo do prédio
+    leftMesh.rotation.y = Math.PI / 2; // Rotaciona -90° para alinhar à esquerda
+    building.add(leftMesh);
+});
+
+// Conjunto 1
 const building3 = createBuilding(8, 10, 8, -80, -30, 0xffffff);
 const building4 = createBuilding(8, 10, 8, -60, -30, 0xffffff);
 const building5 = createBuilding(8, 10, 8, -80, -15, 0xffffff);
 const building6 = createBuilding(8, 10, 8, -60, -15, 0xffffff);
 const building7 = createBuilding(8, 10, 8, -100, -30, 0xffffff);
 const building8 = createBuilding(8, 10, 8, -100, -15, 0xffffff);
+const building44 = createBuilding(50, 0.02, 25, -80, -22.5, 0x808080);
 
-const building9 = createBuilding(6, 17, 6, 80, 115, 0xffffff);
-const building10 = createBuilding(6, 17, 6, 60, 115, 0xffffff);
-const building11 = createBuilding(6, 17, 6, 80, 100, 0xffffff);
-const building12 = createBuilding(6, 17, 6, 60, 100, 0xffffff);
-const building13 = createBuilding(6, 17, 6, 100, 115, 0xffffff);
-const building14 = createBuilding(6, 17, 6, 100, 100, 0xffffff);
+// Criar um grupo de texturas único para o Conjunto 1
+const textureLoader1 = new THREE.TextureLoader();
+const buildingTexture1 = textureLoader.load('conjunto-predios-1.png'); // Substitua pelo caminho da sua imagem
 
+const buildingsConjunto1 = [ building3, building4, building5, building6, building7, building8];
+
+buildingsConjunto1.forEach(building => {
+    const width = building.geometry.parameters.width;  // Largura do prédio (5 ou 8)
+    const height = building.geometry.parameters.height; // Altura do prédio (10 ou 15)
+    const depth = building.geometry.parameters.depth;  // Profundidade do prédio (5 ou 8)
+
+    // Material compartilhado para todos os planos
+    const textMaterial = new THREE.MeshBasicMaterial({ 
+        map: buildingTexture1, 
+        transparent: true, // Opcional, caso a imagem tenha transparência
+        side: THREE.DoubleSide // Para ser visível de ambos os lados
+    });
+
+    // 1. Plano na frente (face frontal)
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02); // Frente do prédio
+    frontMesh.rotation.y = 0;
+    building.add(frontMesh);
+
+    // 2. Plano à direita (face lateral direita)
+    const rightGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0); // Lado direito do prédio
+    rightMesh.rotation.y = -Math.PI / 2; // Rotaciona 90° para alinhar à direita
+    building.add(rightMesh);
+
+    // 3. Plano à esquerda (face lateral esquerda)
+    const leftGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0); // Lado esquerdo do prédio
+    leftMesh.rotation.y = Math.PI / 2; // Rotaciona -90° para alinhar à esquerda
+    building.add(leftMesh);
+});
+
+// Conjunto 2
+const building9 = createBuilding(6, 17, 6, 80, 115, 0x808080);
+const building10 = createBuilding(6, 17, 6, 60, 115, 0x808080);
+const building11 = createBuilding(6, 17, 6, 80, 100, 0x808080);
+const building12 = createBuilding(6, 17, 6, 60, 100, 0x808080);
+const building13 = createBuilding(6, 17, 6, 100, 115, 0x808080);
+const building14 = createBuilding(6, 17, 6, 100, 100, 0x808080);
+const building43 = createBuilding(50, 0.02, 25, 80, 108, 0x808080);
+
+// Criar um grupo de texturas único para o Conjunto 2
+const textureLoader2 = new THREE.TextureLoader();
+const buildingTexture2 = textureLoader.load('conjunto-predios-2.png'); // Substitua pelo caminho da sua imagem
+
+const buildingsConjunto2 = [building1, building9, building10, building11, building12, building13, building14];
+
+buildingsConjunto2.forEach(building => {
+    const width = building.geometry.parameters.width;  // Largura do prédio (6)
+    const height = building.geometry.parameters.height; // Altura do prédio (17)
+    const depth = building.geometry.parameters.depth;  // Profundidade do prédio (6)
+
+    // Material compartilhado para todos os planos
+    const textMaterial = new THREE.MeshBasicMaterial({ 
+        map: buildingTexture2, 
+        transparent: true, // Opcional, caso a imagem tenha transparência
+        side: THREE.DoubleSide // Para ser visível de ambos os lados
+    });
+
+    // 1. Plano na frente (face frontal)
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02); // Frente do prédio
+    frontMesh.rotation.y = 0;
+    building.add(frontMesh);
+
+    // 2. Plano à direita (face lateral direita)
+    const rightGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0); // Lado direito do prédio
+    rightMesh.rotation.y = -Math.PI / 2; // Rotaciona 90° para alinhar à direita
+    building.add(rightMesh);
+
+    // 3. Plano à esquerda (face lateral esquerda)
+    const leftGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0); // Lado esquerdo do prédio
+    leftMesh.rotation.y = Math.PI / 2; // Rotaciona -90° para alinhar à esquerda
+    building.add(leftMesh);
+});
+
+// Conjunto 3
 const building15 = createBuilding(8, 10, 8, 80, -115, 0xffffff);
 const building16 = createBuilding(8, 9, 8, 60, -115, 0xffffff);
 const building17 = createBuilding(8, 8, 8, 80, -100, 0xffffff);
 const building18 = createBuilding(8, 7, 8, 60, -100, 0xffffff);
 const building19 = createBuilding(8, 6, 8, 100, -115, 0xffffff);
-const building20 = createBuilding(8, 15, 8, 100, -100, 0xffffff);
+const building20 = createBuilding(8, 10, 8, 100, -100, 0xffffff);
+const building42 = createBuilding(50, 0.02, 30, 80, -108, 0x808080);
 
+// Criar um grupo de texturas único para o Conjunto 3
+const textureLoader3 = new THREE.TextureLoader(); // Renomeei para evitar confusão, mas pode usar o existente
+const buildingTexture3 = textureLoader.load('conjunto-predios-3.png'); // Substitua pelo caminho da sua imagem
+
+const buildingsConjunto3 = [building15, building16, building17, building18, building19, building20];
+
+buildingsConjunto3.forEach(building => {
+    const width = building.geometry.parameters.width;  // Largura do prédio (8)
+    const height = building.geometry.parameters.height; // Altura do prédio (varia entre 6 e 15)
+    const depth = building.geometry.parameters.depth;  // Profundidade do prédio (8)
+
+    // Material compartilhado para todos os planos
+    const textMaterial = new THREE.MeshBasicMaterial({ 
+        map: buildingTexture3, 
+        transparent: true, // Opcional, caso a imagem tenha transparência
+        side: THREE.DoubleSide // Para ser visível de ambos os lados
+    });
+
+    // 1. Plano na frente (face frontal)
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02); // Frente do prédio
+    frontMesh.rotation.y = 0;
+    building.add(frontMesh);
+
+    // 2. Plano à direita (face lateral direita)
+    const rightGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0); // Lado direito do prédio
+    rightMesh.rotation.y = -Math.PI / 2; // Rotaciona 90° para alinhar à direita
+    building.add(rightMesh);
+
+    // 3. Plano à esquerda (face lateral esquerda)
+    const leftGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0); // Lado esquerdo do prédio
+    leftMesh.rotation.y = Math.PI / 2; // Rotaciona -90° para alinhar à esquerda
+    building.add(leftMesh);
+});
+//Torre alta
 const building21 = createBuilding(9, 8, 9, -100, 100, 0x888888);
 const building22 = createBuilding(8, 10, 8, -100, 100, 0xffffff);
 const building23 = createBuilding(7, 15, 7, -100, 100, 0x888888);
@@ -292,6 +483,20 @@ const building26 = createBuilding(4, 23, 4, -100, 100, 0xffffff);
 const building27 = createBuilding(3, 25, 3, -100, 100, 0x888888);
 const building28 = createBuilding(2, 28, 2, -100, 100, 0xffffff);
 const building29 = createBuilding(1, 35, 1, -100, 100, 0xffffff);
+
+//Ponte
+const building30 = createBuilding(1, 15, 1, 170, -20, 0xffffff);
+const building31 = createBuilding(1, 20, 1, 170, -40, 0xffffff);
+const building32 = createBuilding(1, 20, 1, 170, -60, 0xffffff);
+const building33 = createBuilding(1, 15, 1, 170, -80, 0xffffff);
+const building34 = createBuilding(1, 10, 1, 170, 0, 0xffffff);
+const building35 = createBuilding(1, 10, 1, 170, -100, 0xffffff);
+const building36 = createBuilding(1, 15, 1, 190, -20, 0xffffff);
+const building37 = createBuilding(1, 20, 1, 190, -40, 0xffffff);
+const building38 = createBuilding(1, 20, 1, 190, -60, 0xffffff);
+const building39 = createBuilding(1, 15, 1, 190, -80, 0xffffff);
+const building40 = createBuilding(1, 10, 1, 190, 0, 0xffffff);
+const building41 = createBuilding(1, 10, 1, 190, -100, 0xffffff);
 
 // Função para criar nuvens
 function createCloud(x, z) {
@@ -327,7 +532,7 @@ plane.geometry.computeBoundingBox();
 const planeBox = new THREE.Box3().setFromObject(plane);
 
 // Lista de prédios para verificar colisão (nuvens não entram aqui)
-const buildings = [building1, building2, building3, building4, building5, building6, building7, building8, building9, building10, building11, building12, building13, building14, building15, building16, building17, building18, building19, building20, building21, building22, building23, building24, building25, building26, building27, building28, building29];
+const buildings = [building1, building2, building3, building4, building5, building6, building7, building8, building9, building10, building11, building12, building13, building14, building15, building16, building17, building18, building19, building20, building21, building22, building23, building24, building25, building26, building27, building28, building29, building30, building31, building32, building33, building34, building35, building36, building37, building38, building39, building40, building41,];
 
 // Posicionar a câmera
 camera.position.set(0, 5, 10);
@@ -394,7 +599,7 @@ function resetGame() {
     renderer.render(scene, position);
 }
 
-// Função de animação atualizada
+// Função de animação 
 function animate() {
     requestAnimationFrame(animate);
 
