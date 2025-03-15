@@ -389,7 +389,7 @@ const building43 = createBuilding(50, 0.02, 25, 80, 108, 0x808080);
 const textureLoader2 = new THREE.TextureLoader();
 const buildingTexture2 = textureLoader.load('conjunto-predios-2.png'); // Substitua pelo caminho da sua imagem
 
-const buildingsConjunto2 = [building1, building9, building10, building11, building12, building13, building14];
+const buildingsConjunto2 = [building1, building9, building10, building11, building12, building13, building14,];
 
 buildingsConjunto2.forEach(building => {
     const width = building.geometry.parameters.width;  // Largura do prédio (6)
@@ -473,6 +473,7 @@ buildingsConjunto3.forEach(building => {
     leftMesh.rotation.y = Math.PI / 2; // Rotaciona -90° para alinhar à esquerda
     building.add(leftMesh);
 });
+
 //Torre alta
 const building21 = createBuilding(9, 8, 9, -100, 100, 0x888888);
 const building22 = createBuilding(8, 10, 8, -100, 100, 0xffffff);
@@ -485,18 +486,33 @@ const building28 = createBuilding(2, 28, 2, -100, 100, 0xffffff);
 const building29 = createBuilding(1, 35, 1, -100, 100, 0xffffff);
 
 //Ponte
-const building30 = createBuilding(1, 15, 1, 170, -20, 0xffffff);
-const building31 = createBuilding(1, 20, 1, 170, -40, 0xffffff);
-const building32 = createBuilding(1, 20, 1, 170, -60, 0xffffff);
-const building33 = createBuilding(1, 15, 1, 170, -80, 0xffffff);
-const building34 = createBuilding(1, 10, 1, 170, 0, 0xffffff);
-const building35 = createBuilding(1, 10, 1, 170, -100, 0xffffff);
-const building36 = createBuilding(1, 15, 1, 190, -20, 0xffffff);
-const building37 = createBuilding(1, 20, 1, 190, -40, 0xffffff);
-const building38 = createBuilding(1, 20, 1, 190, -60, 0xffffff);
-const building39 = createBuilding(1, 15, 1, 190, -80, 0xffffff);
-const building40 = createBuilding(1, 10, 1, 190, 0, 0xffffff);
-const building41 = createBuilding(1, 10, 1, 190, -100, 0xffffff);
+const building30 = createBuilding(1, 15, 1, 170, -20, 0xFF4500);
+const building31 = createBuilding(1, 20, 1, 170, -40, 0xFF4500);
+const building32 = createBuilding(1, 20, 1, 170, -60, 0xFF4500);
+const building33 = createBuilding(1, 15, 1, 170, -80, 0xFF4500);
+const building34 = createBuilding(1, 12, 1, 170, 0, 0xFF4500);
+const building35 = createBuilding(1, 12, 1, 170, -100, 0xFF4500);
+const building36 = createBuilding(1, 15, 1, 180, -20, 0xFF4500);
+const building37 = createBuilding(1, 20, 1, 180, -40, 0xFF4500);
+const building38 = createBuilding(1, 20, 1, 180, -60, 0xFF4500);
+const building39 = createBuilding(1, 15, 1, 180, -80, 0xFF4500);
+const building40 = createBuilding(1, 12, 1, 180, 0, 0xFF4500);
+const building41 = createBuilding(1, 12, 1, 180, -100, 0xFF4500);
+const building48 = createBuilding(1, 5, 1, 180, -120, 0xFF4500);
+const building49 = createBuilding(1, 5, 1, 180, 20, 0xFF4500);
+const building50 = createBuilding(1, 5, 1, 170, -120, 0xFF4500);
+const building51 = createBuilding(1, 5, 1, 170, 20, 0xFF4500);
+
+const building45 = createBuilding(10, 1, 100, 175, -50, 0x1a1a1a);
+building45.position.y = 8;
+const building46 = createBuilding(10, 1, 30, 175, -113, 0x1a1a1a);
+building46.rotation.x = 6;
+building46.position.y = 4;
+const building47 = createBuilding(10, 1, 30, 175, 13, 0x1a1a1a);
+building47.rotation.x = -6;
+building47.position.y = 4;
+
+
 
 // Função para criar nuvens
 function createCloud(x, z) {
@@ -532,7 +548,7 @@ plane.geometry.computeBoundingBox();
 const planeBox = new THREE.Box3().setFromObject(plane);
 
 // Lista de prédios para verificar colisão (nuvens não entram aqui)
-const buildings = [building1, building2, building3, building4, building5, building6, building7, building8, building9, building10, building11, building12, building13, building14, building15, building16, building17, building18, building19, building20, building21, building22, building23, building24, building25, building26, building27, building28, building29, building30, building31, building32, building33, building34, building35, building36, building37, building38, building39, building40, building41,];
+const buildings = [building1, building2, building3, building4, building5, building6, building7, building8, building9, building10, building11, building12, building13, building14, building15, building16, building17, building18, building19, building20, building21, building22, building23, building24, building25, building26, building27, building28, building29, building30, building31, building32, building33, building34, building35, building36, building37, building38, building39, building40, building41,building45, building46, building47];
 
 // Posicionar a câmera
 camera.position.set(0, 5, 10);
