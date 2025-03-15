@@ -932,7 +932,7 @@ function ajustarControlesMobile() {
     // Mostrar controles e ajustar FOV da câmera se altura for maior que a largura (mobile)
     if (altura > largura) {
         controles.style.display = "flex";
-        camera.fov = 105; // FOV para mobile
+        camera.fov = 115; // FOV para mobile
     } else {
         controles.style.display = "none";
         camera.fov = 85; // FOV padrão para desktop
