@@ -474,7 +474,7 @@ buildingsConjunto3.forEach(building => {
     building.add(leftMesh);
 });
 
-//Torre alta
+// Torre alta
 const building21 = createBuilding(9, 8, 9, -100, 100, 0x888888);
 const building22 = createBuilding(8, 10, 8, -100, 100, 0xffffff);
 const building23 = createBuilding(7, 15, 7, -100, 100, 0x888888);
@@ -482,8 +482,52 @@ const building24 = createBuilding(6, 17, 6, -100, 100, 0xffffff);
 const building25 = createBuilding(5, 20, 5, -100, 100, 0x888888);
 const building26 = createBuilding(4, 23, 4, -100, 100, 0xffffff);
 const building27 = createBuilding(3, 25, 3, -100, 100, 0x888888);
-const building28 = createBuilding(2, 28, 2, -100, 100, 0xffffff);
+const building28 = createBuilding(2.3, 28, 2.3, -100, 100, 0xffffff);
+const building52 = createBuilding(1.4, 30, 1.4, -100, 100, 0x888888);
 const building29 = createBuilding(1, 35, 1, -100, 100, 0xffffff);
+
+// Criar um grupo de texturas para a Torre alta (apenas prédios cinza)
+const textureLoader5 = new THREE.TextureLoader();
+const buildingTexture5 = textureLoader.load('conjunto-predios-3.png'); // Substitua pelo caminho da sua imagem
+
+const buildingsTorreAlta = [building21, building22, building23, building24, building25, building26, building27, building28, building29, building52];
+
+// Filtrar apenas os prédios cinza (0x888888)
+const buildingsCinza = buildingsTorreAlta.filter(building => building.material.color.getHex() === 0x888888);
+
+buildingsCinza.forEach(building => {
+    const width = building.geometry.parameters.width;  // Largura do prédio (9, 7, 5, 3)
+    const height = building.geometry.parameters.height; // Altura do prédio (8, 15, 20, 25)
+    const depth = building.geometry.parameters.depth;  // Profundidade do prédio (9, 7, 5, 3)
+
+    // Material compartilhado para todos os planos
+    const textMaterial = new THREE.MeshBasicMaterial({ 
+        map: buildingTexture5, 
+        transparent: true, // Opcional, caso a imagem tenha transparência
+        side: THREE.DoubleSide // Para ser visível de ambos os lados
+    });
+
+    // 1. Plano na frente (face frontal)
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02); // Frente do prédio
+    frontMesh.rotation.y = 0;
+    building.add(frontMesh);
+
+    // 2. Plano à direita (face lateral direita)
+    const rightGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0); // Lado direito do prédio
+    rightMesh.rotation.y = -Math.PI / 2; // Rotaciona 90° para alinhar à direita
+    building.add(rightMesh);
+
+    // 3. Plano à esquerda (face lateral esquerda)
+    const leftGeometry = new THREE.PlaneGeometry(depth, height); // Usa profundidade como largura do plano
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0); // Lado esquerdo do prédio
+    leftMesh.rotation.y = Math.PI / 2; // Rotaciona -90° para alinhar à esquerda
+    building.add(leftMesh);
+});
 
 //Ponte
 const building30 = createBuilding(1, 15, 1, 170, -20, 0xFF4500);
@@ -717,7 +761,7 @@ plane.rotation.z += (targetRoll - plane.rotation.z) * smoothFactor; // Suaviza a
             pitchAngle = maxPitchAngle;
             plane.rotation.x = pitchAngle;
         }
-        crashTimer += 1 / 30; // Incrementa o timer em segundos (assumindo 60 FPS)
+        crashTimer += 1 / 15; // Incrementa o timer em segundos (assumindo 60 FPS)
         if (crashTimer >= crashDuration) {
             // Após o tempo de crash, aplicar o desfoque e agendar o reset
             if (crashTimer >= crashDuration + 4) { // 5 segundos extras após o crash para reiniciar
