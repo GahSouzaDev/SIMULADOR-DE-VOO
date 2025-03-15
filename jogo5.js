@@ -581,12 +581,12 @@ const building50 = createBuilding(1, 5, 1, 170, -120, 0xFF4500);
 const building51 = createBuilding(1, 5, 1, 170, 20, 0xFF4500);
 
 //pista
-const building45 = createBuilding(10, 1, 100, 175, -50,  0x4D4D4D);
+const building45 = createBuilding(10, 1, 100, 175, -50,  0x000000);
 building45.position.y = 8;
-const building46 = createBuilding(10, 1, 30, 175, -113,  0x4D4D4D);
+const building46 = createBuilding(10, 1, 30, 175, -113,  0x000000);
 building46.rotation.x = 6;
 building46.position.y = 4;
-const building47 = createBuilding(10, 1, 30, 175, 13, 0x4D4D4D);
+const building47 = createBuilding(10, 1, 30, 175, 13, 0x000000); 
 building47.rotation.x = -6;
 building47.position.y = 4;
 
