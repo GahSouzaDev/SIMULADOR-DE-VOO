@@ -18,8 +18,8 @@ const planeMaterial = new THREE.MeshStandardMaterial({
 const planeTailMaterial = new THREE.MeshStandardMaterial({
     map: planeTexture, // Usa a mesma textura do corpo ou substitua por outra
     // color: 0xff0000, // Opcional: descomente se quiser tingir de vermelho
-    metalness: 0.5,
-    roughness: 0.5
+    metalness: 0.1,
+    roughness: 0
 });
 
 // Materiais que permanecem iguais (sem textura)
@@ -90,6 +90,14 @@ propeller1.position.z = -1.5;
 propeller1.position.y = 0.8;
 propeller1.position.x = -1.2;
 plane.add(propeller1);
+
+const propeller2 = new THREE.Mesh(propellerGeometry, propellerMaterial);
+propeller2.visible = false; // Define como invisível
+plane.add(propeller2);
+
+const propeller3 = new THREE.Mesh(propellerGeometry, propellerMaterial);
+propeller3.visible = false; // Define como invisível
+plane.add(propeller3);
 
 // Trem de pouso
 // Suporte da roda frontal (nariz)
@@ -239,7 +247,7 @@ const inclina = -0.5; // Inclinação lateral maior para manobrabilidade
 const inclina2 = 0.8; // Inclinação lateral maior para manobrabilidade
 
 // Exportar elementos necessários
-export { plane,motor , propeller, propeller1, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, baseRotationSpeed, inclinaBoing2, inclinaBoing,inclina2, inclina, speedFactor, sphereGeometry, ai, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
+export { plane,motor , propeller, propeller1, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, baseRotationSpeed, inclinaBoing2, inclinaBoing,inclina2, inclina, speedFactor, sphereGeometry, propeller3, propeller2, ai, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
 
 function setSpeed(value) { speed = value; }
 function setVelocity(value) { velocity = value; }

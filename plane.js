@@ -144,6 +144,14 @@ const propeller1 = new THREE.Mesh(propellerGeometry, propellerMaterial);
 propeller1.visible = false; // Define como invisível
 plane.add(propeller1);
 
+const propeller2 = new THREE.Mesh(propellerGeometry, propellerMaterial);
+propeller2.visible = false; // Define como invisível
+plane.add(propeller2);
+
+const propeller3 = new THREE.Mesh(propellerGeometry, propellerMaterial);
+propeller3.visible = false; // Define como invisível
+plane.add(propeller3);
+
 // Posicionar o avião na pista
 plane.position.set(0, 0, 2);
 scene.add(plane);
@@ -187,7 +195,7 @@ const baseVerticalSpeedUp = 0.045;
 const speedFactor = 1.5;
 
 // Exportar elementos necessários
-export { plane, propeller, propeller1, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, speedFactor, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
+export { plane, propeller, propeller1, propeller2, propeller3, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, speedFactor, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
 
 function setSpeed(value) { speed = value; }
 function setVelocity(value) { velocity = value; }
