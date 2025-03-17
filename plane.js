@@ -140,6 +140,10 @@ cabin.position.y = 0.70; // Acima do corpo (0.5 + ajuste para raio)
 cabin.position.z = -0.5; // Centralizado na parte frontal do corpo
 plane.add(cabin);
 
+const propeller1 = new THREE.Mesh(propellerGeometry, propellerMaterial);
+propeller1.visible = false; // Define como invisível
+plane.add(propeller1);
+
 // Posicionar o avião na pista
 plane.position.set(0, 0, 2);
 scene.add(plane);
@@ -176,14 +180,14 @@ let crashTimer = 0;
 const crashDuration = 1;
 let pitchAngle = 0;
 const maxPitchAngle = Math.PI / 6;
-const maxAltitude = 50;
+const maxAltitude = 45;
 const liftFactor = 0.7;
 const pitchSpeed = 0.05;
 const baseVerticalSpeedUp = 0.045;
 const speedFactor = 1.5;
 
 // Exportar elementos necessários
-export { plane, propeller, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, speedFactor, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
+export { plane, propeller, propeller1, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, speedFactor, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
 
 function setSpeed(value) { speed = value; }
 function setVelocity(value) { velocity = value; }

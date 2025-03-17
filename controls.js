@@ -94,6 +94,8 @@ function animate() {
 
     currentPlaneModule.propeller.rotation.z += 0.2 + currentPlaneModule.speed;
 
+    currentPlaneModule.propeller1.rotation.z += 0.2 + currentPlaneModule.speed;
+
     // Controla a aceleração e desaceleração do avião
     if (currentPlaneModule.isAccelerating && currentPlaneModule.speed < currentPlaneModule.maxSpeed && !currentPlaneModule.isCrashed) {
         currentPlaneModule.setVelocity(currentPlaneModule.velocity + currentPlaneModule.acceleration);

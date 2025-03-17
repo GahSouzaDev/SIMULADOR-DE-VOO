@@ -1,148 +1,216 @@
-// Importa a cena do arquivo scene.js
 import { scene } from './scene.js';
 
-// Cria um grupo para o caça
 const plane = new THREE.Group();
 
-// Define os materiais usados no modelo do caça
-const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x4a5a6a }); // Cinza metálico escuro típico de caças
-const planeTailMaterial = new THREE.MeshStandardMaterial({ color: 0x6b7280 }); // Cinza mais claro para detalhes
-const gearMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 }); // Cinza escuro para o trem de pouso
-const cabinMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Preto para o canopy da cabine
+// Carregar a textura camuflada
+const textureLoader = new THREE.TextureLoader();
+const camouflageTexture = textureLoader.load('camuflagem.png'); // Substitua pelo caminho da sua textura
 
-// --- CORPO DO CAÇA ---
-// Corpo mais longo e estreito, usando um cilindro cônico para aerodinâmica
-const bodyGeometry = new THREE.CylinderGeometry(0.15, 0.25, 4.5, 32); // Raio superior menor que o inferior
+// Materiais com textura camuflada
+const planeMaterial = new THREE.MeshStandardMaterial({ 
+    map: camouflageTexture // Substitui a cor pela textura
+});
+const planeTailMaterial = new THREE.MeshStandardMaterial({ 
+    map: camouflageTexture // Substitui a cor pela textura
+});
+const gearMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 }); // Cinza escuro para as rodas do trem de pouso
+const cabinMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Cinza claro para a cabine
+
+const black = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Cinza claro para a cabine
+
+
+
+// Corpo
+const bodyGeometry = new THREE.CylinderGeometry(0.2, 0.2, 3.2, 32);
 const body = new THREE.Mesh(bodyGeometry, planeMaterial);
-body.rotation.x = Math.PI / -2; // Rotaciona para alinhar horizontalmente
-body.position.y = 0.5; // Posiciona acima do chão
-body.position.z = 0; // Centraliza no eixo Z
+body.rotation.x = Math.PI / 2;
+body.position.y = 0.5;
+body.position.z = -0.2;
 plane.add(body);
 
-// --- ASAS DO CAÇA ---
-// Asas triangulares (delta) típicas de caças
-const wingsGeometry = new THREE.TetrahedronGeometry(1.5, 2); // Forma triangular simplificada
+// Asas (triângulo ao invés de retângulo)
+const wingsGeometry = new THREE.ConeGeometry(2.5, 1, 3); // Base 4, altura 1, 3 lados (triângulo)
 const wings = new THREE.Mesh(wingsGeometry, planeMaterial);
-wings.scale.set(1.5, 0.1, 0.8); // Alonga as asas e achata a espessura
-wings.rotation.x = Math.PI / 1; // Alinha ao corpo
-wings.rotation.z = Math.PI; // Rotaciona para formar o "V" das asas delta
-wings.position.y = 0.5; // Alinha com o corpo
-wings.position.z = 0.9; // Posiciona ligeiramente para trás
+wings.rotation.x = Math.PI / 1; // Alinhar 
+// wings.rotation.x = Math.PI / 1; // Alinhar horizontalmente
+wings.position.y = 0.10;
+wings.position.z = 0.5;
 plane.add(wings);
 
-// --- CAUDA VERTICAL DUPLA ---
-// Caudas inclinadas para fora, típicas de caças como o F-22
-const tailVerticalGeometry = new THREE.BoxGeometry(0.1, 1, 0.5);
-// Cauda esquerda
-const tailVerticalLeft = new THREE.Mesh(tailVerticalGeometry, planeTailMaterial);
-tailVerticalLeft.position.y = 1; // Acima do corpo
-tailVerticalLeft.position.z = 1.5; // Na traseira
-tailVerticalLeft.position.x = -0.5; // Desloca para a esquerda
-tailVerticalLeft.rotation.z = Math.PI / 6; // Inclina para fora
-plane.add(tailVerticalLeft);
-// Cauda direita
-const tailVerticalRight = new THREE.Mesh(tailVerticalGeometry, planeTailMaterial);
-tailVerticalRight.position.y = 1; // Acima do corpo
-tailVerticalRight.position.z = 1.5; // Na traseira
-tailVerticalRight.position.x = 0.5; // Desloca para a direita
-tailVerticalRight.rotation.z = -Math.PI / 6; // Inclina para fora
-plane.add(tailVerticalRight);
+// Cauda vertical (duplicada)
+const tailVerticalGeometry = new THREE.BoxGeometry(0.1, 1.5, 0.5);
+const tailVertical = new THREE.Mesh(tailVerticalGeometry, planeTailMaterial);
+tailVertical.rotation.x = Math.PI / 2; // Alinhar 
+tailVertical.rotation.y = Math.PI / 5;
+tailVertical.position.y = 0.9;
+tailVertical.position.z = 1.2;
+tailVertical.position.x = -0.7; // Deslocamento leve para criar a duplicação
+plane.add(tailVertical);
 
-// Cauda horizontal
-const tailHorizontalGeometry = new THREE.BoxGeometry(1.5, 0.1, 0.5);
+// Segunda cauda vertical
+const tailVertical2 = new THREE.Mesh(tailVerticalGeometry, planeTailMaterial);
+tailVertical2.rotation.x = Math.PI / 2; // Alinhar 
+tailVertical2.rotation.y = Math.PI / -5; // Alinhar 
+tailVertical2.position.y = 0.9;
+tailVertical2.position.z = 1.2;
+tailVertical2.position.x = 0.7; // Deslocamento leve para criar a duplicação
+plane.add(tailVertical2);
+
+// Criando um plano para exibir o nome do avião
+const textGeometry = new THREE.PlaneGeometry(0.4, 0.4); // Tamanho do nome
+const textTexture = new THREE.TextureLoader().load('FAB.png'); // Imagem com o nome
+const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture });
+
+// Criando o mesh para o texto
+const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+textMesh.position.set(0.06, 0.1, 0); // Ajustando a posição na cauda
+textMesh.rotation.y = Math.PI / 2; // Opcional: ajusta a rotação se necessário
+
+// Adicionando o texto na cauda vertical
+tailVertical.add(textMesh);
+
+// Cauda horizontal (triângulo ao invés de retângulo)
+const tailHorizontalGeometry = new THREE.ConeGeometry(1.5, 0.5, 3); // Base 1.5, altura 0.5, 3 lados (triângulo)
 const tailHorizontal = new THREE.Mesh(tailHorizontalGeometry, planeMaterial);
+tailHorizontal.rotation.x = Math.PI /1; // Alinhar horizontalmente
 tailHorizontal.position.z = -1.2;
-tailHorizontal.position.y = 0.5;
+tailHorizontal.position.y = 0.3;
 plane.add(tailHorizontal);
 
-
-// --- TEXTO NA CAUDA ---
-// Mantém o texto em uma das caudas (esquerda)
-const textGeometry = new THREE.PlaneGeometry(0.4, 0.4);
-const textTexture = new THREE.TextureLoader().load('images.png');
-const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture });
-const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-textMesh.position.set(0.06, 0.1, 0); // Posiciona na cauda esquerda
-textMesh.rotation.y = Math.PI / 2; // Rotaciona para visibilidade
-tailVerticalLeft.add(textMesh);
-
-// --- EXAUSTOR TRASEIRO (SUBSTITUI A HÉLICE) ---
-// Remove a hélice e adiciona um exaustor cilíndrico
-const exhaustGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.5, 32);
-const exhaustMaterial = new THREE.MeshBasicMaterial({ color: 0x111111 }); // Cinza muito escuro
-const propeller = new THREE.Mesh(exhaustGeometry, exhaustMaterial); // Reutiliza a variável propeller
-propeller.rotation.x = Math.PI / 2; // Alinha ao corpo
-propeller.position.z = 2.2; // Posiciona na traseira
-propeller.position.y = 0.5; // Centraliza verticalmente
+// Hélice (agora como fogo, mantendo o nome "propeller")
+const propellerGeometry = new THREE.ConeGeometry(0.4, 0.5, 32); // Base do fogo (cônica)
+const propellerMaterial = new THREE.MeshStandardMaterial({
+    color: 0xff4500, // Laranja-avermelhado (cor de fogo)
+    emissive: 0xff4500, // Emissão de luz própria
+    emissiveIntensity: 0.5, // Intensidade da emissão
+    transparent: true,
+    opacity: 0.09 // Leve transparência
+});
+const propeller = new THREE.Mesh(propellerGeometry, propellerMaterial);
+propeller.position.set(0, 0.2, 1.87); // Mantém a posição original
+propeller.rotation.x = Math.PI; // Vira o cone para apontar para trás
 plane.add(propeller);
 
-// --- TREM DE POUSO ---
-// Trem de pouso mais compacto e retrátil (simplificado)
-// Suporte frontal
-const frontGearSupportGeometry = new THREE.BoxGeometry(0.05, 0.4, 0.05);
-const frontGearSupport = new THREE.Mesh(frontGearSupportGeometry, gearMaterial);
-frontGearSupport.position.z = -1.8; // Mais para a frente
-frontGearSupport.position.y = 0.2; // Abaixo do corpo
+// Adiciona uma forma extra (topo da chama, mais fina e amarela)
+const flameTipGeometry = new THREE.ConeGeometry(0.2, 0.2, 32);
+const flameTipMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffff00, // Amarelo (ponta do fogo)
+    emissive: 0xffff00,
+    emissiveIntensity: 0.7,
+    transparent: true,
+    opacity: 0.2 
+});
+const flameTip = new THREE.Mesh(flameTipGeometry, flameTipMaterial);
+flameTip.position.set(0, 0.2, 2.0); // Ligeiramente mais atrás
+flameTip.rotation.x = Math.PI;
+plane.add(flameTip);
+
+// Luz emitida pelo fogo
+const fireLight = new THREE.PointLight(0xff4500, 1, 5); // Cor laranja, intensidade 1, alcance 5
+fireLight.position.set(0, 0.3, 2); // Centralizado entre as chamas
+plane.add(fireLight);
+
+// Trem de pouso
+// Suporte da roda frontal (nariz)
+const frontGearSupportGeometry = new THREE.BoxGeometry(0.05, 0.6, 0.05);
+const frontGearSupport = new THREE.Mesh(frontGearSupportGeometry, cabinMaterial);
+frontGearSupport.position.z = -1.6;
+frontGearSupport.position.y = 0.2;
 plane.add(frontGearSupport);
 
-const frontWheelGeometry = new THREE.CylinderGeometry(0.06, 0.06, 0.1, 16);
+const frontWheelGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.1, 16);
 const frontWheel = new THREE.Mesh(frontWheelGeometry, gearMaterial);
 frontWheel.rotation.x = Math.PI / 2;
 frontWheel.rotation.z = Math.PI / 2;
-frontWheel.position.z = -1.8;
-frontWheel.position.y = 0; // Mais próximo do chão
+frontWheel.position.z = -1.6;
+frontWheel.position.y = -0.1;
 plane.add(frontWheel);
 
-// Suporte das rodas principais (mais compacto)
-const mainGearSupportGeometry = new THREE.BoxGeometry(0.05, 0.4, 0.05);
+// Suporte das rodas principais
+const mainGearSupportGeometry = new THREE.BoxGeometry(0.05, 0.6, 0.05);
+
+// Suporte das rodas principais
+const mainGearSupportGeometry12 = new THREE.BoxGeometry(0.05, 1.2, 0.05);
+
 // Suporte esquerdo
-const leftGearSupport = new THREE.Mesh(mainGearSupportGeometry, gearMaterial);
-leftGearSupport.position.x = -0.5; // Mais próximo das asas
+const leftGearSupport = new THREE.Mesh(mainGearSupportGeometry, cabinMaterial);
+leftGearSupport.position.x = -1;
 leftGearSupport.position.y = 0.2;
-leftGearSupport.position.z = -0.5;
-leftGearSupport.rotation.z = Math.PI / 12; // Inclinação sutil
+leftGearSupport.position.z =  0.5;
+leftGearSupport.rotation.z = Math.PI / -12; // Inclinação de 15 graus para fora (ajuste conforme necessário)
 plane.add(leftGearSupport);
+
 // Suporte direito
-const rightGearSupport = new THREE.Mesh(mainGearSupportGeometry, gearMaterial);
-rightGearSupport.position.x = 0.5;
+const rightGearSupport = new THREE.Mesh(mainGearSupportGeometry, cabinMaterial);
+rightGearSupport.position.x = 1;
 rightGearSupport.position.y = 0.2;
-rightGearSupport.position.z = -0.5;
-rightGearSupport.rotation.z = -Math.PI / 12;
+rightGearSupport.position.z = 0.5;
+rightGearSupport.rotation.z = -Math.PI / -12; // Inclinação de -15 graus para fora (ajuste conforme necessário)
 plane.add(rightGearSupport);
 
+// Suporte assa esquerdo
+const leftGearSupport1 = new THREE.Mesh(mainGearSupportGeometry12, cabinMaterial);
+leftGearSupport1.position.x = 0.5;
+leftGearSupport1.position.y = 0.1;
+leftGearSupport1.position.z = -0.4;
+leftGearSupport1.rotation.x = Math.PI / 2; // Inclinação de 15 graus para fora (ajuste conforme necessário)
+plane.add(leftGearSupport1);
+
+// Suporte assa direito
+const rightGearSupport1 = new THREE.Mesh(mainGearSupportGeometry12, cabinMaterial);
+rightGearSupport1.position.x = -0.5;
+rightGearSupport1.position.y = 0.1;
+rightGearSupport1.position.z = -0.4;
+rightGearSupport1.rotation.x = -Math.PI / 2; // Inclinação de -15 graus para fora (ajuste conforme necessário)
+plane.add(rightGearSupport1);
+
 // Rodas principais
-const mainWheelGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.12, 16);
+const mainWheelGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.15, 16);
+
 // Roda esquerda
 const leftWheel = new THREE.Mesh(mainWheelGeometry, gearMaterial);
 leftWheel.rotation.x = Math.PI / 2;
 leftWheel.rotation.z = Math.PI / 2;
-leftWheel.position.x = -0.5;
-leftWheel.position.y = 0;
-leftWheel.position.z = -0.5;
+leftWheel.position.x = -1;
+leftWheel.position.y = -0.2;
+leftWheel.position.z = 0.5;
 plane.add(leftWheel);
+
 // Roda direita
 const rightWheel = new THREE.Mesh(mainWheelGeometry, gearMaterial);
 rightWheel.rotation.x = Math.PI / 2;
 rightWheel.rotation.z = Math.PI / 2;
-rightWheel.position.x = 0.5;
-rightWheel.position.y = 0;
-rightWheel.position.z = -0.5;
+rightWheel.position.x = 1;
+rightWheel.position.y = -0.2;
+rightWheel.position.z =  0.5;
 plane.add(rightWheel);
 
-// --- CABINE DO CAÇA ---
-// Cabine menor e integrada ao corpo, como um canopy
-const cabinGeometry = new THREE.SphereGeometry(0.2, 16, 16, 0, Math.PI * 2, 0, Math.PI / 1); // Meio esfera
+// Cabine em forma de cilindro
+const cabinGeometry = new THREE.CylinderGeometry(0.25, 0.25, 0.8, 16); // Raio superior, raio inferior, altura
 const cabin = new THREE.Mesh(cabinGeometry, cabinMaterial);
-cabin.rotation.x = -Math.PI / 2; // Alinha ao corpo
-cabin.position.y = 0.7; // Acima do corpo
-cabin.position.z = -0.5; // Mais para a frente
+cabin.rotation.x = Math.PI / 2; // Rotacionada para alinhar ao corpo
+cabin.position.y = 0.3; // Acima do corpo (0.5 + ajuste para raio)
+cabin.position.z = 1.5 ; // Centralizado na parte frontal do corpo
 plane.add(cabin);
 
-// --- POSIÇÃO INICIAL E SOMBRA ---
+// Esfera
+const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+const sphere = new THREE.Mesh(sphereGeometry, black);
+sphere.rotation.x = Math.PI / 2;  // Mantém a mesma rotação que o corpo
+sphere.position.y = 0.60;         // Mantém a mesma posição Y
+sphere.position.z = -0.3;        // Mantém a mesma posição Z
+plane.add(sphere);
+
+const propeller1 = new THREE.Mesh(propellerGeometry, propellerMaterial);
+propeller1.visible = false; // Define como invisível
+plane.add(propeller1);
+
+// Posicionar o avião na pista
 plane.position.set(0, 0, 2);
 scene.add(plane);
 
-const shadowGeometry = new THREE.CircleGeometry(2, 32); // Sombra maior para o caça
+// Sombra
+const shadowGeometry = new THREE.CircleGeometry(1.7, 32);
 const shadowMaterial = new THREE.MeshBasicMaterial({
     color: 0x000000,
     transparent: true,
@@ -153,8 +221,8 @@ shadow.rotation.x = -Math.PI / 2;
 shadow.position.y = 0.01;
 scene.add(shadow);
 
-// --- BOUNDING BOX PARA COLISÃO ---
-plane.geometry = new THREE.BoxGeometry(2.5, 0.8, 4.5); // Ajustada para o novo tamanho
+// Bounding box para colisão
+plane.geometry = new THREE.BoxGeometry(4, 0.8, 3.2);
 plane.geometry.computeBoundingBox();
 const planeBox = new THREE.Box3().setFromObject(plane);
 
@@ -186,10 +254,9 @@ const speedFactor = 3.0; // Maior amplificação de velocidade
 const inclina = -1.5; // Inclinação lateral maior para manobrabilidade
 const inclina2 = 1.5; // Inclinação lateral maior para manobrabilidade
 
-// --- EXPORTAÇÃO ---
-export { plane, propeller, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, targetRoll, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, speedFactor, inclina, inclina2, baseRotationSpeed, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
+// Exportar elementos necessários
+export { plane, sphere, propeller, inclina2, fireLight, inclina, propeller1, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, speedFactor, flameTip, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
 
-// --- FUNÇÕES SETTER ---
 function setSpeed(value) { speed = value; }
 function setVelocity(value) { velocity = value; }
 function setIsAccelerating(value) { isAccelerating = value; }

@@ -1,24 +1,52 @@
 import { scene } from './scene.js';
 
-
 const plane = new THREE.Group();
-const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-const planeTailMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+
+// Carregar a textura para as partes vermelhas
+const textureLoader = new THREE.TextureLoader();
+const planeTexture = textureLoader.load('antigo.png'); // Substitua pelo caminho da sua textura
+
+// Material do corpo, asas e cauda horizontal com textura
+const planeMaterial = new THREE.MeshStandardMaterial({
+    map: planeTexture, // Usa a textura carregada
+    // color: 0xff0000, // Opcional: descomente se quiser tingir a textura de vermelho
+    metalness: 0,   // Opcional: ajusta o brilho metálico
+    roughness: 0    // Opcional: ajusta a rugosidade
+});
+
+// Material da cauda vertical com textura (pode usar a mesma ou outra)
+const planeTailMaterial = new THREE.MeshStandardMaterial({
+    map: planeTexture, // Usa a mesma textura do corpo ou substitua por outra
+    // color: 0xff0000, // Opcional: descomente se quiser tingir de vermelho
+    metalness: 0.5,
+    roughness: 0.5
+});
+
+// Materiais que permanecem iguais (sem textura)
 const gearMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 }); // Cinza escuro para as rodas do trem de pouso
 const cabinMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa }); // Cinza claro para a cabine
-
+const motorMaterial = new THREE.MeshBasicMaterial({ color: 0x333333}); 
 // Corpo
-const bodyGeometry = new THREE.CylinderGeometry(0.2, 0.2, 3.2, 32);
+const bodyGeometry = new THREE.CylinderGeometry(0.2, 0.3, 5.2, 32);
 const body = new THREE.Mesh(bodyGeometry, planeMaterial);
 body.rotation.x = Math.PI / 2;
 body.position.y = 0.5;
 body.position.z = -0.2;
 plane.add(body);
 
+// Esfera
+const sphereGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+const sphere = new THREE.Mesh(sphereGeometry, planeMaterial);
+sphere.rotation.x = Math.PI / 2;  // Mantém a mesma rotação que o corpo
+sphere.position.y = 0.5;         // Mantém a mesma posição Y
+sphere.position.z = -2.9;        // Mantém a mesma posição Z
+plane.add(sphere);
+
+
 // Asas
-const wingsGeometry = new THREE.BoxGeometry(12, 0.1, 2);
+const wingsGeometry = new THREE.BoxGeometry(7, 0.1, 1.8);
 const wings = new THREE.Mesh(wingsGeometry, planeMaterial);
-wings.position.y = 0.92;
+wings.position.y = 1;
 wings.position.z = -0.5;
 plane.add(wings);
 
@@ -26,12 +54,12 @@ plane.add(wings);
 const tailVerticalGeometry = new THREE.BoxGeometry(0.1, 0.8, 0.5);
 const tailVertical = new THREE.Mesh(tailVerticalGeometry, planeTailMaterial);
 tailVertical.position.y = 0.9;
-tailVertical.position.z = 1.2;
+tailVertical.position.z = 2.2;
 plane.add(tailVertical);
 
 // Criando um plano para exibir o nome do avião
 const textGeometry = new THREE.PlaneGeometry(0.4, 0.4); // Tamanho do nome
-const textTexture = new THREE.TextureLoader().load('images.png'); // Imagem com o nome
+const textTexture = new THREE.TextureLoader().load('ATR.png'); // Imagem com o nome
 const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture });
 
 // Criando o mesh para o texto
@@ -45,23 +73,29 @@ tailVertical.add(textMesh);
 // Cauda horizontal
 const tailHorizontalGeometry = new THREE.BoxGeometry(3, 0.1, 0.5);
 const tailHorizontal = new THREE.Mesh(tailHorizontalGeometry, planeMaterial);
-tailHorizontal.position.z = 1.2;
+tailHorizontal.position.z = 2;
 tailHorizontal.position.y = 0.5;
 plane.add(tailHorizontal);
 
 // Hélice
-const propellerGeometry = new THREE.BoxGeometry(0.1, 1.2, 0.1);
+const propellerGeometry = new THREE.BoxGeometry(0.1, 1.5, 0.1);
 const propellerMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 const propeller = new THREE.Mesh(propellerGeometry, propellerMaterial);
-propeller.position.z = -1.8;
-propeller.position.y = 0.5;
+propeller.position.z = -1.5;
+propeller.position.y = 0.8;
+propeller.position.x = 1.2;
 plane.add(propeller);
+const propeller1 = new THREE.Mesh(propellerGeometry, propellerMaterial);
+propeller1.position.z = -1.5;
+propeller1.position.y = 0.8;
+propeller1.position.x = -1.2;
+plane.add(propeller1);
 
 // Trem de pouso
 // Suporte da roda frontal (nariz)
 const frontGearSupportGeometry = new THREE.BoxGeometry(0.05, 0.6, 0.05);
 const frontGearSupport = new THREE.Mesh(frontGearSupportGeometry, cabinMaterial);
-frontGearSupport.position.z = -1.6;
+frontGearSupport.position.z = -2.4;
 frontGearSupport.position.y = 0.2;
 plane.add(frontGearSupport);
 
@@ -69,7 +103,7 @@ const frontWheelGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.1, 16);
 const frontWheel = new THREE.Mesh(frontWheelGeometry, gearMaterial);
 frontWheel.rotation.x = Math.PI / 2;
 frontWheel.rotation.z = Math.PI / 2;
-frontWheel.position.z = -1.6;
+frontWheel.position.z = -2.4;
 frontWheel.position.y = -0.1;
 plane.add(frontWheel);
 
@@ -133,23 +167,35 @@ rightWheel.position.z = -0.5;
 plane.add(rightWheel);
 
 // Cabine em forma de cilindro
-const cabinGeometry = new THREE.CylinderGeometry(0.25, 0.25, 0.8, 16); // Raio superior, raio inferior, altura
+const cabinGeometry = new THREE.CylinderGeometry(0.25, 0.25, 2, 20); // Raio superior, raio inferior, altura
 const cabin = new THREE.Mesh(cabinGeometry, cabinMaterial);
 cabin.rotation.x = Math.PI / 2; // Rotacionada para alinhar ao corpo
 cabin.position.y = 0.70; // Acima do corpo (0.5 + ajuste para raio)
-cabin.position.z = -0.5; // Centralizado na parte frontal do corpo
+cabin.position.z = -1.25; // Centralizado na parte frontal do corpo
 plane.add(cabin);
 
-const propeller1 = new THREE.Mesh(propellerGeometry, propellerMaterial);
-propeller1.visible = false; // Define como invisível
-plane.add(propeller1);
+// Cabine em forma de cilindro
+const motorGeometry = new THREE.CylinderGeometry(0.25, 0.25, 0.8, 10); // Raio superior, raio 
+const motor = new THREE.Mesh(motorGeometry, motorMaterial);
+motor.rotation.x = Math.PI / 2; // Rotacionada para alinhar ao corpo
+motor.position.y = 0.8; // Acima do corpo (0.5 + ajuste para raio)
+motor.position.z = -1.19 // Centralizado na parte frontal do corpo
+motor.position.x = -1.19; // Centralizado na parte frontal do corpo
+plane.add(motor);
+
+const motor1 = new THREE.Mesh(motorGeometry, motorMaterial);
+motor1.rotation.x = Math.PI / 2; // Rotacionada para alinhar ao corpo
+motor1.position.y = 0.8; // Acima do corpo (0.5 + ajuste para raio)
+motor1.position.z = -1.19 // Centralizado na parte frontal do corpo
+motor1.position.x = 1.19; // Centralizado na parte frontal do corpo
+plane.add(motor1);
 
 // Posicionar o avião na pista
 plane.position.set(0, 0, 2);
 scene.add(plane);
 
 // Sombra
-const shadowGeometry = new THREE.CircleGeometry(1.7, 32);
+const shadowGeometry = new THREE.CircleGeometry(2.5, 32);
 const shadowMaterial = new THREE.MeshBasicMaterial({
     color: 0x000000,
     transparent: true,
@@ -168,20 +214,20 @@ const planeBox = new THREE.Box3().setFromObject(plane);
 // Parâmetros de física
 let speed = 0;
 let velocity = 0;
-const maxSpeed = 1.5;
-const acceleration = 0.0022;
-const friction = 0.002;
-const gravity = 0.4;
+const maxSpeed = 1;
+const acceleration = 0.001;
+const friction = 0.001;
+const gravity = 0.3;
 const crashGravity = 0.9;
-const liftThreshold = 0.60;
+const liftThreshold = 0.40;
 let isAccelerating = false;
 let isCrashed = false;
 let crashTimer = 0;
 const crashDuration = 1;
 let pitchAngle = 0;
 const maxPitchAngle = Math.PI / 4;
-const maxAltitude = 80;
-const liftFactor = 0.7;
+const maxAltitude = 60;
+const liftFactor = 0.2;
 const pitchSpeed = 0.04;
 const baseVerticalSpeedUp = 0.050;
 const speedFactor = 0.2;
@@ -189,11 +235,11 @@ const ai = 0.8;
 const baseRotationSpeed = 0.05; 
 const inclinaBoing = -0.3;
 const inclinaBoing2 = 0.3;
-const inclina = -0.8; // Inclinação lateral maior para manobrabilidade
+const inclina = -0.5; // Inclinação lateral maior para manobrabilidade
 const inclina2 = 0.8; // Inclinação lateral maior para manobrabilidade
 
 // Exportar elementos necessários
-export { plane, propeller, propeller1, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, baseRotationSpeed, inclinaBoing2, inclinaBoing,inclina2, inclina, speedFactor, ai, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
+export { plane,motor , propeller, propeller1, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, baseRotationSpeed, inclinaBoing2, inclinaBoing,inclina2, inclina, speedFactor, sphereGeometry, ai, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
 
 function setSpeed(value) { speed = value; }
 function setVelocity(value) { velocity = value; }
