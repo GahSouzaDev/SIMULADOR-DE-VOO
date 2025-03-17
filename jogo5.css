@@ -22,6 +22,88 @@ canvas {
     border-radius: 5px;
 }
 
+/* Estilo para a seleção de aviões */
+#plane-selection {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+#plane-selection button {
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-left: 5px;
+    transition: background-color 0.3s;
+}
+
+#plane-selection button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#plane-selection button:active {
+    background-color: rgba(0, 0, 0, 1);
+}
+
+/* Estilo para o dropdown de seleção de aviões */
+.plane-selector {
+    position: absolute;
+    top: 50px; /* Ajustado para não sobrepor o #plane-selection */
+    right: 10px;
+    z-index: 10;    
+}
+
+.dropdown-btn {
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    right: 0; /* Alinha à direita do botão */
+}
+
+.plane-selector:hover .dropdown-content {
+    display: block; /* Exibe o dropdown ao passar o mouse */
+}
+
+.plane-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.plane-option:hover {
+    background-color: #ddd;
+}
+
+.plane-option img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
 /* Estilos dos controles para mobile */
 .mobile-controls {
     display: none; /* Oculto por padrão em desktop */
@@ -34,33 +116,33 @@ canvas {
 
 .direction-controls {
     position: absolute;    
-    left: 2%; /* Ajustei de 200px para 20px para ficar mais à esquerda */
+    left: 2%;
     pointer-events: auto;
 }
 
 /* Posicionamento individual dos botões direcionais */
 #up-btn {
     position: absolute;
-    left: 60px; /* Centraliza horizontalmente em relação ao grupo */
-    top: 0px;   /* Posição superior */
+    left: 60px;
+    top: 0px;
 }
 
 #left-btn {
     position: absolute;
-    left: 0px;  /* À esquerda do botão "up" */
-    top: 60px;  /* Alinhado verticalmente com o "down" e "right" */
+    left: 0px;
+    top: 60px;
 }
 
 #right-btn {
     position: absolute;
-    left: 120px; /* À direita do botão "up" */
-    top: 60px;   /* Alinhado verticalmente com o "left" e "down" */
+    left: 120px;
+    top: 60px;
 }
 
 #down-btn {
     position: absolute;
-    left: 60px;  /* Centraliza horizontalmente em relação ao grupo */
-    top: 120px;  /* Abaixo do botão "up" */
+    left: 60px;
+    top: 120px;
 }
 
 .accelerator-control {
@@ -73,29 +155,39 @@ canvas {
 /* Ajuste de posição para botões grandes (largura > 500px) */
 @media (min-width: 501px) {
     #up-btn {
-        left: 120px; /* Aumenta o espaçamento */
+        left: 120px;
         top: 0px;
     }
 
     #left-btn {
         left: 0px;
-        top: 120px; /* Aumenta o espaçamento vertical */
+        top: 120px;
     }
 
     #right-btn {
-        left: 240px; /* Aumenta o espaçamento horizontal */
+        left: 240px;
         top: 120px;
     }
 
     #down-btn {
         left: 120px;
-        top: 240px; /* Aumenta o espaçamento vertical */
+        top: 240px;
     }
+
     #hud {
         font-size: 30px;
     }
+
     .accelerator-control {
         bottom: -230px;
+    }
+
+    .dropdown-btn {
+        font-size: 20px;
+    }
+
+    #plane-selection button {
+        font-size: 18px;
     }
 }
 
@@ -107,7 +199,16 @@ canvas {
     border: 2px solid #333;
     border-radius: 10px;
     cursor: pointer;
-    touch-action: manipulation; /* Melhora a resposta em touch */
+    touch-action: manipulation;
+    transition: background-color 0.3s;
+}
+
+.mobile-controls button:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.mobile-controls button:active {
+    background: rgba(255, 255, 255, 0.8);
 }
 
 #accelerator-btn {
@@ -122,4 +223,45 @@ canvas {
         display: flex;
         justify-content: space-between;
     }
+}
+/* CSS para estilizar o dropdown */
+.plane-selector {   
+    display: inline-block;
+}
+
+.dropdown-btn {
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+   
+    background-color: rgba(0, 0, 0, 0.5);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content button {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 25px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-content button:hover {
+    background-color: rgba(255, 255, 255, 0.235)
+}
+
+.plane-selector:hover .dropdown-content {
+    display: block;
 }

@@ -38,6 +38,14 @@
             <div>Altura: <span id="altitude">0</span> m</div>
             <div>Velocidade: <span id="speed">0</span> km/h</div>
         </div>
+        <div class="plane-selector">
+            <button class="dropdown-btn">Select Plane ▼</button>
+            <div class="dropdown-content">
+                <button onclick="loadPlane('plane.js')">Cessna</button>
+                <button onclick="loadPlane('plane-jato.js')">Jato</button>
+                <button onclick="loadPlane('plane-boing.js')">Boeing</button>
+            </div>
+        </div>
         <div id="controls" class="mobile-controls">
             <!-- Botões de direção à esquerda -->
             <div class="direction-controls">
