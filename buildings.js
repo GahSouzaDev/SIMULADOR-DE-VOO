@@ -1,0 +1,248 @@
+import { scene } from './scene.js';
+
+// Função para criar prédios
+function createBuilding(width, height, depth, x, z, color) {
+    const geometry = new THREE.BoxGeometry(width, height, depth);
+    const material = new THREE.MeshStandardMaterial({ color });
+    const building = new THREE.Mesh(geometry, material);
+    building.position.set(x, height / 2, z);
+    scene.add(building);
+    building.geometry.computeBoundingBox();
+    building.boundingBox = new THREE.Box3().setFromObject(building);
+    return building;
+}
+
+// Prédios do aeroporto
+const building1 = createBuilding(6, 10, 6, 25, -15, 0x888888);
+const building2 = createBuilding(3, 18, 3, 25, -1, 0x4682B4);
+
+const textureLoader = new THREE.TextureLoader();
+const buildingTexture4 = textureLoader.load('torre-de-controle.png');
+const buildingsAeroporto = [building2];
+buildingsAeroporto.forEach(building => {
+    const width = building.geometry.parameters.width;
+    const height = building.geometry.parameters.height;
+    const depth = building.geometry.parameters.depth;
+    const textMaterial = new THREE.MeshBasicMaterial({ map: buildingTexture4, transparent: true, side: THREE.DoubleSide });
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02);
+    building.add(frontMesh);
+    const rightGeometry = new THREE.PlaneGeometry(depth, height);
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0);
+    rightMesh.rotation.y = -Math.PI / 2;
+    building.add(rightMesh);
+    const leftGeometry = new THREE.PlaneGeometry(depth, height);
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0);
+    leftMesh.rotation.y = Math.PI / 2;
+    building.add(leftMesh);
+});
+
+// Conjunto 1
+const building3 = createBuilding(8, 10, 8, -80, -30, 0xffffff);
+const building4 = createBuilding(8, 10, 8, -60, -30, 0xffffff);
+const building5 = createBuilding(8, 10, 8, -80, -15, 0xffffff);
+const building6 = createBuilding(8, 10, 8, -60, -15, 0xffffff);
+const building7 = createBuilding(8, 10, 8, -100, -30, 0xffffff);
+const building8 = createBuilding(8, 10, 8, -100, -15, 0xffffff);
+const building44 = createBuilding(50, 0.02, 25, -80, -22.5, 0x808080);
+
+const buildingTexture1 = textureLoader.load('conjunto-predios-1.png');
+const buildingsConjunto1 = [building3, building4, building5, building6, building7, building8];
+buildingsConjunto1.forEach(building => {
+    const width = building.geometry.parameters.width;
+    const height = building.geometry.parameters.height;
+    const depth = building.geometry.parameters.depth;
+    const textMaterial = new THREE.MeshBasicMaterial({ map: buildingTexture1, transparent: true, side: THREE.DoubleSide });
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02);
+    building.add(frontMesh);
+    const rightGeometry = new THREE.PlaneGeometry(depth, height);
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0);
+    rightMesh.rotation.y = -Math.PI / 2;
+    building.add(rightMesh);
+    const leftGeometry = new THREE.PlaneGeometry(depth, height);
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0);
+    leftMesh.rotation.y = Math.PI / 2;
+    building.add(leftMesh);
+});
+
+// Conjunto 2
+const building9 = createBuilding(6, 17, 6, 80, 115, 0x808080);
+const building10 = createBuilding(6, 17, 6, 60, 115, 0x808080);
+const building11 = createBuilding(6, 17, 6, 80, 100, 0x808080);
+const building12 = createBuilding(6, 17, 6, 60, 100, 0x808080);
+const building13 = createBuilding(6, 17, 6, 100, 115, 0x808080);
+const building14 = createBuilding(6, 17, 6, 100, 100, 0x808080);
+const building43 = createBuilding(50, 0.02, 25, 80, 108, 0x808080);
+
+const buildingTexture2 = textureLoader.load('conjunto-predios-2.png');
+const buildingsConjunto2 = [building1, building9, building10, building11, building12, building13, building14];
+buildingsConjunto2.forEach(building => {
+    const width = building.geometry.parameters.width;
+    const height = building.geometry.parameters.height;
+    const depth = building.geometry.parameters.depth;
+    const textMaterial = new THREE.MeshBasicMaterial({ map: buildingTexture2, transparent: true, side: THREE.DoubleSide });
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02);
+    building.add(frontMesh);
+    const rightGeometry = new THREE.PlaneGeometry(depth, height);
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0);
+    rightMesh.rotation.y = -Math.PI / 2;
+    building.add(rightMesh);
+    const leftGeometry = new THREE.PlaneGeometry(depth, height);
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0);
+    leftMesh.rotation.y = Math.PI / 2;
+    building.add(leftMesh);
+});
+
+// Conjunto 3
+const building15 = createBuilding(8, 10, 8, 80, -115, 0xffffff);
+const building16 = createBuilding(8, 9, 8, 60, -115, 0xffffff);
+const building17 = createBuilding(8, 8, 8, 80, -100, 0xffffff);
+const building18 = createBuilding(8, 7, 8, 60, -100, 0xffffff);
+const building19 = createBuilding(8, 6, 8, 100, -115, 0xffffff);
+const building20 = createBuilding(8, 10, 8, 100, -100, 0xffffff);
+const building42 = createBuilding(50, 0.02, 30, 80, -108, 0x808080);
+
+const buildingTexture3 = textureLoader.load('conjunto-predios-3.png');
+const buildingsConjunto3 = [building15, building16, building17, building18, building19, building20];
+buildingsConjunto3.forEach(building => {
+    const width = building.geometry.parameters.width;
+    const height = building.geometry.parameters.height;
+    const depth = building.geometry.parameters.depth;
+    const textMaterial = new THREE.MeshBasicMaterial({ map: buildingTexture3, transparent: true, side: THREE.DoubleSide });
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02);
+    building.add(frontMesh);
+    const rightGeometry = new THREE.PlaneGeometry(depth, height);
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0);
+    rightMesh.rotation.y = -Math.PI / 2;
+    building.add(rightMesh);
+    const leftGeometry = new THREE.PlaneGeometry(depth, height);
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0);
+    leftMesh.rotation.y = Math.PI / 2;
+    building.add(leftMesh);
+});
+
+// Torre alta
+const building21 = createBuilding(9, 8, 9, -100, 100, 0x888888);
+const building22 = createBuilding(8, 10, 8, -100, 100, 0xffffff);
+const building23 = createBuilding(7, 15, 7, -100, 100, 0x888888);
+const building24 = createBuilding(6, 17, 6, -100, 100, 0xffffff);
+const building25 = createBuilding(5, 20, 5, -100, 100, 0x888888);
+const building26 = createBuilding(4, 23, 4, -100, 100, 0xffffff);
+const building27 = createBuilding(3, 25, 3, -100, 100, 0x888888);
+const building28 = createBuilding(2.3, 28, 2.3, -100, 100, 0xffffff);
+const building52 = createBuilding(1.4, 30, 1.4, -100, 100, 0x888888);
+const building29 = createBuilding(1, 35, 1, -100, 100, 0xffffff);
+
+const buildingTexture5 = textureLoader.load('conjunto-predios-3.png');
+const buildingsTorreAlta = [building21, building22, building23, building24, building25, building26, building27, building28, building29, building52];
+const buildingsCinza = buildingsTorreAlta.filter(building => building.material.color.getHex() === 0x888888);
+buildingsCinza.forEach(building => {
+    const width = building.geometry.parameters.width;
+    const height = building.geometry.parameters.height;
+    const depth = building.geometry.parameters.depth;
+    const textMaterial = new THREE.MeshBasicMaterial({ map: buildingTexture5, transparent: true, side: THREE.DoubleSide });
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02);
+    building.add(frontMesh);
+    const rightGeometry = new THREE.PlaneGeometry(depth, height);
+    const rightMesh = new THREE.Mesh(rightGeometry, textMaterial);
+    rightMesh.position.set(width / 2 + 0.02, 0, 0);
+    rightMesh.rotation.y = -Math.PI / 2;
+    building.add(rightMesh);
+    const leftGeometry = new THREE.PlaneGeometry(depth, height);
+    const leftMesh = new THREE.Mesh(leftGeometry, textMaterial);
+    leftMesh.position.set(-width / 2 - 0.02, 0, 0);
+    leftMesh.rotation.y = Math.PI / 2;
+    building.add(leftMesh);
+});
+
+// Ponte
+const building30 = createBuilding(1, 15, 1, 170, -20, 0xFF4500);
+const building31 = createBuilding(1, 20, 1, 170, -40, 0xFF4500);
+const building32 = createBuilding(1, 20, 1, 170, -60, 0xFF4500);
+const building33 = createBuilding(1, 15, 1, 170, -80, 0xFF4500);
+const building34 = createBuilding(1, 12, 1, 170, 0, 0xFF4500);
+const building35 = createBuilding(1, 12, 1, 170, -100, 0xFF4500);
+const building36 = createBuilding(1, 15, 1, 180, -20, 0xFF4500);
+const building37 = createBuilding(1, 20, 1, 180, -40, 0xFF4500);
+const building38 = createBuilding(1, 20, 1, 180, -60, 0xFF4500);
+const building39 = createBuilding(1, 15, 1, 180, -80, 0xFF4500);
+const building40 = createBuilding(1, 12, 1, 180, 0, 0xFF4500);
+const building41 = createBuilding(1, 12, 1, 180, -100, 0xFF4500);
+const building48 = createBuilding(1, 5, 1, 180, -120, 0xFF4500);
+const building49 = createBuilding(1, 5, 1, 180, 20, 0xFF4500);
+const building50 = createBuilding(1, 5, 1, 170, -120, 0xFF4500);
+const building51 = createBuilding(1, 5, 1, 170, 20, 0xFF4500);
+
+const building45 = createBuilding(10, 1, 100, 175, -50, 0x000000);
+building45.position.y = 8;
+const building46 = createBuilding(10, 1, 30, 175, -113, 0x000000);
+building46.rotation.x = 6;
+building46.position.y = 4;
+const building47 = createBuilding(10, 1, 30, 175, 13, 0x000000);
+building47.rotation.x = -6;
+building47.position.y = 4;
+
+const building53 = createBuilding(1, 1, 150, 170, -50, 0xFF4500);
+const building54 = createBuilding(1, 1, 150, 180, -50, 0xFF4500);
+const building55 = createBuilding(1, 1, 20, 170, -50, 0xFF4500);
+building55.position.y = 20;
+const building56 = createBuilding(1, 1, 20, 180, -50, 0xFF4500);
+building56.position.y = 20;
+const building57 = createBuilding(1, 1, 20, 170, -30, 0xFF4500);
+building57.position.y = 17;
+building57.rotation.x = -6;
+const building58 = createBuilding(1, 1, 20, 180, -30, 0xFF4500);
+building58.position.y = 17;
+building58.rotation.x = -6;
+const building59 = createBuilding(1, 1, 20, 170, -70, 0xFF4500);
+building59.position.y = 17;
+building59.rotation.x = 6;
+const building60 = createBuilding(1, 1, 20, 180, -70, 0xFF4500);
+building60.position.y = 17;
+building60.rotation.x = 6;
+const building61 = createBuilding(1, 1, 20, 170, -90, 0xFF4500);
+building61.position.y = 13;
+building61.rotation.x = 6.15;
+const building62 = createBuilding(1, 1, 20, 180, -90, 0xFF4500);
+building62.position.y = 13;
+building62.rotation.x = 6.15;
+const building63 = createBuilding(1, 1, 20, 170, -10, 0xFF4500);
+building63.position.y = 13;
+building63.rotation.x = -6.15;
+const building64 = createBuilding(1, 1, 20, 180, -10, 0xFF4500);
+building64.position.y = 13;
+building64.rotation.x = -6.15;
+const building65 = createBuilding(1, 1, 21, 170, -110, 0xFF4500);
+building65.position.y = 8;
+building65.rotation.x = 5.92;
+const building66 = createBuilding(1, 1, 21, 180, -110, 0xFF4500);
+building66.position.y = 8;
+building66.rotation.x = 5.92;
+const building67 = createBuilding(1, 1, 21, 170, 10, 0xFF4500);
+building67.position.y = 8;
+building67.rotation.x = -5.92;
+const building68 = createBuilding(1, 1, 21, 180, 10, 0xFF4500);
+building68.position.y = 8;
+building68.rotation.x = -5.92;
+
+const buildings = [building1, building2, building3, building4, building5, building6, building7, building8, building9, building10, building11, building12, building13, building14, building15, building16, building17, building18, building19, building20, building21, building22, building23, building24, building25, building26, building27, building28, building29, building30, building31, building32, building33, building34, building35, building36, building37, building38, building39, building40, building41, building45, building46, building47, building55, building56, building57, building58, building59, building60, building61, building62, building63, building64, building65, building66, building67, building68];
+
+// Exportar prédios para colisão
+export { buildings };
