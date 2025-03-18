@@ -43,6 +43,9 @@ loadPlane(savedPlane || 'plane.js');
 let keys = { w: false, s: false, a: false, d: false };
 const baseRotationSpeed = 0.015;
 
+// Variável para rastrear o modo da câmera
+let isCameraBehind = false; // Padrão: perspectiva fixa
+
 // --- EVENTOS DE TECLADO ---
 document.addEventListener('keydown', (event) => {
     if (!currentPlaneModule) return;
@@ -85,6 +88,33 @@ function resetGame() {
     currentPlaneModule.setIsAccelerating(false);
     renderer.domElement.style.filter = 'none';
     renderer.render(scene, position);
+}
+
+// --- FUNÇÃO PARA ATUALIZAR A CÂMERA ---
+function updateCamera() {
+    if (isCameraBehind) {
+        // Perspectiva atrás do avião
+        const distanceBehind = 10;
+        const heightOffset = 5;
+        const yaw = currentPlaneModule.plane.rotation.y;
+
+        const cameraOffsetX = +Math.sin(yaw) * distanceBehind;
+        const cameraOffsetZ = +Math.cos(yaw) * distanceBehind;
+
+        camera.position.set(
+            currentPlaneModule.plane.position.x + cameraOffsetX,
+            currentPlaneModule.plane.position.y + heightOffset,
+            currentPlaneModule.plane.position.z + cameraOffsetZ
+        );
+    } else {
+        // Perspectiva fixa
+        camera.position.set(
+            currentPlaneModule.plane.position.x,
+            currentPlaneModule.plane.position.y + 5,
+            currentPlaneModule.plane.position.z + 10
+        );
+    }
+    camera.lookAt(currentPlaneModule.plane.position);
 }
 
 // --- FUNÇÃO DE ANIMAÇÃO ---
@@ -136,6 +166,7 @@ function animate() {
     const directionZ = Math.cos(currentPlaneModule.plane.rotation.y);
     const newX = currentPlaneModule.plane.position.x - directionX * currentPlaneModule.speed;
     const newZ = currentPlaneModule.plane.position.z - directionZ * currentPlaneModule.speed;
+    
     let newY = currentPlaneModule.plane.position.y;
     let verticalSpeed = 0;
 
@@ -143,12 +174,12 @@ function animate() {
         // Subida proporcional à velocidade quando a tecla W é pressionada
         if (keys.w && currentPlaneModule.speed > currentPlaneModule.liftThreshold && currentPlaneModule.plane.position.y < currentPlaneModule.maxAltitude) {
             verticalSpeed = currentPlaneModule.baseVerticalSpeedUp + (currentPlaneModule.baseVerticalSpeedUp * speedMultiplier);
-            newY += verticalSpeed;
+            newY += verticalSpeed + currentPlaneModule.speed * 0.1;;
         }
         // Descida fixa quando a tecla S é pressionada e o avião está acima de 0.1
         if (keys.s && currentPlaneModule.plane.position.y > 0.1) {
-            verticalSpeed = -0.2;
-            newY += verticalSpeed;
+            verticalSpeed = -0.1;
+            newY += verticalSpeed - currentPlaneModule.speed * 0.1;
         }
         // Frenagem linear quando a tecla S é pressionada e o avião está no chão (y <= 0.1)
         if (keys.s && currentPlaneModule.plane.position.y <= 0.1 && currentPlaneModule.velocity > 0) {
@@ -165,13 +196,16 @@ function animate() {
         }
 
         const yaw = currentPlaneModule.plane.rotation.y;
+        
         const cameraDirectionZ = Math.cos(yaw);
         const relativeVerticalSpeed = verticalSpeed * Math.sign(cameraDirectionZ);
         const targetPitch = relativeVerticalSpeed * 5;
         currentPlaneModule.setPitchAngle(currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed);
         currentPlaneModule.setPitchAngle(Math.max(-currentPlaneModule.maxPitchAngle, Math.min(currentPlaneModule.maxPitchAngle, currentPlaneModule.pitchAngle)));
-        currentPlaneModule.plane.rotation.x = currentPlaneModule.pitchAngle;
-
+        
+        //currentPlaneModule.plane.rotation.x = currentPlaneModule.pitchAngle;   
+              
+             
         if (newY > currentPlaneModule.maxAltitude) newY = currentPlaneModule.maxAltitude;
         if (newY < 0.1) newY = 0.1;
     } else {
@@ -232,12 +266,12 @@ function animate() {
         if (cloud.position.x > 100) cloud.position.x = -100;
     });
 
-    camera.position.set(currentPlaneModule.plane.position.x, currentPlaneModule.plane.position.y + 5, currentPlaneModule.plane.position.z + 10);
-    camera.lookAt(currentPlaneModule.plane.position);
+    // Substitui a lógica fixa da câmera pela função updateCamera
+    updateCamera();
 
     const altitudeDisplay = document.getElementById('altitude');
     const speedDisplay = document.getElementById('speed');
-    altitudeDisplay.textContent = ((currentPlaneModule.plane.position.y - 0.1) * 4 ).toFixed(1);
+    altitudeDisplay.textContent = ((currentPlaneModule.plane.position.y - 0.1) * 4).toFixed(1);
     speedDisplay.textContent = (currentPlaneModule.speed * 450).toFixed(1);
 
     renderer.render(scene, camera);
@@ -330,5 +364,12 @@ addButtonEvents(leftBtn, 'a');
 addButtonEvents(rightBtn, 'd');
 addButtonEvents(downBtn, 's');
 addButtonEvents(acceleratorBtn, null, false);
+
+// Adiciona o evento do botão de alternância da câmera
+const cameraToggleBtn = document.getElementById('camera-toggle-btn');
+cameraToggleBtn.addEventListener('click', () => {
+    isCameraBehind = !isCameraBehind; // Alterna o estado da câmera
+    cameraToggleBtn.classList.toggle('active'); // Alterna a classe para mudar a cor
+});
 
 window.loadPlane = loadPlane;
