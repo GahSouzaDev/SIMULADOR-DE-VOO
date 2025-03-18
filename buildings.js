@@ -38,6 +38,12 @@ buildingsAeroporto.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
+    // Adiciona a face traseira
+    const backGeometry = new THREE.PlaneGeometry(width, height);
+    const backMesh = new THREE.Mesh(backGeometry, textMaterial);
+    backMesh.position.set(0, 0, -depth / 2 - 0.02);
+    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    building.add(backMesh);
 });
 
 // Conjunto 1
@@ -70,6 +76,12 @@ buildingsConjunto1.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
+    // Adiciona a face traseira
+    const backGeometry = new THREE.PlaneGeometry(width, height);
+    const backMesh = new THREE.Mesh(backGeometry, textMaterial);
+    backMesh.position.set(0, 0, -depth / 2 - 0.02);
+    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    building.add(backMesh);
 });
 
 // Conjunto 2
@@ -102,6 +114,12 @@ buildingsConjunto2.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
+    // Adiciona a face traseira
+    const backGeometry = new THREE.PlaneGeometry(width, height);
+    const backMesh = new THREE.Mesh(backGeometry, textMaterial);
+    backMesh.position.set(0, 0, -depth / 2 - 0.02);
+    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    building.add(backMesh);
 });
 
 // Conjunto 3
@@ -134,6 +152,12 @@ buildingsConjunto3.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
+    // Adiciona a face traseira
+    const backGeometry = new THREE.PlaneGeometry(width, height);
+    const backMesh = new THREE.Mesh(backGeometry, textMaterial);
+    backMesh.position.set(0, 0, -depth / 2 - 0.02);
+    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    building.add(backMesh);
 });
 
 // Torre alta
@@ -170,6 +194,12 @@ buildingsCinza.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
+    // Adiciona a face traseira
+    const backGeometry = new THREE.PlaneGeometry(width, height);
+    const backMesh = new THREE.Mesh(backGeometry, textMaterial);
+    backMesh.position.set(0, 0, -depth / 2 - 0.02);
+    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    building.add(backMesh);
 });
 
 // Ponte
