@@ -268,7 +268,7 @@ canvas {
     display: block;
 }
 .camera-toggle {
-    position: absolute;
+    position: fixed;
     top: 300px; /* Abaixo do HUD */
     right: 10px;
     width: 50px;
@@ -276,7 +276,7 @@ canvas {
     background-color: #db000076; /* Perspectiva fixa (padrão) */
     border: none;
     border-radius: 50%;
-    font-size: 40px;
+    font-size: 35px;
     cursor: pointer;
     transition: background-color 0.3s;
     z-index: 10;
