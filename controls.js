@@ -75,7 +75,6 @@ function checkCollision(box1, box2) {
 }
 
 // --- FUNÇÃO DE REINÍCIO DO JOGO ---
-
 function resetGame() {
     if (!currentPlaneModule) return;
     currentPlaneModule.plane.position.set(0, 0, 2);
@@ -90,6 +89,7 @@ function resetGame() {
     renderer.domElement.style.filter = 'none';
     renderer.render(scene, position);
 }
+
 
 // --- FUNÇÃO PARA ATUALIZAR A CÂMERA ---
 function updateCamera() {
@@ -327,10 +327,21 @@ window.addEventListener("resize", ajustarControlesMobile);
 const joystickContainer = document.getElementById('joystick-container');
 const joystick = document.getElementById('joystick');
 let isDragging = false;
+let activeTouchId = null; // Rastrear o toque específico do joystick
 
 function handleJoystickStart(event) {
     event.preventDefault();
-    if (!currentPlaneModule) return;
+    if (!currentPlaneModule || isDragging) return;
+
+    let touch;
+    if (event.type === 'touchstart') {
+        touch = Array.from(event.touches).find(t => joystickContainer.contains(document.elementFromPoint(t.clientX, t.clientY)));
+        if (!touch) return; // Só ativa se o toque começou no joystick
+        activeTouchId = touch.identifier;
+    } else {
+        touch = event;
+    }
+
     isDragging = true;
     joystick.style.background = 'rgba(83, 85, 237, 0.8)';
     handleJoystickMove(event);
@@ -339,10 +350,17 @@ function handleJoystickStart(event) {
 function handleJoystickMove(event) {
     if (!isDragging || !currentPlaneModule) return;
 
+    let touch;
+    if (event.type === 'touchmove') {
+        touch = Array.from(event.touches).find(t => t.identifier === activeTouchId);
+        if (!touch) return; // Ignora se o toque ativo não estiver presente
+    } else {
+        touch = event;
+    }
+
     const rect = joystickContainer.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    const touch = event.type.includes('touch') ? event.touches[0] : event;
     let offsetX = touch.clientX - centerX;
     let offsetY = touch.clientY - centerY;
 
@@ -367,9 +385,15 @@ function handleJoystickMove(event) {
 }
 
 function handleJoystickEnd(event) {
-    event.preventDefault();
-    if (!currentPlaneModule) return;
+    if (!isDragging || !currentPlaneModule) return;
+
+    if (event.type === 'touchend' || event.type === 'touchcancel') {
+        const touch = Array.from(event.changedTouches).find(t => t.identifier === activeTouchId);
+        if (!touch) return; // Só termina se o toque ativo foi liberado
+    }
+
     isDragging = false;
+    activeTouchId = null;
     joystick.style.left = '50%';
     joystick.style.top = '50%';
     joystick.style.background = 'rgba(255, 255, 255, 0.36)';
@@ -382,7 +406,7 @@ function handleJoystickEnd(event) {
 joystickContainer.addEventListener('mousedown', handleJoystickStart);
 joystickContainer.addEventListener('touchstart', handleJoystickStart);
 document.addEventListener('mousemove', handleJoystickMove);
-document.addEventListener('touchmove', handleJoystickMove);
+document.addEventListener('touchmove', handleJoystickMove, { passive: false });
 document.addEventListener('mouseup', handleJoystickEnd);
 document.addEventListener('touchend', handleJoystickEnd);
 document.addEventListener('touchcancel', handleJoystickEnd);
@@ -393,6 +417,7 @@ const acceleratorBtn = document.getElementById('accelerator-btn');
 function addButtonEvents(button, action, isKey = true) {
     const startEvent = (e) => {
         e.preventDefault();
+        e.stopPropagation(); // Impede que o evento afete o joystick
         if (!currentPlaneModule) return;
         if (isKey) keys[action] = true;
         else currentPlaneModule.setIsAccelerating(true);
@@ -401,6 +426,7 @@ function addButtonEvents(button, action, isKey = true) {
     
     const endEvent = (e) => {
         e.preventDefault();
+        e.stopPropagation(); // Impede que o evento afete o joystick
         if (!currentPlaneModule) return;
         if (isKey) keys[action] = false;
         else currentPlaneModule.setIsAccelerating(false);
@@ -421,6 +447,7 @@ const cameraToggleBtn = document.getElementById('camera-toggle-btn');
 
 function toggleCamera(event) {
     event.preventDefault();
+    event.stopPropagation(); // Impede interferência com outros controles
     isCameraBehind = !isCameraBehind;
     cameraToggleBtn.classList.toggle('active');
 }
@@ -436,6 +463,7 @@ const planeOptions = dropdownContent.querySelectorAll('button');
 
 function toggleDropdown(event) {
     event.preventDefault();
+    event.stopPropagation(); // Impede interferência com outros controles
     planeSelector.classList.toggle('active');
 }
 
@@ -445,27 +473,26 @@ function closeDropdown(event) {
     }
 }
 
-// Adicionar eventos ao botão de abrir/fechar o dropdown
 dropdownBtn.addEventListener('click', toggleDropdown);
 dropdownBtn.addEventListener('touchstart', toggleDropdown);
 
-// Adicionar eventos às opções do dropdown
 planeOptions.forEach(option => {
     option.addEventListener('click', (event) => {
         event.preventDefault();
+        event.stopPropagation();
         const planeFile = option.getAttribute('onclick').match(/'([^']+)'/)[1];
         loadPlane(planeFile);
-        planeSelector.classList.remove('active'); // Fechar o dropdown após selecionar
+        planeSelector.classList.remove('active');
     });
     option.addEventListener('touchstart', (event) => {
         event.preventDefault();
+        event.stopPropagation();
         const planeFile = option.getAttribute('onclick').match(/'([^']+)'/)[1];
         loadPlane(planeFile);
-        planeSelector.classList.remove('active'); // Fechar o dropdown após selecionar
+        planeSelector.classList.remove('active');
     });
 });
 
-// Fechar o dropdown ao clicar/tocar fora
 document.addEventListener('click', closeDropdown);
 document.addEventListener('touchstart', closeDropdown);
 
