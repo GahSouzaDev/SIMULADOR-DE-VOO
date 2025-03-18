@@ -123,11 +123,8 @@ function animate() {
     if (!currentPlaneModule) return;
 
     currentPlaneModule.propeller.rotation.z += 0.2 + currentPlaneModule.speed;
-
     currentPlaneModule.propeller1.rotation.z += 0.2 + currentPlaneModule.speed;
-
     currentPlaneModule.propeller2.rotation.z += 0.2 + currentPlaneModule.speed;
-
     currentPlaneModule.propeller3.rotation.z += 0.2 + currentPlaneModule.speed;
 
     // Controla a aceleração e desaceleração do avião
@@ -155,7 +152,7 @@ function animate() {
         if (keys.d) {
             currentPlaneModule.plane.rotation.y -= rotationSpeed;
             targetYaw -= rotationSpeed;
-            if (currentPlaneModule.velocity > 0.3) targetRoll = currentPlaneModule.inclinaBoing ||-0.5;
+            if (currentPlaneModule.velocity > 0.3) targetRoll = currentPlaneModule.inclinaBoing || -0.5;
             if (currentPlaneModule.velocity > 1.4) targetRoll = currentPlaneModule.inclina || -0.5;
         }
     }
@@ -169,43 +166,69 @@ function animate() {
     
     let newY = currentPlaneModule.plane.position.y;
     let verticalSpeed = 0;
+    const pitchMultiplier = 5; // Ajuste este valor para mudar o ângulo de subida/descida
 
     if (!currentPlaneModule.isCrashed) {
+        const yaw = currentPlaneModule.plane.rotation.y;
+
         // Subida proporcional à velocidade quando a tecla W é pressionada
         if (keys.w && currentPlaneModule.speed > currentPlaneModule.liftThreshold && currentPlaneModule.plane.position.y < currentPlaneModule.maxAltitude) {
             verticalSpeed = currentPlaneModule.baseVerticalSpeedUp + (currentPlaneModule.baseVerticalSpeedUp * speedMultiplier);
-            newY += verticalSpeed + currentPlaneModule.speed * 0.1;;
+            newY += verticalSpeed + currentPlaneModule.speed * 0.1;
+
+            // Ajustar o pitch para cima
+            const targetPitch = verticalSpeed * pitchMultiplier;
+            currentPlaneModule.setPitchAngle(
+                currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
+            );
         }
         // Descida fixa quando a tecla S é pressionada e o avião está acima de 0.1
-        if (keys.s && currentPlaneModule.plane.position.y > 0.1) {
+        else if (keys.s && currentPlaneModule.plane.position.y > 0.1) {
             verticalSpeed = -0.1;
             newY += verticalSpeed - currentPlaneModule.speed * 0.1;
+
+            // Ajustar o pitch para baixo
+            const targetPitch = verticalSpeed * pitchMultiplier;
+            currentPlaneModule.setPitchAngle(
+                currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
+            );
         }
+        // Se não houver comando W ou S, retornar o pitch a 0 gradualmente
+        else {
+            const targetPitch = 0; // Posição reta
+            currentPlaneModule.setPitchAngle(
+                currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
+            );
+        }
+
         // Frenagem linear quando a tecla S é pressionada e o avião está no chão (y <= 0.1)
         if (keys.s && currentPlaneModule.plane.position.y <= 0.1 && currentPlaneModule.velocity > 0) {
-            // Reduz a velocity de forma linear (usando um valor fixo de desaceleração)
-            const brakeDeceleration = 0.005; // Valor ajustável para a força da frenagem
+            const brakeDeceleration = 0.005;
             currentPlaneModule.setVelocity(currentPlaneModule.velocity - brakeDeceleration);
-            if (currentPlaneModule.velocity < 0) currentPlaneModule.setVelocity(0); // Garante que não fique negativo
-            currentPlaneModule.setSpeed(currentPlaneModule.velocity); // Atualiza a speed
+            if (currentPlaneModule.velocity < 0) currentPlaneModule.setVelocity(0);
+            currentPlaneModule.setSpeed(currentPlaneModule.velocity);
         }
         // Aplica gravidade se a velocidade for insuficiente para sustentação
         if (currentPlaneModule.speed < currentPlaneModule.liftThreshold && currentPlaneModule.plane.position.y > 0.1) {
             verticalSpeed = currentPlaneModule.speed === 0 ? -currentPlaneModule.gravity * 5 : -currentPlaneModule.gravity;
             newY += verticalSpeed;
+
+            // Ajustar o pitch para baixo durante a queda por gravidade
+            const targetPitch = verticalSpeed * pitchMultiplier;
+            currentPlaneModule.setPitchAngle(
+                currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
+            );
         }
 
-        const yaw = currentPlaneModule.plane.rotation.y;
-        
-        const cameraDirectionZ = Math.cos(yaw);
-        const relativeVerticalSpeed = verticalSpeed * Math.sign(cameraDirectionZ);
-        const targetPitch = relativeVerticalSpeed * 5;
-        currentPlaneModule.setPitchAngle(currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed);
-        currentPlaneModule.setPitchAngle(Math.max(-currentPlaneModule.maxPitchAngle, Math.min(currentPlaneModule.maxPitchAngle, currentPlaneModule.pitchAngle)));
-        
-        //currentPlaneModule.plane.rotation.x = currentPlaneModule.pitchAngle;   
-              
-             
+        // Limitar o ângulo de pitch
+        currentPlaneModule.setPitchAngle(
+            Math.max(-currentPlaneModule.maxPitchAngle, Math.min(currentPlaneModule.maxPitchAngle, currentPlaneModule.pitchAngle))
+        );
+
+        // Aplicar a rotação no espaço local com ordem YXZ
+        currentPlaneModule.plane.rotation.order = 'YXZ';
+        currentPlaneModule.plane.rotation.x = currentPlaneModule.pitchAngle;
+
         if (newY > currentPlaneModule.maxAltitude) newY = currentPlaneModule.maxAltitude;
         if (newY < 0.1) newY = 0.1;
     } else {
@@ -266,7 +289,6 @@ function animate() {
         if (cloud.position.x > 100) cloud.position.x = -100;
     });
 
-    // Substitui a lógica fixa da câmera pela função updateCamera
     updateCamera();
 
     const altitudeDisplay = document.getElementById('altitude');
@@ -368,8 +390,8 @@ addButtonEvents(acceleratorBtn, null, false);
 // Adiciona o evento do botão de alternância da câmera
 const cameraToggleBtn = document.getElementById('camera-toggle-btn');
 cameraToggleBtn.addEventListener('click', () => {
-    isCameraBehind = !isCameraBehind; // Alterna o estado da câmera
-    cameraToggleBtn.classList.toggle('active'); // Alterna a classe para mudar a cor
+    isCameraBehind = !isCameraBehind;
+    cameraToggleBtn.classList.toggle('active');
 });
 
 window.loadPlane = loadPlane;
