@@ -23,40 +23,12 @@ canvas {
     border-radius: 5px;
 }
 
-/* Estilo para a seleção de aviões */
-#plane-selection {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 10;
-}
-
-#plane-selection button {
-    padding: 10px 20px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-    margin-left: 5px;
-    transition: background-color 0.3s;
-}
-
-#plane-selection button:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-#plane-selection button:active {
-    background-color: rgba(0, 0, 0, 1);
-}
-
 /* Estilo para o dropdown de seleção de aviões */
 .plane-selector {
     position: absolute;
-    top: 50px; /* Ajustado para não sobrepor o #plane-selection */
+    top: 100px;
     right: 10px;
-    z-index: 10;    
+    z-index: 30; /* Acima de tudo */
 }
 
 .dropdown-btn {
@@ -68,6 +40,7 @@ canvas {
     font-size: 18px;
     border-radius: 5px;
     transition: background-color 0.3s;
+    touch-action: manipulation; /* Garante interação em mobile */
 }
 
 .dropdown-btn:hover {
@@ -77,73 +50,74 @@ canvas {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
-    min-width: 200px;
+    background-color: rgba(0, 0, 0, 0.5);
+    min-width: 160px;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-    right: 0; /* Alinha à direita do botão */
+    right: 0;
+    z-index: 30;
 }
 
-.plane-selector:hover .dropdown-content {
-    display: block; /* Exibe o dropdown ao passar o mouse */
+.plane-selector.active .dropdown-content {
+    display: block; /* Usaremos JS para ativar em mobile */
 }
 
-.plane-option {
-    display: flex;
-    align-items: center;
-    padding: 10px;
+.dropdown-content button {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 25px;
+    background-color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.plane-option:hover {
-    background-color: #ddd;
-}
-
-.plane-option img {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
+.dropdown-content button:hover {
+    background-color: rgba(255, 255, 255, 0.235);
 }
 
 /* Estilos dos controles para mobile */
 .mobile-controls {
-    display: none; /* Oculto por padrão em desktop */
+    display: none;
     position: fixed;
     bottom: 30%;
     width: 100%;
-    z-index: 100;
-    pointer-events: none; /* Permite interação apenas com os botões */
+    z-index: 10; /* Abaixo do HUD e dropdown */
+    pointer-events: none;
 }
 
 .direction-controls {
-    position: absolute;    
+    position: absolute;
     left: 2%;
     pointer-events: auto;
 }
 
-/* Posicionamento individual dos botões direcionais */
-#up-btn {
-    position: absolute;
-    left: 60px;
-    top: 0px;
+/* Estilo do Joystick */
+#joystick-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid #333;
+    border-radius: 50%;
+    user-select: none;
+    touch-action: none;
 }
 
-#left-btn {
+#joystick {
     position: absolute;
-    left: 0px;
-    top: 60px;
-}
-
-#right-btn {
-    position: absolute;
-    left: 120px;
-    top: 60px;
-}
-
-#down-btn {
-    position: absolute;
-    left: 60px;
-    top: 120px;
+    width: 60px;
+    height: 60px;
+    background: rgba(83, 85, 237, 0.8);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: background-color 0.3s;
 }
 
 .accelerator-control {
@@ -153,26 +127,16 @@ canvas {
     pointer-events: auto;
 }
 
-/* Ajuste de posição para botões grandes (largura > 500px) */
+/* Ajuste de tamanho para telas maiores (largura > 500px) */
 @media (min-width: 501px) {
-    #up-btn {
-        left: 120px;
-        top: 0px;
+    #joystick-container {
+        width: 360px;
+        height: 360px;
     }
 
-    #left-btn {
-        left: 0px;
-        top: 120px;
-    }
-
-    #right-btn {
-        left: 240px;
-        top: 120px;
-    }
-
-    #down-btn {
-        left: 120px;
-        top: 240px;
+    #joystick {
+        width: 120px;
+        height: 120px;
     }
 
     #hud {
@@ -185,10 +149,6 @@ canvas {
 
     .dropdown-btn {
         font-size: 20px;
-    }
-
-    #plane-selection button {
-        font-size: 18px;
     }
 }
 
@@ -225,65 +185,24 @@ canvas {
         justify-content: space-between;
     }
 }
-/* CSS para estilizar o dropdown */
-.plane-selector {   
-    top: 100px;
-    display: inline-block;
-}
 
-.dropdown-btn {
-    padding: 10px 20px;
-    background-color: rgba(0, 0, 0, 0.2);
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: none;
-   
-    background-color: rgba(0, 0, 0, 0.5);
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content button {
-    color: white;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    border: none;
-    width: 100%;
-    text-align: left;
-    font-size: 25px;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.dropdown-content button:hover {
-    background-color: rgba(255, 255, 255, 0.235)
-}
-
-.plane-selector:hover .dropdown-content {
-    display: block;
-}
+/* Estilo do botão de alternância da câmera */
 .camera-toggle {
-    position: fixed;
-    top: 300px; /* Abaixo do HUD */
+    position: absolute;
+    top: 300px;
     right: 10px;
     width: 50px;
     height: 50px;
-    background-color: #db000076; /* Perspectiva fixa (padrão) */
+    background-color: #db000076;
     border: none;
     border-radius: 50%;
-    font-size: 35px;
+    font-size: 40px;
     cursor: pointer;
     transition: background-color 0.3s;
-    z-index: 10;
-    
+    z-index: 20; /* Acima dos controles */
+    touch-action: manipulation;
 }
 
 .camera-toggle.active {
-    
-    background-color: #09ff0073; /* Perspectiva atrás (verde quando ativo) */
+    background-color: #09ff0073;
 }

@@ -44,7 +44,7 @@ let keys = { w: false, s: false, a: false, d: false };
 const baseRotationSpeed = 0.015;
 
 // Variável para rastrear o modo da câmera
-let isCameraBehind = false; // Padrão: perspectiva fixa
+let isCameraBehind = false;
 
 // --- EVENTOS DE TECLADO ---
 document.addEventListener('keydown', (event) => {
@@ -75,6 +75,7 @@ function checkCollision(box1, box2) {
 }
 
 // --- FUNÇÃO DE REINÍCIO DO JOGO ---
+
 function resetGame() {
     if (!currentPlaneModule) return;
     currentPlaneModule.plane.position.set(0, 0, 2);
@@ -93,7 +94,6 @@ function resetGame() {
 // --- FUNÇÃO PARA ATUALIZAR A CÂMERA ---
 function updateCamera() {
     if (isCameraBehind) {
-        // Perspectiva atrás do avião
         const distanceBehind = 10;
         const heightOffset = 5;
         const yaw = currentPlaneModule.plane.rotation.y;
@@ -107,7 +107,6 @@ function updateCamera() {
             currentPlaneModule.plane.position.z + cameraOffsetZ
         );
     } else {
-        // Perspectiva fixa
         camera.position.set(
             currentPlaneModule.plane.position.x,
             currentPlaneModule.plane.position.y + 5,
@@ -127,7 +126,6 @@ function animate() {
     currentPlaneModule.propeller2.rotation.z += 0.2 + currentPlaneModule.speed;
     currentPlaneModule.propeller3.rotation.z += 0.2 + currentPlaneModule.speed;
 
-    // Controla a aceleração e desaceleração do avião
     if (currentPlaneModule.isAccelerating && currentPlaneModule.speed < currentPlaneModule.maxSpeed && !currentPlaneModule.isCrashed) {
         currentPlaneModule.setVelocity(currentPlaneModule.velocity + currentPlaneModule.acceleration);
     } else if (!currentPlaneModule.isAccelerating && currentPlaneModule.velocity > 0 && !currentPlaneModule.isCrashed) {
@@ -166,66 +164,53 @@ function animate() {
     
     let newY = currentPlaneModule.plane.position.y;
     let verticalSpeed = 0;
-    const pitchMultiplier = 5; // Ajuste este valor para mudar o ângulo de subida/descida
+    const pitchMultiplier = 5;
 
     if (!currentPlaneModule.isCrashed) {
         const yaw = currentPlaneModule.plane.rotation.y;
 
-        // Subida proporcional à velocidade quando a tecla W é pressionada
-        if (keys.w && currentPlaneModule.speed > currentPlaneModule.liftThreshold && currentPlaneModule.plane.position.y < currentPlaneModule.maxAltitude) {
+        if (keys.s && currentPlaneModule.speed > currentPlaneModule.liftThreshold && currentPlaneModule.plane.position.y < currentPlaneModule.maxAltitude) {
             verticalSpeed = currentPlaneModule.baseVerticalSpeedUp + (currentPlaneModule.baseVerticalSpeedUp * speedMultiplier);
             newY += verticalSpeed + currentPlaneModule.speed * 0.1;
-
-            // Ajustar o pitch para cima
             const targetPitch = verticalSpeed * pitchMultiplier;
             currentPlaneModule.setPitchAngle(
                 currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
             );
         }
-        // Descida fixa quando a tecla S é pressionada e o avião está acima de 0.1
-        else if (keys.s && currentPlaneModule.plane.position.y > 0.1) {
+        else if (keys.w && currentPlaneModule.plane.position.y > 0.1) {
             verticalSpeed = -0.1;
             newY += verticalSpeed - currentPlaneModule.speed * 0.1;
-
-            // Ajustar o pitch para baixo
             const targetPitch = verticalSpeed * pitchMultiplier;
             currentPlaneModule.setPitchAngle(
                 currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
             );
         }
-        // Se não houver comando W ou S, retornar o pitch a 0 gradualmente
         else {
-            const targetPitch = 0; // Posição reta
+            const targetPitch = 0;
             currentPlaneModule.setPitchAngle(
                 currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
             );
         }
 
-        // Frenagem linear quando a tecla S é pressionada e o avião está no chão (y <= 0.1)
-        if (keys.s && currentPlaneModule.plane.position.y <= 0.1 && currentPlaneModule.velocity > 0) {
+        if (keys.w && currentPlaneModule.plane.position.y <= 0.1 && currentPlaneModule.velocity > 0) {
             const brakeDeceleration = 0.005;
             currentPlaneModule.setVelocity(currentPlaneModule.velocity - brakeDeceleration);
             if (currentPlaneModule.velocity < 0) currentPlaneModule.setVelocity(0);
             currentPlaneModule.setSpeed(currentPlaneModule.velocity);
         }
-        // Aplica gravidade se a velocidade for insuficiente para sustentação
         if (currentPlaneModule.speed < currentPlaneModule.liftThreshold && currentPlaneModule.plane.position.y > 0.1) {
             verticalSpeed = currentPlaneModule.speed === 0 ? -currentPlaneModule.gravity * 5 : -currentPlaneModule.gravity;
             newY += verticalSpeed;
-
-            // Ajustar o pitch para baixo durante a queda por gravidade
             const targetPitch = verticalSpeed * pitchMultiplier;
             currentPlaneModule.setPitchAngle(
                 currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
             );
         }
 
-        // Limitar o ângulo de pitch
         currentPlaneModule.setPitchAngle(
             Math.max(-currentPlaneModule.maxPitchAngle, Math.min(currentPlaneModule.maxPitchAngle, currentPlaneModule.pitchAngle))
         );
 
-        // Aplicar a rotação no espaço local com ordem YXZ
         currentPlaneModule.plane.rotation.order = 'YXZ';
         currentPlaneModule.plane.rotation.x = currentPlaneModule.pitchAngle;
 
@@ -308,12 +293,11 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// --- CONTROLES MOBILE ---
+// --- CONTROLES MOBILE COM JOYSTICK ---
 function ajustarControlesMobile() {
     const largura = window.innerWidth;
     const altura = window.innerHeight;
     const controles = document.querySelector(".mobile-controls");
-    const botoes = document.querySelectorAll(".mobile-controls button");
     const acelerador = document.getElementById("accelerator-btn");
 
     if (altura > largura) {
@@ -326,42 +310,91 @@ function ajustarControlesMobile() {
     camera.updateProjectionMatrix();
 
     if (largura > 500) {
-        botoes.forEach(botao => {
-            botao.style.width = "120px";
-            botao.style.height = "120px";
-            botao.style.fontSize = "30px";
-        });
         acelerador.style.width = "160px";
         acelerador.style.height = "110px";
+        acelerador.style.fontSize = "30px";
     } else {
-        botoes.forEach(botao => {
-            botao.style.width = "60px";
-            botao.style.height = "60px";
-            botao.style.fontSize = "18px";
-        });
         acelerador.style.width = "100px";
         acelerador.style.height = "60px";
+        acelerador.style.fontSize = "18px";
     }
 }
 
 window.addEventListener("load", ajustarControlesMobile);
 window.addEventListener("resize", ajustarControlesMobile);
 
-const upBtn = document.getElementById('up-btn');
-const leftBtn = document.getElementById('left-btn');
-const rightBtn = document.getElementById('right-btn');
-const downBtn = document.getElementById('down-btn');
-const acceleratorBtn = document.getElementById('accelerator-btn');
+// --- LÓGICA DO JOYSTICK ---
+const joystickContainer = document.getElementById('joystick-container');
+const joystick = document.getElementById('joystick');
+let isDragging = false;
 
-function setKey(key, value) {
-    keys[key] = value;
+function handleJoystickStart(event) {
+    event.preventDefault();
+    if (!currentPlaneModule) return;
+    isDragging = true;
+    joystick.style.background = 'rgba(83, 85, 237, 0.8)';
+    handleJoystickMove(event);
 }
 
-function addButtonEvents(button, keyOrAction, isKey = true) {
+function handleJoystickMove(event) {
+    if (!isDragging || !currentPlaneModule) return;
+
+    const rect = joystickContainer.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const touch = event.type.includes('touch') ? event.touches[0] : event;
+    let offsetX = touch.clientX - centerX;
+    let offsetY = touch.clientY - centerY;
+
+    const radius = rect.width / 2 - joystick.offsetWidth / 2;
+    const distance = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+    if (distance > radius) {
+        const angle = Math.atan2(offsetY, offsetX);
+        offsetX = Math.cos(angle) * radius;
+        offsetY = Math.sin(angle) * radius;
+    }
+
+    joystick.style.left = `calc(50% + ${offsetX}px)`;
+    joystick.style.top = `calc(50% + ${offsetY}px)`;
+
+    const normalizedX = offsetX / radius;
+    const normalizedY = offsetY / radius;
+
+    keys.a = normalizedX < -0.3;
+    keys.d = normalizedX > 0.3;
+    keys.w = normalizedY < -0.3;
+    keys.s = normalizedY > 0.3;
+}
+
+function handleJoystickEnd(event) {
+    event.preventDefault();
+    if (!currentPlaneModule) return;
+    isDragging = false;
+    joystick.style.left = '50%';
+    joystick.style.top = '50%';
+    joystick.style.background = 'rgba(255, 255, 255, 0.36)';
+    keys.w = false;
+    keys.s = false;
+    keys.a = false;
+    keys.d = false;
+}
+
+joystickContainer.addEventListener('mousedown', handleJoystickStart);
+joystickContainer.addEventListener('touchstart', handleJoystickStart);
+document.addEventListener('mousemove', handleJoystickMove);
+document.addEventListener('touchmove', handleJoystickMove);
+document.addEventListener('mouseup', handleJoystickEnd);
+document.addEventListener('touchend', handleJoystickEnd);
+document.addEventListener('touchcancel', handleJoystickEnd);
+
+// --- EVENTOS DO ACELERADOR ---
+const acceleratorBtn = document.getElementById('accelerator-btn');
+
+function addButtonEvents(button, action, isKey = true) {
     const startEvent = (e) => {
         e.preventDefault();
         if (!currentPlaneModule) return;
-        if (isKey) setKey(keyOrAction, true);
+        if (isKey) keys[action] = true;
         else currentPlaneModule.setIsAccelerating(true);
         button.style.background = 'rgba(83, 85, 237, 0.8)';
     };
@@ -369,7 +402,7 @@ function addButtonEvents(button, keyOrAction, isKey = true) {
     const endEvent = (e) => {
         e.preventDefault();
         if (!currentPlaneModule) return;
-        if (isKey) setKey(keyOrAction, false);
+        if (isKey) keys[action] = false;
         else currentPlaneModule.setIsAccelerating(false);
         button.style.background = 'rgba(255, 255, 255, 0.36)';
     };
@@ -381,17 +414,59 @@ function addButtonEvents(button, keyOrAction, isKey = true) {
     button.addEventListener('touchcancel', endEvent);
 }
 
-addButtonEvents(upBtn, 'w');
-addButtonEvents(leftBtn, 'a');
-addButtonEvents(rightBtn, 'd');
-addButtonEvents(downBtn, 's');
 addButtonEvents(acceleratorBtn, null, false);
 
-// Adiciona o evento do botão de alternância da câmera
+// --- BOTÃO DE CÂMERA ---
 const cameraToggleBtn = document.getElementById('camera-toggle-btn');
-cameraToggleBtn.addEventListener('click', () => {
+
+function toggleCamera(event) {
+    event.preventDefault();
     isCameraBehind = !isCameraBehind;
     cameraToggleBtn.classList.toggle('active');
+}
+
+cameraToggleBtn.addEventListener('click', toggleCamera);
+cameraToggleBtn.addEventListener('touchstart', toggleCamera);
+
+// --- DROPDOWN DE SELEÇÃO DE AVIÃO ---
+const planeSelector = document.querySelector('.plane-selector');
+const dropdownBtn = document.querySelector('.dropdown-btn');
+const dropdownContent = document.querySelector('.dropdown-content');
+const planeOptions = dropdownContent.querySelectorAll('button');
+
+function toggleDropdown(event) {
+    event.preventDefault();
+    planeSelector.classList.toggle('active');
+}
+
+function closeDropdown(event) {
+    if (!planeSelector.contains(event.target)) {
+        planeSelector.classList.remove('active');
+    }
+}
+
+// Adicionar eventos ao botão de abrir/fechar o dropdown
+dropdownBtn.addEventListener('click', toggleDropdown);
+dropdownBtn.addEventListener('touchstart', toggleDropdown);
+
+// Adicionar eventos às opções do dropdown
+planeOptions.forEach(option => {
+    option.addEventListener('click', (event) => {
+        event.preventDefault();
+        const planeFile = option.getAttribute('onclick').match(/'([^']+)'/)[1];
+        loadPlane(planeFile);
+        planeSelector.classList.remove('active'); // Fechar o dropdown após selecionar
+    });
+    option.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        const planeFile = option.getAttribute('onclick').match(/'([^']+)'/)[1];
+        loadPlane(planeFile);
+        planeSelector.classList.remove('active'); // Fechar o dropdown após selecionar
+    });
 });
+
+// Fechar o dropdown ao clicar/tocar fora
+document.addEventListener('click', closeDropdown);
+document.addEventListener('touchstart', closeDropdown);
 
 window.loadPlane = loadPlane;
