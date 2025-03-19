@@ -193,9 +193,10 @@ const liftFactor = 0.7;
 const pitchSpeed = 0.05;
 const baseVerticalSpeedUp = 0.045;
 const speedFactor = 1.5;
+const baseRotationSpeed = 0.010;
 
 // Exportar elementos necessários
-export { plane, propeller, propeller1, propeller2, propeller3, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, speedFactor, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
+export { plane, propeller, propeller1, propeller2, propeller3, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, baseRotationSpeed , speedFactor, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
 
 function setSpeed(value) { speed = value; }
 function setVelocity(value) { velocity = value; }
