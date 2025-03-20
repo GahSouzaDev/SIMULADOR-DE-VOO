@@ -273,6 +273,7 @@ function animate() {
         cloud.position.x += 0.01;
         if (cloud.position.x > 100) cloud.position.x = -100;
     });
+    
 
     updateCamera();
 

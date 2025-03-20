@@ -1,6 +1,6 @@
 import { scene } from './scene.js';
 
-// Função para criar prédios
+// Função para criar prédios cúbicos
 function createBuilding(width, height, depth, x, z, color) {
     const geometry = new THREE.BoxGeometry(width, height, depth);
     const material = new THREE.MeshStandardMaterial({ color });
@@ -12,11 +12,23 @@ function createBuilding(width, height, depth, x, z, color) {
     return building;
 }
 
+// Nova função para criar cilindros
+function createCylinder(radiusTop, radiusBottom, height, x, z, color) {
+    const geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 32);
+    const material = new THREE.MeshStandardMaterial({ color });
+    const cylinder = new THREE.Mesh(geometry, material);
+    cylinder.position.set(x, height / 2, z);
+    scene.add(cylinder);
+    cylinder.geometry.computeBoundingBox();
+    cylinder.boundingBox = new THREE.Box3().setFromObject(cylinder);
+    return cylinder;
+}
+
+const textureLoader = new THREE.TextureLoader();
+
 // Prédios do aeroporto
 const building1 = createBuilding(6, 10, 6, 25, -15, 0x888888);
 const building2 = createBuilding(3, 18, 3, 25, -1, 0x4682B4);
-
-const textureLoader = new THREE.TextureLoader();
 const buildingTexture4 = textureLoader.load('torre-de-controle.png');
 const buildingsAeroporto = [building2];
 buildingsAeroporto.forEach(building => {
@@ -38,11 +50,10 @@ buildingsAeroporto.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
-    // Adiciona a face traseira
     const backGeometry = new THREE.PlaneGeometry(width, height);
     const backMesh = new THREE.Mesh(backGeometry, textMaterial);
     backMesh.position.set(0, 0, -depth / 2 - 0.02);
-    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    backMesh.rotation.y = Math.PI;
     building.add(backMesh);
 });
 
@@ -54,7 +65,6 @@ const building6 = createBuilding(8, 10, 8, -60, -15, 0xffffff);
 const building7 = createBuilding(8, 10, 8, -100, -30, 0xffffff);
 const building8 = createBuilding(8, 10, 8, -100, -15, 0xffffff);
 const building44 = createBuilding(50, 0.02, 25, -80, -22.5, 0x808080);
-
 const buildingTexture1 = textureLoader.load('conjunto-predios-1.png');
 const buildingsConjunto1 = [building3, building4, building5, building6, building7, building8];
 buildingsConjunto1.forEach(building => {
@@ -76,11 +86,10 @@ buildingsConjunto1.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
-    // Adiciona a face traseira
     const backGeometry = new THREE.PlaneGeometry(width, height);
     const backMesh = new THREE.Mesh(backGeometry, textMaterial);
     backMesh.position.set(0, 0, -depth / 2 - 0.02);
-    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    backMesh.rotation.y = Math.PI;
     building.add(backMesh);
 });
 
@@ -92,7 +101,6 @@ const building12 = createBuilding(6, 17, 6, 60, 100, 0x808080);
 const building13 = createBuilding(6, 17, 6, 100, 115, 0x808080);
 const building14 = createBuilding(6, 17, 6, 100, 100, 0x808080);
 const building43 = createBuilding(50, 0.02, 25, 80, 108, 0x808080);
-
 const buildingTexture2 = textureLoader.load('conjunto-predios-2.png');
 const buildingsConjunto2 = [building1, building9, building10, building11, building12, building13, building14];
 buildingsConjunto2.forEach(building => {
@@ -114,11 +122,10 @@ buildingsConjunto2.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
-    // Adiciona a face traseira
     const backGeometry = new THREE.PlaneGeometry(width, height);
     const backMesh = new THREE.Mesh(backGeometry, textMaterial);
     backMesh.position.set(0, 0, -depth / 2 - 0.02);
-    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    backMesh.rotation.y = Math.PI;
     building.add(backMesh);
 });
 
@@ -130,7 +137,6 @@ const building18 = createBuilding(8, 7, 8, 60, -100, 0xffffff);
 const building19 = createBuilding(8, 6, 8, 100, -115, 0xffffff);
 const building20 = createBuilding(8, 10, 8, 100, -100, 0xffffff);
 const building42 = createBuilding(50, 0.02, 30, 80, -108, 0x808080);
-
 const buildingTexture3 = textureLoader.load('conjunto-predios-3.png');
 const buildingsConjunto3 = [building15, building16, building17, building18, building19, building20];
 buildingsConjunto3.forEach(building => {
@@ -152,11 +158,10 @@ buildingsConjunto3.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
-    // Adiciona a face traseira
     const backGeometry = new THREE.PlaneGeometry(width, height);
     const backMesh = new THREE.Mesh(backGeometry, textMaterial);
     backMesh.position.set(0, 0, -depth / 2 - 0.02);
-    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    backMesh.rotation.y = Math.PI;
     building.add(backMesh);
 });
 
@@ -171,7 +176,6 @@ const building27 = createBuilding(3, 25, 3, -100, 100, 0x888888);
 const building28 = createBuilding(2.3, 28, 2.3, -100, 100, 0xffffff);
 const building52 = createBuilding(1.4, 30, 1.4, -100, 100, 0x888888);
 const building29 = createBuilding(1, 35, 1, -100, 100, 0xffffff);
-
 const buildingTexture5 = textureLoader.load('conjunto-predios-3.png');
 const buildingsTorreAlta = [building21, building22, building23, building24, building25, building26, building27, building28, building29, building52];
 const buildingsCinza = buildingsTorreAlta.filter(building => building.material.color.getHex() === 0x888888);
@@ -194,11 +198,10 @@ buildingsCinza.forEach(building => {
     leftMesh.position.set(-width / 2 - 0.02, 0, 0);
     leftMesh.rotation.y = Math.PI / 2;
     building.add(leftMesh);
-    // Adiciona a face traseira
     const backGeometry = new THREE.PlaneGeometry(width, height);
     const backMesh = new THREE.Mesh(backGeometry, textMaterial);
     backMesh.position.set(0, 0, -depth / 2 - 0.02);
-    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    backMesh.rotation.y = Math.PI;
     building.add(backMesh);
 });
 
@@ -219,7 +222,6 @@ const building48 = createBuilding(1, 5, 1, 180, -120, 0xFF4500);
 const building49 = createBuilding(1, 5, 1, 180, 20, 0xFF4500);
 const building50 = createBuilding(1, 5, 1, 170, -120, 0xFF4500);
 const building51 = createBuilding(1, 5, 1, 170, 20, 0xFF4500);
-
 const building45 = createBuilding(10, 1, 100, 175, -50, 0x000000);
 building45.position.y = 8;
 const building46 = createBuilding(10, 1, 30, 175, -113, 0x000000);
@@ -228,7 +230,6 @@ building46.position.y = 4;
 const building47 = createBuilding(10, 1, 30, 175, 13, 0x000000);
 building47.rotation.x = -6;
 building47.position.y = 4;
-
 const building53 = createBuilding(1, 1, 150, 170, -50, 0xFF4500);
 const building54 = createBuilding(1, 1, 150, 180, -50, 0xFF4500);
 const building55 = createBuilding(1, 1, 20, 170, -50, 0xFF4500);
@@ -272,7 +273,44 @@ const building68 = createBuilding(1, 1, 21, 180, 10, 0xFF4500);
 building68.position.y = 8;
 building68.rotation.x = -5.92;
 
-const buildings = [building1, building2, building3, building4, building5, building6, building7, building8, building9, building10, building11, building12, building13, building14, building15, building16, building17, building18, building19, building20, building21, building22, building23, building24, building25, building26, building27, building28, building29, building30, building31, building32, building33, building34, building35, building36, building37, building38, building39, building40, building41, building45, building46, building47, building55, building56, building57, building58, building59, building60, building61, building62, building63, building64, building65, building66, building67, building68];
+// Novo Conjunto com 2 cilindros e 1 cubo (substitua apenas esta parte no seu código)
+const cylinder1 = createCylinder(1, 1, 30,-90, -80, 0xaaaaaa); // Cilindro 1
+const cylinder2 = createCylinder(1, 1, 30, -30, -80, 0xaaaaaa); // Cilindro 2
+const cube1 = createBuilding(60, 30, 2, -60, -80, 0xffffff); 
+cube1.position.y = 18;// Cubo
+const buildingTextureNew = textureLoader.load('outdor.png'); // Substitua pelo nome da sua textura
+
+const buildingsNewConjunto = [cube1];
+buildingsNewConjunto.forEach(building => {
+    const width = building.geometry.parameters.width;
+    const height = building.geometry.parameters.height;
+    const depth = building.geometry.parameters.depth;
+    const textMaterial = new THREE.MeshBasicMaterial({ map: buildingTextureNew, transparent: true, side: THREE.DoubleSide });
+    // Textura no lado frontal (Z positivo)
+    const frontGeometry = new THREE.PlaneGeometry(width, height);
+    const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
+    frontMesh.position.set(0, 0, depth / 2 + 0.02);
+    building.add(frontMesh);
+    // Textura no lado traseiro (Z negativo)
+    const backGeometry = new THREE.PlaneGeometry(width, height);
+    const backMesh = new THREE.Mesh(backGeometry, textMaterial);
+    backMesh.position.set(0, 0, -depth / 2 - 0.02);
+    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    building.add(backMesh);
+});
+
+// Lista completa de prédios para colisão
+const buildings = [
+    building1, building2, building3, building4, building5, building6, building7, building8,
+    building9, building10, building11, building12, building13, building14,
+    building15, building16, building17, building18, building19, building20,
+    building21, building22, building23, building24, building25, building26, building27, building28, building29,
+    building30, building31, building32, building33, building34, building35, building36, building37, building38,
+    building39, building40, building41, building44, building45, building46, building47,
+    building55, building56, building57, building58, building59, building60, building61, building62, building63,
+    building64, building65, building66, building67, building68,
+    cylinder1, cylinder2, cube1 // Adicionando o novo conjunto
+];
 
 // Exportar prédios para colisão
 export { buildings };

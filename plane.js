@@ -165,7 +165,7 @@ const shadowMaterial = new THREE.MeshBasicMaterial({
 });
 const shadow = new THREE.Mesh(shadowGeometry, shadowMaterial);
 shadow.rotation.x = -Math.PI / 2;
-shadow.position.y = 0.01;
+shadow.position.y = 0.03;
 scene.add(shadow);
 
 // Bounding box para colisão
@@ -192,7 +192,7 @@ const maxAltitude = 45;
 const liftFactor = 0.7;
 const pitchSpeed = 0.05;
 const baseVerticalSpeedUp = 0.045;
-const speedFactor = 1.5;
+const speedFactor = 0.5;
 const baseRotationSpeed = 0.010;
 
 // Exportar elementos necessários

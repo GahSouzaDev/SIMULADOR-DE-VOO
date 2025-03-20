@@ -30,19 +30,30 @@ const textureLoader = new THREE.TextureLoader();
 const groundTexture = textureLoader.load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg');
 groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
 groundTexture.repeat.set(50, 50);
-const groundGeometry = new THREE.PlaneGeometry(800, 800);
+const groundGeometry = new THREE.PlaneGeometry(1200, 1200);
 const groundMaterial = new THREE.MeshStandardMaterial({ map: groundTexture });
 const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -Math.PI / 2;
 scene.add(ground);
 
-// Pista
+// Pista1
 const runwayGeometry = new THREE.PlaneGeometry(9.5, 100);
 const runwayMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1a1a });
 const runway = new THREE.Mesh(runwayGeometry, runwayMaterial);
 runway.rotation.x = -Math.PI / 2;
 runway.position.set(0, 0.01, -46.5);
 scene.add(runway);
+
+// Pista2 com textura
+const runwayTexture = textureLoader.load('terra.png'); // URL de teste, substitua pela sua imagem
+runwayTexture.wrapS = runwayTexture.wrapT = THREE.RepeatWrapping;
+runwayTexture.repeat.set(1, 5); // Ajuste conforme necessário
+const runway1Material = new THREE.MeshStandardMaterial({ map: runwayTexture });
+const runway1 = new THREE.Mesh(runwayGeometry, runway1Material);
+runway1.rotation.x = -Math.PI / 2;
+runway1.rotation.z = -Math.PI / 2;
+runway1.position.set(-400, 0.012, 400);
+scene.add(runway1);
 
 // Faixas da pista
 function createRunwayStripe(x, z, width, length) {
@@ -100,8 +111,8 @@ scene.add(lake);
 
 const lakeShape2 = new THREE.Shape();
 lakeShape2.moveTo(0, 0);
-lakeShape2.bezierCurveTo(80, -40, 100, 50, 60, 60);
-lakeShape2.bezierCurveTo(70, 120, -20, 80, -50, 50);
+lakeShape2.bezierCurveTo(80, -40, 300, 50, 60, 60);
+lakeShape2.bezierCurveTo(170, 120, -20, 80, -50, 50);
 lakeShape2.bezierCurveTo(-100, 20, -80, -50, 0, 0);
 const lakeGeometry2 = new THREE.ShapeGeometry(lakeShape2);
 const waterTexture2 = textureLoader.load('https://threejs.org/examples/textures/waternormals.jpg');
@@ -119,6 +130,29 @@ const lake2 = new THREE.Mesh(lakeGeometry2, lakeMaterial2);
 lake2.rotation.x = -Math.PI / 2;
 lake2.position.set(165, 0.01, -10);
 scene.add(lake2);
+
+//Lago 3
+const lakeShape3 = new THREE.Shape();
+lakeShape3.moveTo(0, 0);
+lakeShape3.bezierCurveTo(130, -140, 100, 50, 60, 60);
+lakeShape3.bezierCurveTo(250, 120, -210, 130, -150, 50);
+lakeShape3.bezierCurveTo(-100, 20, -180, -150, 0, 0);
+const lakeGeometry3 = new THREE.ShapeGeometry(lakeShape2);
+const waterTexture3 = textureLoader.load('https://threejs.org/examples/textures/waternormals.jpg');
+waterTexture3.wrapS = waterTexture3.wrapT = THREE.RepeatWrapping;
+waterTexture3.repeat.set(1.2, 1.2);
+const lakeMaterial3 = new THREE.MeshStandardMaterial({
+    map: waterTexture3,
+    transparent: true,
+    opacity: 0.9,
+    roughness: 0.25,
+    metalness: 0.7,
+    side: THREE.DoubleSide
+});
+const lake3 = new THREE.Mesh(lakeGeometry3, lakeMaterial3);
+lake3.rotation.x = -Math.PI / 2;
+lake3.position.set(-150, 0.01, 450);
+scene.add(lake3);
 
 // Nuvens
 function createCloud(x, z) {

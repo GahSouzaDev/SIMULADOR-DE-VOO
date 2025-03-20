@@ -24,7 +24,7 @@ const planeTailMaterial = new THREE.MeshStandardMaterial({
 const gearMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
 const vidro = new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
 const cabinMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
-const motorMaterial = new THREE.MeshBasicMaterial({ color: 0x333333});
+const motorMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
 
 // Corpo
 const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.5, 5.2, 32);
@@ -33,14 +33,14 @@ body.rotation.x = Math.PI / 2;
 body.position.y = 0.5;
 body.position.z = -0.2;
 plane.add(body);
-// Corpo2
+
 const body2Geometry = new THREE.CylinderGeometry(0.1, 0.5, 2.2, 32);
 const body2 = new THREE.Mesh(body2Geometry, planeMaterial);
 body2.rotation.x = Math.PI / 2;
 body2.position.y = 0.5;
 body2.position.z = 3.5;
 plane.add(body2);
-// Corpo3
+
 const body3Geometry = new THREE.CylinderGeometry(0.5, 0.01, 0.8, 25);
 const body3 = new THREE.Mesh(body3Geometry, planeMaterial);
 body3.rotation.x = Math.PI / 2;
@@ -55,7 +55,7 @@ sphere.rotation.x = Math.PI / 2;
 sphere.position.y = 0.6;
 sphere.position.z = -3.3;
 plane.add(sphere);
-// Esfera1
+
 const sphere1Geometry = new THREE.SphereGeometry(0.5, 32, 32);
 const sphere1 = new THREE.Mesh(sphere1Geometry, planeMaterial);
 sphere1.rotation.x = Math.PI / 2;
@@ -185,8 +185,6 @@ sphere21.position.z = 2.5;
 sphere21.position.x = 0.28;
 plane.add(sphere21);
 
-
-
 // Asas
 const wingsGeometry = new THREE.BoxGeometry(7, 0.1, 1.8);
 const wings = new THREE.Mesh(wingsGeometry, planeMaterial);
@@ -196,7 +194,6 @@ wings.position.x = -3;
 wings.rotation.y = -3;
 plane.add(wings);
 
-// Asas
 const wings1Geometry = new THREE.BoxGeometry(7, 0.1, 1.8);
 const wings1 = new THREE.Mesh(wings1Geometry, planeMaterial);
 wings1.position.y = 0.6;
@@ -213,7 +210,6 @@ tailVertical.position.z = 3.5;
 tailVertical.rotation.x = -3;
 plane.add(tailVertical);
 
-// Criando um plano para exibir o nome do avião
 const textGeometry = new THREE.PlaneGeometry(0.4, 0.4);
 const textTexture = new THREE.TextureLoader().load('boeing.png');
 const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture });
@@ -231,7 +227,6 @@ tailHorizontal.position.x = 0.6;
 tailHorizontal.rotation.y = 3;
 plane.add(tailHorizontal);
 
-// Cauda horizontal
 const tailHorizontal1Geometry = new THREE.BoxGeometry(2, 0.1, 0.5);
 const tailHorizontal1 = new THREE.Mesh(tailHorizontal1Geometry, planeMaterial);
 tailHorizontal1.position.z = 3.5;
@@ -240,30 +235,60 @@ tailHorizontal1.position.x = -0.6;
 tailHorizontal1.rotation.y = -3;
 plane.add(tailHorizontal1);
 
-// Hélice
-const propellerGeometry = new THREE.BoxGeometry(0.1, 0.3, 0.03);
-const propellerMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
-const propeller = new THREE.Mesh(propellerGeometry, propellerMaterial);
-propeller.position.z = -1;
-propeller.position.y = 0.3;
-propeller.position.x = 1.5;
+// Material e geometria do fogo (partículas)
+const fireMaterial = new THREE.PointsMaterial({
+    color: 0xff4500,
+    size: 0.1,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending
+});
+
+const fireGeometry = new THREE.BufferGeometry();
+const fireVertices = new Float32Array(100 * 3); // 100 partículas, 3 coordenadas cada
+for (let i = 0; i < 100; i++) {
+    fireVertices[i * 3] = (Math.random() - 0.5) * 0.3;     // x
+    fireVertices[i * 3 + 1] = (Math.random() - 0.5) * 0.3; // y
+    fireVertices[i * 3 + 2] = (Math.random() - 0.5) * 0.5; // z
+}
+fireGeometry.setAttribute('position', new THREE.BufferAttribute(fireVertices, 3));
+
+// Propeller (fogo de partículas)
+const propeller = new THREE.Points(fireGeometry, fireMaterial);
+propeller.position.set(1.5, 0.3, 0.3); // Posição original
 plane.add(propeller);
-const propeller2 = new THREE.Mesh(propellerGeometry, propellerMaterial);
-propeller2.position.z = -0.7;
-propeller2.position.y = 0.3;
-propeller2.position.x = 3;
+
+// Propeller1 (fogo de partículas)
+const propeller1 = new THREE.Points(fireGeometry, fireMaterial);
+propeller1.position.set(-1.5, 0.3, 0.3); // Posição original
+plane.add(propeller1);
+
+// Propeller2 (fogo de partículas)
+const propeller2 = new THREE.Points(fireGeometry, fireMaterial);
+propeller2.position.set(3, 0.3,0.5); // Posição original
 plane.add(propeller2);
 
-const propeller1 = new THREE.Mesh(propellerGeometry, propellerMaterial);
-propeller1.position.z = -1;
-propeller1.position.y = 0.3;
-propeller1.position.x = -1.5;
-plane.add(propeller1);
-const propeller3 = new THREE.Mesh(propellerGeometry, propellerMaterial);
-propeller3.position.z = -0.7;
-propeller3.position.y = 0.3;
-propeller3.position.x = -3;
+// Propeller3 (fogo de partículas)
+const propeller3 = new THREE.Points(fireGeometry, fireMaterial);
+propeller3.position.set(-3, 0.3, 0.5); // Posição original
 plane.add(propeller3);
+
+// Luz emitida pelo fogo
+const fireLight = new THREE.PointLight(0xff4500, 0.5, 5);
+fireLight.position.set(1.5, 0.3, 0.3);
+plane.add(fireLight);
+
+const fireLight1 = new THREE.PointLight(0xff4500, 0.5, 5);
+fireLight1.position.set(-1.5, 0.3, 0.3);
+plane.add(fireLight1);
+
+const fireLight2 = new THREE.PointLight(0xff4500, 0.5, 5);
+fireLight2.position.set(3, 0.3, 0.5);
+plane.add(fireLight2);
+
+const fireLight3 = new THREE.PointLight(0xff4500, 0.5, 5);
+fireLight3.position.set(-3, 0.3, 0.5);
+plane.add(fireLight3);
 
 // Trem de pouso
 const frontGearSupportGeometry = new THREE.BoxGeometry(0.05, 0.6, 0.05);
@@ -280,11 +305,9 @@ frontWheel.position.z = -2.4;
 frontWheel.position.y = -0.1;
 plane.add(frontWheel);
 
-// Suporte das rodas principais
 const mainGearSupportGeometry = new THREE.BoxGeometry(0.05, 0.6, 0.05);
 const mainGearSupportGeometry12 = new THREE.BoxGeometry(0.05, 1.2, 0.05);
 
-// Suporte esquerdo
 const leftGearSupport = new THREE.Mesh(mainGearSupportGeometry, cabinMaterial);
 leftGearSupport.position.x = -0.2;
 leftGearSupport.position.y = 0.2;
@@ -298,7 +321,6 @@ leftGearSupport3.position.z = 0.5;
 leftGearSupport3.rotation.z = Math.PI / -12;
 plane.add(leftGearSupport3);
 
-// Suporte direito
 const rightGearSupport = new THREE.Mesh(mainGearSupportGeometry, cabinMaterial);
 rightGearSupport.position.x = 0.2;
 rightGearSupport.position.y = 0.2;
@@ -312,7 +334,6 @@ rightGearSupport3.position.z = 0.5;
 rightGearSupport3.rotation.z = -Math.PI / -12;
 plane.add(rightGearSupport3);
 
-// Suporte assa esquerdo
 const leftGearSupport1 = new THREE.Mesh(mainGearSupportGeometry12, cabinMaterial);
 leftGearSupport1.position.x = 1.5;
 leftGearSupport1.position.y = 0.60;
@@ -338,7 +359,6 @@ leftGearSupport5.position.z = 1.2;
 leftGearSupport5.rotation.x = Math.PI / 2;
 plane.add(leftGearSupport5);
 
-// Suporte assa direito
 const rightGearSupport1 = new THREE.Mesh(mainGearSupportGeometry12, cabinMaterial);
 rightGearSupport1.position.x = -1.5;
 rightGearSupport1.position.y = 0.60;
@@ -364,10 +384,8 @@ rightGearSupport5.position.z = 1.2;
 rightGearSupport5.rotation.x = -Math.PI / 2;
 plane.add(rightGearSupport5);
 
-// Rodas principais
 const mainWheelGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.15, 16);
 
-// Roda esquerda
 const leftWheel = new THREE.Mesh(mainWheelGeometry, gearMaterial);
 leftWheel.rotation.x = Math.PI / 2;
 leftWheel.rotation.z = Math.PI / 2;
@@ -383,7 +401,6 @@ leftWheel1.position.y = -0.1;
 leftWheel1.position.z = 0.5;
 plane.add(leftWheel1);
 
-// Roda direita
 const rightWheel = new THREE.Mesh(mainWheelGeometry, gearMaterial);
 rightWheel.rotation.x = Math.PI / 2;
 rightWheel.rotation.z = Math.PI / 2;
@@ -437,51 +454,6 @@ motor3.position.z = -0.2;
 motor3.position.x = 3;
 plane.add(motor3);
 
-// Adicionando fogo (partículas) e luz atrás dos motores
-const fireMaterial = new THREE.PointsMaterial({
-    color: 0xff4500, // Cor laranja-avermelhada para o fogo
-    size: 0.1,
-    transparent: true,
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending
-});
-
-const fireGeometry = new THREE.BufferGeometry();
-const fireVertices = [];
-for (let i = 0; i < 100; i++) {
-    fireVertices.push((Math.random() - 0.5) * 0.3, (Math.random() - 0.5) * 0.3, (Math.random() - 0.5) * 0.5);
-}
-fireGeometry.setAttribute('position', new THREE.Float32BufferAttribute(fireVertices, 3));
-
-// Fogo e luz para cada motor
-const fire1 = new THREE.Points(fireGeometry, fireMaterial);
-fire1.position.set(-1.5, 0.3, 0.2); // Atrás do motor
-plane.add(fire1);
-const light1 = new THREE.PointLight(0xff4500, 0.5, 5);
-light1.position.set(-1.5, 0.3, 0.3);
-plane.add(light1);
-
-const fire2 = new THREE.Points(fireGeometry, fireMaterial);
-fire2.position.set(-3, 0.3, 0.5); // Atrás do motor2
-plane.add(fire2);
-const light2 = new THREE.PointLight(0xff4500, 0.5, 5);
-light2.position.set(-3, 0.3, 0.6);
-plane.add(light2);
-
-const fire3 = new THREE.Points(fireGeometry, fireMaterial);
-fire3.position.set(1.5, 0.3, 0.2); // Atrás do motor1
-plane.add(fire3);
-const light3 = new THREE.PointLight(0xff4500, 0.5, 5);
-light3.position.set(1.5, 0.3, 0.3);
-plane.add(light3);
-
-const fire4 = new THREE.Points(fireGeometry, fireMaterial);
-fire4.position.set(3, 0.3, 0.5); // Atrás do motor3
-plane.add(fire4);
-const light4 = new THREE.PointLight(0xff4500, 0.5, 5);
-light4.position.set(3, 0.3, 0.6);
-plane.add(light4);
-
 // Posicionar o avião na pista
 plane.position.set(0, 0, 2);
 scene.add(plane);
@@ -495,7 +467,7 @@ const shadowMaterial = new THREE.MeshBasicMaterial({
 });
 const shadow = new THREE.Mesh(shadowGeometry, shadowMaterial);
 shadow.rotation.x = -Math.PI / 2;
-shadow.position.y = 0.01;
+shadow.position.y = 0.03;
 scene.add(shadow);
 
 // Bounding box para colisão
@@ -508,7 +480,7 @@ let speed = 0;
 let velocity = 0;
 const maxSpeed = 1.5;
 const acceleration = 0.0022;
-const friction = 0.002;
+const friction = 0.0022;
 const gravity = 0.2;
 const crashGravity = 0.9;
 const liftThreshold = 0.60;
@@ -522,7 +494,7 @@ const maxAltitude = 80;
 const liftFactor = 0.7;
 const pitchSpeed = 0.04;
 const baseVerticalSpeedUp = 0.050;
-const speedFactor = 0.2;
+const speedFactor = 0.15;
 const ai = 0.8;
 const baseRotationSpeed = 0.01;
 const inclinaBoing = -0.3;
@@ -530,8 +502,51 @@ const inclinaBoing2 = 0.3;
 const inclina = -0.8;
 const inclina2 = 0.8;
 
+// Função de animação para o fogo
+function animateFire() {
+    const positions = propeller.geometry.attributes.position.array;
+    const positions1 = propeller1.geometry.attributes.position.array;
+    const positions2 = propeller2.geometry.attributes.position.array;
+    const positions3 = propeller3.geometry.attributes.position.array;
+
+    for (let i = 0; i < 100; i++) {
+        // Movimenta as partículas na direção z (para trás)
+        positions[i * 3 + 2] -= 0.02;  // propeller
+        positions1[i * 3 + 2] -= 0.02; // propeller1
+        positions2[i * 3 + 2] -= 0.02; // propeller2
+        positions3[i * 3 + 2] -= 0.02; // propeller3
+
+        // Se a partícula ultrapassar o limite, reposiciona no início
+        if (positions[i * 3 + 2] < -0.5) {
+            positions[i * 3] = (Math.random() - 0.5) * 0.3;     // x
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 0.3; // y
+            positions[i * 3 + 2] = 0.5;                         // z
+        }
+        if (positions1[i * 3 + 2] < -0.5) {
+            positions1[i * 3] = (Math.random() - 0.5) * 0.3;
+            positions1[i * 3 + 1] = (Math.random() - 0.5) * 0.3;
+            positions1[i * 3 + 2] = 0.5;
+        }
+        if (positions2[i * 3 + 2] < -0.5) {
+            positions2[i * 3] = (Math.random() - 0.5) * 0.3;
+            positions2[i * 3 + 1] = (Math.random() - 0.5) * 0.3;
+            positions2[i * 3 + 2] = 0.5;
+        }
+        if (positions3[i * 3 + 2] < -0.5) {
+            positions3[i * 3] = (Math.random() - 0.5) * 0.3;
+            positions3[i * 3 + 1] = (Math.random() - 0.5) * 0.3;
+            positions3[i * 3 + 2] = 0.5;
+        }
+    }
+
+    propeller.geometry.attributes.position.needsUpdate = true;
+    propeller1.geometry.attributes.position.needsUpdate = true;
+    propeller2.geometry.attributes.position.needsUpdate = true;
+    propeller3.geometry.attributes.position.needsUpdate = true;
+}
+
 // Exportar elementos necessários
-export { plane, motor, body3, propeller, propeller1, propeller2, propeller3, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, baseRotationSpeed, inclinaBoing2, inclinaBoing, inclina2, body2, inclina, speedFactor, vidro, sphere1, sphereGeometry, ai, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
+export { plane, motor, body3, propeller, propeller1, propeller2, propeller3, shadow, planeBox, speed, velocity, maxSpeed, acceleration, friction, gravity, crashGravity, liftThreshold, isAccelerating, isCrashed, crashTimer, crashDuration, pitchAngle, maxPitchAngle, maxAltitude, liftFactor, pitchSpeed, baseVerticalSpeedUp, baseRotationSpeed, inclinaBoing2, inclinaBoing, inclina2, body2, inclina, speedFactor, vidro, sphere1, sphereGeometry, ai, animateFire, setSpeed, setVelocity, setIsAccelerating, setIsCrashed, setCrashTimer, setPitchAngle };
 
 function setSpeed(value) { speed = value; }
 function setVelocity(value) { velocity = value; }

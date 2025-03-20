@@ -211,7 +211,7 @@ const shadowMaterial = new THREE.MeshBasicMaterial({
 });
 const shadow = new THREE.Mesh(shadowGeometry, shadowMaterial);
 shadow.rotation.x = -Math.PI / 2;
-shadow.position.y = 0.01;
+shadow.position.y = 0.03;
 scene.add(shadow);
 
 // Bounding box para colisão
