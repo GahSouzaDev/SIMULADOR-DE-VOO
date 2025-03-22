@@ -3,6 +3,10 @@ import { scene, camera, renderer, clouds } from './scene.js';
 // Importa os prédios do jogo (usados para colisão) do arquivo buildings.js
 import { buildings } from './buildings.js';
 
+// Configurar o ouvinte de áudio global (se ainda não estiver em scene.js)
+const listener = new THREE.AudioListener();
+camera.add(listener); // Anexar o ouvinte à câmera para seguir seus movimentos
+
 // Variável global que armazena o módulo do avião atualmente carregado
 let currentPlaneModule = null;
 
@@ -23,12 +27,25 @@ function getCookie(name) {
 // --- FUNÇÃO PRINCIPAL PARA CARREGAR AVIÕES ---
 async function loadPlane(planeFile) {
     if (currentPlaneModule) {
+        // Parar o som do avião atual, se existir
+        const currentSound = currentPlaneModule.plane.userData.sound;
+        if (currentSound) {
+            if (currentSound.isPlaying) {
+                currentSound.stop(); // Para o som
+            }
+            currentSound.disconnect(); // Desconecta do ouvinte para liberar recursos
+        }
+        // Remover o avião e a sombra da cena
         scene.remove(currentPlaneModule.plane);
         scene.remove(currentPlaneModule.shadow);
+        currentPlaneModule = null; // Limpa a referência
     }
+
+    // Carregar o novo avião
     currentPlaneModule = await import(`./${planeFile}`);
     scene.add(currentPlaneModule.plane);
     scene.add(currentPlaneModule.shadow);
+
     setCookie('selectedPlane', planeFile, 30);
     resetGame();
     camera.position.set(0, 5, 10);
@@ -44,7 +61,7 @@ let keys = { w: false, s: false, a: false, d: false };
 const baseRotationSpeed = 0.015;
 
 // Variável para rastrear o modo da câmera
-let isCameraBehind = false;
+let isCameraBehind = true;
 
 // --- EVENTOS DE TECLADO ---
 document.addEventListener('keydown', (event) => {
@@ -77,6 +94,10 @@ function checkCollision(box1, box2) {
 // --- FUNÇÃO DE REINÍCIO DO JOGO ---
 function resetGame() {
     if (!currentPlaneModule) return;
+    const planeSound = currentPlaneModule.plane.userData.sound;
+    if (planeSound && planeSound.isPlaying) {
+        planeSound.stop(); // Para o som ao reiniciar
+    }
     currentPlaneModule.plane.position.set(0, 0, 2);
     currentPlaneModule.plane.rotation.set(0, 0, 0);
     currentPlaneModule.setSpeed(0);
@@ -89,7 +110,6 @@ function resetGame() {
     renderer.domElement.style.filter = 'none';
     renderer.render(scene, position);
 }
-
 
 // --- FUNÇÃO PARA ATUALIZAR A CÂMERA ---
 function updateCamera() {
@@ -120,6 +140,30 @@ function updateCamera() {
 function animate() {
     requestAnimationFrame(animate);
     if (!currentPlaneModule) return;
+
+    // Controle do som
+    const planeSound = currentPlaneModule.plane.userData.sound;
+    if (planeSound) {
+        if (!currentPlaneModule.isCrashed) {
+            if (!planeSound.isPlaying) {
+                planeSound.play(); // Inicia o som se ainda não estiver tocando
+            }
+
+            // Ajustar pitch e velocidade com base na velocidade do avião
+            const speedRatio = currentPlaneModule.speed / currentPlaneModule.maxSpeed * 5;
+            const minPitch = 0.5;
+            const maxPitch = 1.5;
+            const pitch = minPitch + (maxPitch - minPitch) * speedRatio;
+            planeSound.setPlaybackRate(pitch);
+
+            const minVolume = 0.3;
+            const maxVolume = 0.7;
+            const volume = minVolume + (maxVolume - minVolume) * speedRatio;
+            planeSound.setVolume(volume);
+        } else if (planeSound.isPlaying) {
+            planeSound.stop(); // Para o som se o avião colidir
+        }
+    }
 
     currentPlaneModule.propeller.rotation.z += 0.2 + currentPlaneModule.speed;
     currentPlaneModule.propeller1.rotation.z += 0.2 + currentPlaneModule.speed;
@@ -273,7 +317,6 @@ function animate() {
         cloud.position.x += 0.01;
         if (cloud.position.x > 100) cloud.position.x = -100;
     });
-    
 
     updateCamera();
 

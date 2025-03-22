@@ -1,6 +1,23 @@
 import { scene } from './scene.js';
 
+// Configuração do áudio
+const audioLoader = new THREE.AudioLoader();
+const listener = new THREE.AudioListener(); // Ouvinte global
+scene.add(listener); // Adicione o ouvinte à cena uma vez
+
 const plane = new THREE.Group();
+
+// Criar o som do avião
+const sound = new THREE.Audio(listener);
+audioLoader.load('sr71.mp3', (buffer) => {
+    sound.setBuffer(buffer);
+    sound.setLoop(true); // Som em loop
+    sound.setVolume(0.01); // Volume inicial
+    sound.setSpeed(200);
+    
+    sound.play(); // Inicia o som assim que o buffer é carregado
+});
+plane.userData.sound = sound;
 
 // Carregar a textura camuflada
 const textureLoader = new THREE.TextureLoader();
@@ -274,7 +291,7 @@ const acceleration = 0.004;
 const friction = 0.0035;
 const gravity = 0.3;
 const crashGravity = 0.9;
-const liftThreshold = 0.70;
+const liftThreshold = 0.80;
 let isAccelerating = false;
 let isCrashed = false;
 let crashTimer = 0;
