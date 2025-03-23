@@ -9,7 +9,7 @@ const plane = new THREE.Group();
 
 // Criar o som do avião
 const sound = new THREE.Audio(listener);
-audioLoader.load('boeing.mp3', (buffer) => {
+audioLoader.load('sr71.mp3', (buffer) => {
     sound.setBuffer(buffer);
     sound.setLoop(true); // Som em loop
     sound.setVolume(0.01); // Volume inicial

@@ -1,11 +1,9 @@
-// Importa elementos essenciais do arquivo scene.js, como a cena, câmera, renderizador e nuvens
 import { scene, camera, renderer, clouds } from './scene.js';
-// Importa os prédios do jogo (usados para colisão) do arquivo buildings.js
 import { buildings } from './buildings.js';
 
-// Configurar o ouvinte de áudio global (se ainda não estiver em scene.js)
+// Configurar o ouvinte de áudio global
 const listener = new THREE.AudioListener();
-camera.add(listener); // Anexar o ouvinte à câmera para seguir seus movimentos
+camera.add(listener);
 
 // Variável global que armazena o módulo do avião atualmente carregado
 let currentPlaneModule = null;
@@ -24,37 +22,69 @@ function getCookie(name) {
     return null;
 }
 
+// --- FUNÇÃO DE DELAY ---
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // --- FUNÇÃO PRINCIPAL PARA CARREGAR AVIÕES ---
 async function loadPlane(planeFile) {
     if (currentPlaneModule) {
-        // Parar o som do avião atual, se existir
         const currentSound = currentPlaneModule.plane.userData.sound;
         if (currentSound) {
             if (currentSound.isPlaying) {
-                currentSound.stop(); // Para o som
+                currentSound.stop();
             }
-            currentSound.disconnect(); // Desconecta do ouvinte para liberar recursos
+            currentSound.disconnect();
         }
-        // Remover o avião e a sombra da cena
         scene.remove(currentPlaneModule.plane);
         scene.remove(currentPlaneModule.shadow);
-        currentPlaneModule = null; // Limpa a referência
+        currentPlaneModule = null;
     }
 
     // Carregar o novo avião
-    currentPlaneModule = await import(`./${planeFile}`);
-    scene.add(currentPlaneModule.plane);
-    scene.add(currentPlaneModule.shadow);
+    try {
+        currentPlaneModule = await import(`./${planeFile}`);
+        scene.add(currentPlaneModule.plane);
+        scene.add(currentPlaneModule.shadow);
 
-    setCookie('selectedPlane', planeFile, 30);
-    resetGame();
-    camera.position.set(0, 5, 10);
-    camera.lookAt(currentPlaneModule.plane.position);
+        // Ocultar a div "no-plane-selected"
+        const noPlaneDiv = document.getElementById('no-plane-selected');
+        if (noPlaneDiv) {
+            noPlaneDiv.style.display = 'none';
+        }
+
+        setCookie('selectedPlane', planeFile, 30);
+        resetGame();
+        camera.position.set(0, 5, 10);
+        camera.lookAt(currentPlaneModule.plane.position);
+
+        // Adicionar delay antes de tocar o som
+        const planeSound = currentPlaneModule.plane.userData.sound;
+        if (planeSound) {
+            if (!planeSound.buffer) {
+                console.warn(`Sound buffer not loaded for ${planeFile}. Waiting for load...`);
+                planeSound.onAudioReady = async () => {
+                    await sleep(1000);
+                    if (!planeSound.isPlaying) planeSound.play();
+                };
+            } else if (!planeSound.isPlaying) {
+                await sleep(1000);
+                planeSound.play();
+            }
+        } else {
+            console.warn(`No sound defined for plane in ${planeFile}`);
+        }
+    } catch (error) {
+        console.error(`Failed to load plane ${planeFile}:`, error);
+    }
 }
 
 // --- INICIALIZAÇÃO DO JOGO ---
 const savedPlane = getCookie('selectedPlane');
-loadPlane(savedPlane || 'plane.js');
+if (savedPlane) {
+    
+}
 
 // --- VARIÁVEIS DE CONTROLE ---
 let keys = { w: false, s: false, a: false, d: false };
@@ -96,7 +126,7 @@ function resetGame() {
     if (!currentPlaneModule) return;
     const planeSound = currentPlaneModule.plane.userData.sound;
     if (planeSound && planeSound.isPlaying) {
-        planeSound.stop(); // Para o som ao reiniciar
+        planeSound.stop();
     }
     currentPlaneModule.plane.position.set(0, 0, 2);
     currentPlaneModule.plane.rotation.set(0, 0, 0);
@@ -108,18 +138,19 @@ function resetGame() {
     keys = { w: false, s: false, a: false, d: false };
     currentPlaneModule.setIsAccelerating(false);
     renderer.domElement.style.filter = 'none';
-    renderer.render(scene, position);
+    renderer.render(scene, camera, position); // Corrigido: usar 'camera' em vez de 'position'
 }
 
 // --- FUNÇÃO PARA ATUALIZAR A CÂMERA ---
 function updateCamera() {
+    if (!currentPlaneModule) return;
     if (isCameraBehind) {
         const distanceBehind = 10;
         const heightOffset = 5;
         const yaw = currentPlaneModule.plane.rotation.y;
 
-        const cameraOffsetX = +Math.sin(yaw) * distanceBehind;
-        const cameraOffsetZ = +Math.cos(yaw) * distanceBehind;
+        const cameraOffsetX = Math.sin(yaw) * distanceBehind;
+        const cameraOffsetZ = Math.cos(yaw) * distanceBehind;
 
         camera.position.set(
             currentPlaneModule.plane.position.x + cameraOffsetX,
@@ -145,11 +176,9 @@ function animate() {
     const planeSound = currentPlaneModule.plane.userData.sound;
     if (planeSound) {
         if (!currentPlaneModule.isCrashed) {
-            if (!planeSound.isPlaying) {
-                planeSound.play(); // Inicia o som se ainda não estiver tocando
+            if (!planeSound.isPlaying && planeSound.buffer) {
+                planeSound.play();
             }
-
-            // Ajustar pitch e velocidade com base na velocidade do avião
             const speedRatio = currentPlaneModule.speed / currentPlaneModule.maxSpeed * 5;
             const minPitch = 0.5;
             const maxPitch = 1.5;
@@ -161,7 +190,7 @@ function animate() {
             const volume = minVolume + (maxVolume - minVolume) * speedRatio;
             planeSound.setVolume(volume);
         } else if (planeSound.isPlaying) {
-            planeSound.stop(); // Para o som se o avião colidir
+            planeSound.stop();
         }
     }
 
@@ -211,8 +240,6 @@ function animate() {
     const pitchMultiplier = 5;
 
     if (!currentPlaneModule.isCrashed) {
-        const yaw = currentPlaneModule.plane.rotation.y;
-
         if (keys.s && currentPlaneModule.speed > currentPlaneModule.liftThreshold && currentPlaneModule.plane.position.y < currentPlaneModule.maxAltitude) {
             verticalSpeed = currentPlaneModule.baseVerticalSpeedUp + (currentPlaneModule.baseVerticalSpeedUp * speedMultiplier);
             newY += verticalSpeed + currentPlaneModule.speed * 0.1;
@@ -220,16 +247,14 @@ function animate() {
             currentPlaneModule.setPitchAngle(
                 currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
             );
-        }
-        else if (keys.w && currentPlaneModule.plane.position.y > 0.1) {
+        } else if (keys.w && currentPlaneModule.plane.position.y > 0.1) {
             verticalSpeed = -0.1;
             newY += verticalSpeed - currentPlaneModule.speed * 0.1;
             const targetPitch = verticalSpeed * pitchMultiplier;
             currentPlaneModule.setPitchAngle(
                 currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
             );
-        }
-        else {
+        } else {
             const targetPitch = 0;
             currentPlaneModule.setPitchAngle(
                 currentPlaneModule.pitchAngle + (targetPitch - currentPlaneModule.pitchAngle) * currentPlaneModule.pitchSpeed
@@ -322,8 +347,8 @@ function animate() {
 
     const altitudeDisplay = document.getElementById('altitude');
     const speedDisplay = document.getElementById('speed');
-    altitudeDisplay.textContent = ((currentPlaneModule.plane.position.y - 0.1) * 4).toFixed(1);
-    speedDisplay.textContent = (currentPlaneModule.speed * 450).toFixed(1);
+    if (altitudeDisplay) altitudeDisplay.textContent = ((currentPlaneModule.plane.position.y - 0.1) * 4).toFixed(1);
+    if (speedDisplay) speedDisplay.textContent = (currentPlaneModule.speed * 450).toFixed(1);
 
     renderer.render(scene, camera);
 }
@@ -344,23 +369,27 @@ function ajustarControlesMobile() {
     const controles = document.querySelector(".mobile-controls");
     const acelerador = document.getElementById("accelerator-btn");
 
-    if (altura > largura) {
-        controles.style.display = "flex";
-        camera.fov = 115;
-    } else {
-        controles.style.display = "none";
-        camera.fov = 85;
+    if (controles) {
+        if (altura > largura) {
+            controles.style.display = "flex";
+            camera.fov = 115;
+        } else {
+            controles.style.display = "none";
+            camera.fov = 85;
+        }
     }
     camera.updateProjectionMatrix();
 
-    if (largura > 500) {
-        acelerador.style.width = "160px";
-        acelerador.style.height = "110px";
-        acelerador.style.fontSize = "30px";
-    } else {
-        acelerador.style.width = "100px";
-        acelerador.style.height = "60px";
-        acelerador.style.fontSize = "18px";
+    if (acelerador) {
+        if (largura > 500) {
+            acelerador.style.width = "160px";
+            acelerador.style.height = "110px";
+            acelerador.style.fontSize = "30px";
+        } else {
+            acelerador.style.width = "100px";
+            acelerador.style.height = "60px";
+            acelerador.style.fontSize = "18px";
+        }
     }
 }
 
@@ -371,7 +400,7 @@ window.addEventListener("resize", ajustarControlesMobile);
 const joystickContainer = document.getElementById('joystick-container');
 const joystick = document.getElementById('joystick');
 let isDragging = false;
-let activeTouchId = null; // Rastrear o toque específico do joystick
+let activeTouchId = null;
 
 function handleJoystickStart(event) {
     event.preventDefault();
@@ -380,14 +409,14 @@ function handleJoystickStart(event) {
     let touch;
     if (event.type === 'touchstart') {
         touch = Array.from(event.touches).find(t => joystickContainer.contains(document.elementFromPoint(t.clientX, t.clientY)));
-        if (!touch) return; // Só ativa se o toque começou no joystick
+        if (!touch) return;
         activeTouchId = touch.identifier;
     } else {
         touch = event;
     }
 
     isDragging = true;
-    joystick.style.background = 'rgba(83, 85, 237, 0.8)';
+    if (joystick) joystick.style.background = 'rgba(83, 85, 237, 0.8)';
     handleJoystickMove(event);
 }
 
@@ -397,7 +426,7 @@ function handleJoystickMove(event) {
     let touch;
     if (event.type === 'touchmove') {
         touch = Array.from(event.touches).find(t => t.identifier === activeTouchId);
-        if (!touch) return; // Ignora se o toque ativo não estiver presente
+        if (!touch) return;
     } else {
         touch = event;
     }
@@ -408,7 +437,7 @@ function handleJoystickMove(event) {
     let offsetX = touch.clientX - centerX;
     let offsetY = touch.clientY - centerY;
 
-    const radius = rect.width / 2 - joystick.offsetWidth / 2;
+    const radius = rect.width / 2 - (joystick ? joystick.offsetWidth / 2 : 0);
     const distance = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
     if (distance > radius) {
         const angle = Math.atan2(offsetY, offsetX);
@@ -416,8 +445,10 @@ function handleJoystickMove(event) {
         offsetY = Math.sin(angle) * radius;
     }
 
-    joystick.style.left = `calc(50% + ${offsetX}px)`;
-    joystick.style.top = `calc(50% + ${offsetY}px)`;
+    if (joystick) {
+        joystick.style.left = `calc(50% + ${offsetX}px)`;
+        joystick.style.top = `calc(50% + ${offsetY}px)`;
+    }
 
     const normalizedX = offsetX / radius;
     const normalizedY = offsetY / radius;
@@ -433,22 +464,26 @@ function handleJoystickEnd(event) {
 
     if (event.type === 'touchend' || event.type === 'touchcancel') {
         const touch = Array.from(event.changedTouches).find(t => t.identifier === activeTouchId);
-        if (!touch) return; // Só termina se o toque ativo foi liberado
+        if (!touch) return;
     }
 
     isDragging = false;
     activeTouchId = null;
-    joystick.style.left = '50%';
-    joystick.style.top = '50%';
-    joystick.style.background = 'rgba(255, 255, 255, 0.36)';
+    if (joystick) {
+        joystick.style.left = '50%';
+        joystick.style.top = '50%';
+        joystick.style.background = 'rgba(255, 255, 255, 0.36)';
+    }
     keys.w = false;
     keys.s = false;
     keys.a = false;
     keys.d = false;
 }
 
-joystickContainer.addEventListener('mousedown', handleJoystickStart);
-joystickContainer.addEventListener('touchstart', handleJoystickStart);
+if (joystickContainer) {
+    joystickContainer.addEventListener('mousedown', handleJoystickStart);
+    joystickContainer.addEventListener('touchstart', handleJoystickStart);
+}
 document.addEventListener('mousemove', handleJoystickMove);
 document.addEventListener('touchmove', handleJoystickMove, { passive: false });
 document.addEventListener('mouseup', handleJoystickEnd);
@@ -461,7 +496,7 @@ const acceleratorBtn = document.getElementById('accelerator-btn');
 function addButtonEvents(button, action, isKey = true) {
     const startEvent = (e) => {
         e.preventDefault();
-        e.stopPropagation(); // Impede que o evento afete o joystick
+        e.stopPropagation();
         if (!currentPlaneModule) return;
         if (isKey) keys[action] = true;
         else currentPlaneModule.setIsAccelerating(true);
@@ -470,7 +505,7 @@ function addButtonEvents(button, action, isKey = true) {
     
     const endEvent = (e) => {
         e.preventDefault();
-        e.stopPropagation(); // Impede que o evento afete o joystick
+        e.stopPropagation();
         if (!currentPlaneModule) return;
         if (isKey) keys[action] = false;
         else currentPlaneModule.setIsAccelerating(false);
@@ -484,56 +519,64 @@ function addButtonEvents(button, action, isKey = true) {
     button.addEventListener('touchcancel', endEvent);
 }
 
-addButtonEvents(acceleratorBtn, null, false);
+if (acceleratorBtn) addButtonEvents(acceleratorBtn, null, false);
 
 // --- BOTÃO DE CÂMERA ---
 const cameraToggleBtn = document.getElementById('camera-toggle-btn');
 
 function toggleCamera(event) {
     event.preventDefault();
-    event.stopPropagation(); // Impede interferência com outros controles
+    event.stopPropagation();
     isCameraBehind = !isCameraBehind;
-    cameraToggleBtn.classList.toggle('active');
+    if (cameraToggleBtn) cameraToggleBtn.classList.toggle('active');
 }
 
-cameraToggleBtn.addEventListener('click', toggleCamera);
-cameraToggleBtn.addEventListener('touchstart', toggleCamera);
+if (cameraToggleBtn) {
+    cameraToggleBtn.addEventListener('click', toggleCamera);
+    cameraToggleBtn.addEventListener('touchstart', toggleCamera);
+}
 
 // --- DROPDOWN DE SELEÇÃO DE AVIÃO ---
 const planeSelector = document.querySelector('.plane-selector');
 const dropdownBtn = document.querySelector('.dropdown-btn');
 const dropdownContent = document.querySelector('.dropdown-content');
-const planeOptions = dropdownContent.querySelectorAll('button');
+const planeOptions = dropdownContent ? dropdownContent.querySelectorAll('button') : [];
 
 function toggleDropdown(event) {
     event.preventDefault();
-    event.stopPropagation(); // Impede interferência com outros controles
-    planeSelector.classList.toggle('active');
+    event.stopPropagation();
+    if (planeSelector) planeSelector.classList.toggle('active');
 }
 
 function closeDropdown(event) {
-    if (!planeSelector.contains(event.target)) {
+    if (planeSelector && !planeSelector.contains(event.target)) {
         planeSelector.classList.remove('active');
     }
 }
 
-dropdownBtn.addEventListener('click', toggleDropdown);
-dropdownBtn.addEventListener('touchstart', toggleDropdown);
+if (dropdownBtn) {
+    dropdownBtn.addEventListener('click', toggleDropdown);
+    dropdownBtn.addEventListener('touchstart', toggleDropdown);
+}
 
 planeOptions.forEach(option => {
     option.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
-        const planeFile = option.getAttribute('onclick').match(/'([^']+)'/)[1];
-        loadPlane(planeFile);
-        planeSelector.classList.remove('active');
+        const planeFile = option.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+        if (planeFile) {
+            loadPlane(planeFile);
+            if (planeSelector) planeSelector.classList.remove('active');
+        }
     });
     option.addEventListener('touchstart', (event) => {
         event.preventDefault();
         event.stopPropagation();
-        const planeFile = option.getAttribute('onclick').match(/'([^']+)'/)[1];
-        loadPlane(planeFile);
-        planeSelector.classList.remove('active');
+        const planeFile = option.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+        if (planeFile) {
+            loadPlane(planeFile);
+            if (planeSelector) planeSelector.classList.remove('active');
+        }
     });
 });
 

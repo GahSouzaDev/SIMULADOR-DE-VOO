@@ -206,3 +206,18 @@ canvas {
 .camera-toggle.active {
     background-color: #09ff0073;
 }
+
+#no-plane-selected {
+    
+    background-color: rgba(0, 0, 0, 0.129); /* Fundo preto da div */
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 50px;
+    text-align: center; /* Centralizar o texto horizontalmente */
+    animation: colorChange 2s infinite alternate; /* Animação de cor */
+    position: absolute; /* Posicionamento absoluto em relação ao body */
+    top: 50%; /* Centralizar verticalmente */
+    left: 50%; /* Centralizar horizontalmente */
+    transform: translate(-50%, -50%); /* Ajustar para o centro exato */
+    width: 100%; /* Garantir que o texto ocupe a largura necessária */
+    color: white;
+}
