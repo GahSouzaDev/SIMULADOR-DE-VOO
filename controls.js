@@ -185,8 +185,8 @@ function animate() {
             const pitch = minPitch + (maxPitch - minPitch) * speedRatio;
             planeSound.setPlaybackRate(pitch);
 
-            const minVolume = 0.3;
-            const maxVolume = 0.7;
+            const minVolume = 0.1;
+            const maxVolume = 0.2;
             const volume = minVolume + (maxVolume - minVolume) * speedRatio;
             planeSound.setVolume(volume);
         } else if (planeSound.isPlaying) {
