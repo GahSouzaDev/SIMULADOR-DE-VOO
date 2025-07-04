@@ -139,6 +139,7 @@ function resetGame() {
     currentPlaneModule.setIsAccelerating(false);
     renderer.domElement.style.filter = 'none';
     renderer.render(scene, camera, position); // Corrigido: usar 'camera' em vez de 'position'
+    
 }
 
 // --- FUNÇÃO PARA ATUALIZAR A CÂMERA ---
@@ -185,8 +186,8 @@ function animate() {
             const pitch = minPitch + (maxPitch - minPitch) * speedRatio;
             planeSound.setPlaybackRate(pitch);
 
-            const minVolume = 0.1;
-            const maxVolume = 0.2;
+            const minVolume = 0.3;
+            const maxVolume = 0.7;
             const volume = minVolume + (maxVolume - minVolume) * speedRatio;
             planeSound.setVolume(volume);
         } else if (planeSound.isPlaying) {
@@ -347,7 +348,7 @@ function animate() {
 
     const altitudeDisplay = document.getElementById('altitude');
     const speedDisplay = document.getElementById('speed');
-    if (altitudeDisplay) altitudeDisplay.textContent = ((currentPlaneModule.plane.position.y - 0.1) * 4).toFixed(1);
+    if (altitudeDisplay) altitudeDisplay.textContent = ((currentPlaneModule.plane.position.y - 0.1) * 8).toFixed(1);
     if (speedDisplay) speedDisplay.textContent = (currentPlaneModule.speed * 450).toFixed(1);
 
     renderer.render(scene, camera);

@@ -1,0 +1,231 @@
+body {
+    margin: 0;
+    overflow: hidden;    
+}
+
+canvas {
+    width: 100%;
+    height: 100vh;
+    display: block;
+}
+
+/* Estilo para o HUD (Heads-Up Display) */
+#hud {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 20; /* Acima dos controles */
+}
+
+/* Estilo para o dropdown de seleção de aviões */
+.plane-selector {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    z-index: 30; /* Acima de tudo */
+}
+
+.dropdown-btn {
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    touch-action: manipulation; /* Garante interação em mobile */
+}
+
+.dropdown-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    right: 0;
+    z-index: 30;
+}
+
+.plane-selector.active .dropdown-content {
+    display: block; /* Usaremos JS para ativar em mobile */
+}
+
+.dropdown-content button {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 25px;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content button:hover {
+    background-color: rgba(255, 255, 255, 0.235);
+}
+
+/* Estilos dos controles para mobile */
+.mobile-controls {
+    display: none;
+    position: fixed;
+    bottom: 30%;
+    width: 100%;
+    z-index: 10; /* Abaixo do HUD e dropdown */
+    pointer-events: none;
+}
+
+.direction-controls {
+    position: absolute;
+    left: 2%;
+    pointer-events: auto;
+}
+
+/* Estilo do Joystick */
+#joystick-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid #333;
+    border-radius: 50%;
+    user-select: none;
+    touch-action: none;
+}
+
+#joystick {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: rgba(83, 85, 237, 0.8);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: background-color 0.3s;
+}
+
+.accelerator-control {
+    position: absolute;
+    bottom: -115px;
+    right: 5px;
+    pointer-events: auto;
+}
+
+/* Ajuste de tamanho para telas maiores (largura > 500px) */
+@media (min-width: 501px) {
+    #joystick-container {
+        width: 360px;
+        height: 360px;
+    }
+
+    #joystick {
+        width: 120px;
+        height: 120px;
+    }
+
+    #hud {
+        font-size: 30px;
+    }
+
+    .accelerator-control {
+        bottom: -230px;
+    }
+
+    .dropdown-btn {
+        font-size: 20px;
+    }
+}
+
+.mobile-controls button {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    background: rgba(255, 255, 255, 0.36);
+    border: 2px solid #333;
+    border-radius: 10px;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background-color 0.3s;
+}
+
+.mobile-controls button:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.mobile-controls button:active {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+#accelerator-btn {
+    width: 100px;
+    height: 60px;
+    font-size: 18px;
+}
+
+/* Mostrar controles apenas em mobile */
+@media (max-width: 768px) or (pointer: coarse) {
+    .mobile-controls {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+/* Estilo do botão de alternância da câmera */
+.camera-toggle {
+    position: absolute;
+    top: 300px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    background-color: #db000076;
+    border: none;
+    border-radius: 50%;
+    font-size: 40px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 20; /* Acima dos controles */
+    touch-action: manipulation;
+}
+
+.camera-toggle.active {
+    background-color: #09ff0073;
+}
+/* Resetar o body para evitar bordas brancas */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black; /* Fundo preto para toda a página */
+    height: 100vh; /* Garantir que o body ocupe toda a tela */
+    overflow: hidden; /* Evitar barras de rolagem */
+}
+
+#no-plane-selected {
+    background-color: rgba(0, 0, 0, 0.129); /* Fundo preto da div */
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 50px;
+    text-align: center; /* Centralizar o texto horizontalmente */
+    animation: colorChange 2s infinite alternate; /* Animação de cor */
+    position: absolute; /* Posicionamento absoluto em relação ao body */
+    top: 50%; /* Centralizar verticalmente */
+    left: 50%; /* Centralizar horizontalmente */
+    transform: translate(-50%, -50%); /* Ajustar para o centro exato */
+    width: 100%; /* Garantir que o texto ocupe a largura necessária */
+    color: white;
+}
+

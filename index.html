@@ -1,187 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-
     <meta charset="UTF-8">
-    <meta name="description" content="Gah Souza Games - Jogos incríveis criados com HTML, CSS e JavaScript. Divirta-se com nossos jogos online gratuitos!">
-    <meta name="keywords" content="Gah Souza Games, jogos online, HTML, CSS, JavaScript, jogos gratuitos">
-    <meta name="author" content="Gah Souza">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gah Souza Games</title>
-
-    <link rel="stylesheet" href="styles.css">
-    <link rel="shortcut icon" href="logo-removebg-preview.png" type="image.png">
-
+    <title>Simulador de Voo</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body id="fundo-inicio">
-    <header>
-        <div class="container">
-
-            <div id="titulo">
-                <img src="logo-removebg-preview-removebg-preview001.png" alt="Logo do site" class="logo">
-                <a href="index.html" id="inicio">
-                    <h1> <a href="https://gahsouzadev.github.io/JOGOS/" id="aprensetacao-desktop">
-                        <img src="https://readme-typing-svg.herokuapp.com/?color=F2B705&size=40&center=true&vCenter=true&higth=1000&width=600&lines=Gah+Souza+Games;Seja+Bem-vindo!+:%29" alt="Animação de texto" id="aprensetacao" class="desktop-text">
-                    </a>
-                    <a href="https://gahsouzadev.github.io/JOGOS/" id="aprensetacao-mobile">
-                        <img src="https://readme-typing-svg.herokuapp.com/?color=F2B705&size=25&center=true&vCenter=true&hight=1000&width=270&lines=Gah+Souza+Games;Seja+Bem-vindo!" alt="Animação de texto" id="aprensetacao" class="desktop-text">
-                    </a></h1>
-                </a>
-            </div>
-
-            <nav>
-                <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
-                <ul id="menu" class="menu">                    
-                    
-                    <li><a href="#home" id="inicio-nav">Inicio</a></li>
-                    <li><a href="#simulador-de-voo" >Simulador de voo</a></li>
-                    <li><a href="#jogo-da-memoria">Jogo da Memoria</a></li>
-                    <li><a href="#Quiz">Quiz Master</a></li>                    
-                    <li><a href="#jogo-da-velha">Jogo da Velha</a></li>
-                    <li><a href="#corrida-do-encanador">Corrida Encanada</a></li>      
-                    <li><a href="#contact" id="contato-nav">Contato</a></li>
-                    
-                </ul>
-            </nav>
-
+<body>
+    <div class="plane-selector">
+        <button class="dropdown-btn">Selecionar Avião ▼</button>
+        <div class="dropdown-content">
+            <button onclick="loadPlane('plane.js')">Cessna</button>
+            <button onclick="loadPlane('plane-bi-motor.js')">ATR</button>
+            <button onclick="loadPlane('plane-jato.js')">Jato Caça</button>
+            <button onclick="loadPlane('plane-sr71.js')">SR-71</button>
+            <button onclick="loadPlane('plane-boing.js')">Boeing-A380</button>
+            <button onclick="loadPlane('plane-ovni.js')">OVNI</button>
         </div>
-
-    </header>
-
-    <main>      
-             
-        <section id="home" >
-            <div class="intro">
-               
-                <h1>Neste site você encontrará alguns jogos que desenvolvi.</h1><img src="game-14535_256.gif" alt=""><br> <p>Para começar a jogar, basta <STRONG>clicar na imagem do jogo</STRONG>  desejado.</p> <p>Ao terminar, <strong>clique no icone HOME ou no topo do site para voltar à página inicial</strong>.</p>
-                
-            </div>            
-        </section> 
-        <section id="simulador-de-voo"></section>
-        <section id="jogo5" class="jogo">
-            <div class="imagem" onclick='window.location.href="jogo5.html"'>
-                <img src="img-jogo5-mobile.png" id="img-jogo-mobile" alt="Imagem do Jogo 5" >
-                <img src="img-jogo5-desktop.png" id="img-jogo-desktop" alt="Imagem do Jogo 5" >
+    </div>
+    <div id="hud">
+        <div>Altura: <span id="altitude">0</span> m</div>
+        <div>Velocidade: <span id="speed">0</span> km/h</div>       
+    </div>
+   
+    <!-- Botão de alternância da câmera -->
+    <button id="camera-toggle-btn" class="camera-toggle">↻</button>
+    <div id="controls" class="mobile-controls">
+        <div class="direction-controls">
+            <div id="joystick-container">
+                <div id="joystick"></div>
             </div>
-            <div class="texto">
-                <div class=“texto”> <h1 id=“titulo-jogo”>Simulador de voo</h1> <p>Enfrente 3 níveis com 10 perguntas sobre Ciências da Natureza, Ciências Exatas e Ciências Humanas. Responda corretamente para avançar. Um erro e você recomeça. Complete todos os níveis sem errar!</p> <br>
-
-                    <h2>Como Jogar?</h2> <p>O quiz é composto por 3 níveis, cada um com 10 perguntas. Os temas são Ciências da Natureza, Ciências Exatas e Ciências Humanas. Para avançar, você deve responder corretamente a todas as perguntas de um nível. Se errar uma pergunta, você terá que reiniciar o nível. O objetivo é completar todos os níveis sem errar nenhuma pergunta.</p> <br>
-                    
-                    <p><h2>Clique na imagem para jogar!</h2></p> </div>
-        </section>    
-        
-        <section id="jogo-da-memoria"></section>
-        <section id="jogo4" class="jogo">
-            <div class="imagem" onclick='window.location.href="jogo4.html"'>
-                <img src="img-jogo4-mobile.png" id="img-jogo-mobile" alt="Imagem do Jogo 4" >
-                <img src="img-jogo4-desktop.png" id="img-jogo-desktop" alt="Imagem do Jogo 4" >
-            </div>
-            <div class="texto">
-                <h1>Jogo da Memória:</h1>
-                <p>Desafie um amigo para uma partida clássica de Jogo da Memória! Este jogo é perfeito para testar suas habilidades de memorização e se divertir.</p>
-                <br>
-            
-                <h1>Como jogar?</h1>
-                
-                
-                <p><h4>No celular e no computador:</h4> O jogo é da mesma maneira em ambas as plataformas. Toque na tela ou clica em uma carta para virá-la. O objetivo é encontrar os pares de imagens correspondentes.</p>
-                <br>
-                
-                <p>O jogo tem doze imagens; a missão é encontrar os 6 pares escondidos e organizados de forma aleatória pela máquina.</p><br>
-                <p><h2>Clique na imagem para jogar!</h2></p>
-            
-            </div>
-            
-        </section>    
-        <section id="Quiz"></section>
-        <section id="jogo3" class="jogo">
-            <div class="imagem" onclick='window.location.href="jogo3.html"'>
-                <img src="img-jogo3-mobile.png" id="img-jogo-mobile" alt="Imagem do Jogo 3" >
-                <img src="img-jogo3-desktop.png" id="img-jogo-desktop" alt="Imagem do Jogo 3" >
-            </div>
-            <div class="texto">
-                <div class=“texto”> <h1 id=“titulo-jogo”>Quiz Master:</h1> <p>Enfrente 3 níveis com 10 perguntas sobre Ciências da Natureza, Ciências Exatas e Ciências Humanas. Responda corretamente para avançar. Um erro e você recomeça. Complete todos os níveis sem errar!</p> <br>
-
-                    <h2>Como Jogar?</h2> <p>O quiz é composto por 3 níveis, cada um com 10 perguntas. Os temas são Ciências da Natureza, Ciências Exatas e Ciências Humanas. Para avançar, você deve responder corretamente a todas as perguntas de um nível. Se errar uma pergunta, você terá que reiniciar o nível. O objetivo é completar todos os níveis sem errar nenhuma pergunta.</p> <br>
-                    
-                    <p><h2>Clique na imagem para jogar!</h2></p> </div>
-        </section>    
-        
-        <section id="jogo-da-velha"></section>
-        <section id="jogo2" class="jogo">
-            <div class="imagem" onclick='window.location.href="jogo2.html"'>
-                <img src="img-jogo2-mobile.png" id="img-jogo-mobile" alt="Imagem do Jogo 1" >
-                <img src="img-jogo2-desktop.png" id="img-jogo-desktop" alt="Imagem do Jogo 1" >
-            </div>
-            <div class="texto">
-                <h1>Jogo da Velha:</h1> <p>Desafie um amigo para uma partida clássica de Jogo da Velha! Este jogo é perfeito para testar suas habilidades estratégicas e se divertir.</p> <br>
-
-                <h1>Como jogar?</h1> <p><h4>Configuração:</h4> Antes de começar, insira o nome do Jogador 1 e do Jogador 2. O jogo determinará aleatoriamente quem começa.</p>
-                
-                <p><h4>No celular e no computador:</h4> O jogo é da mesma maneira em ambas as plataformas. Cada jogador, em sua vez, toca na tela ou clica em um espaço vazio do tabuleiro 3x3 para colocar seu símbolo (X ou O).</p> <br>
-                
-                <p>O objetivo é ser o primeiro a alinhar três de seus símbolos na horizontal, vertical ou diagonal. Se todos os espaços forem preenchidos sem um vencedor, o jogo termina em empate.</p> <br>
-                
-                <p><h2>Clique na imagem para jogar!</h2></p>
-            </div>
-        </section>    
-
-        <section id="corrida-do-encanador"></section>
-
-        <section id="jogo1" class="jogo" >
-
-            <div class="imagem" onclick='window.location.href="jogo1.html"'>
-                <img src="img-jogo1-mobile.png" id="img-jogo-mobile" alt="Imagem do Jogo 1" >
-                <img src="img-jogo1-desktop.png" id="img-jogo-desktop" alt="Imagem do Jogo 1" >
-            </div>
-
-            <div class="texto">
-                <p> <h1 id="titulo-jogo">Corrida Encanada:</h1> Experimente a emoção de um clássico com um toque moderno! Nesse jogo, um explorador está correndo por uma fase repleta de canos. Sua missão é simples: pular os canos para evitar bater e continuar avançando.</p> <br>
-                
-                <h1>Como Jogar?</h1>
-                    
-                <p> <h4>No celular:</h4> Toque na tela para fazer o encanador pular.</p> 
-                <p> <h4>No computador:</h4> Aperte qualquer tecla do teclado para saltar.</p> <br>
-                <p>Conforme você avança, a fase acelera, tornando o jogo cada vez mais desafiador. Teste suas habilidades e veja até onde você consegue ir!</p> <br>
-                    
-                <p><h2>Clique na imagem para jogar!</h2></p>
-            </div>
-           
-        </section> 
-       
-        
-        
-        <section id="contact">
-
-            <h2>Contato</h2>
-            <form id="form">
-                
-                <label for="from_name">Nome:</label>
-                <input type="text" placeholder="Seu Nome" id="from_name" name="from_name" required>
-                
-                <label for="email_id">Email:</label>
-                <input type="email" id="email_id" placeholder="Seu Email" name="email_id" required>
-                
-                <label for="mensagem">Mensagem:</label>
-                <textarea id="mensagem" placeholder="Como posso ajudar?" name="mensagem"></textarea>               
-                
-                <button type="submit" id="button">Enviar</button>
-            </form>            
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 Gah Souza Dev. Todos os direitos reservados.</p> <br>
-        <a href="https://gahsouza.com.br/">
-            <p>www.gahsouza.com.br</p>
-        </a>
-    </footer>
-    <script src="script.js"></script>
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-      
-      <script type="text/javascript">
-        emailjs.init('NQZvwCNXkOscBas-G')
-      </script>
+        </div>
+        <div class="accelerator-control">
+            <button id="accelerator-btn">Acelerador</button>
+        </div>
+    </div>
+    <div id="no-plane-selected"><h1>Selecione um avião para começar</h1></div>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    <script type="module" src="controls.js"></script>
 </body>
 </html>

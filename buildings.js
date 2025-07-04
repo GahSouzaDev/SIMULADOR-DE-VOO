@@ -1,5 +1,60 @@
 import { scene } from './scene.js';
 
+// Função para criar uma árvore simples
+function createTree(x, z) {
+    const group = new THREE.Group();
+    
+    // Tronco
+    const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.4, 4, 8);
+    const trunkMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x8B4513,
+        roughness: 0.9
+    });
+    const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+    trunk.position.y = 2;
+    trunk.castShadow = true;
+    group.add(trunk);
+    
+    // Folhagem
+    const foliageGeometry = new THREE.ConeGeometry(3, 6, 8);
+    const foliageMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x2E8B57,
+        roughness: 0.7
+    });
+    const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+    foliage.position.y = 6;
+    foliage.castShadow = true;
+    group.add(foliage);
+    
+    // Posicionamento
+    group.position.set(x, 0, z);
+    
+    // Rotação aleatória para variedade
+    group.rotation.y = Math.random() * Math.PI * 2;
+    
+    // Escala aleatória
+    const scale = 0.8 + Math.random() * 0.4;
+    group.scale.set(scale, scale, scale);
+    
+    // Calcular bounding box para colisão
+    const bbox = new THREE.Box3().setFromObject(group);
+    group.boundingBox = bbox;
+    
+    scene.add(group);
+    return group;
+}
+
+// Lista para armazenar árvores para colisão
+const trees = [];
+
+// Adicionar árvores ao cenário (distribuição esparsa)
+for (let i = 0; i < 100; i++) {
+    const x = (Math.random() - 0.5) * 1200; // -500 a 500
+    const z = (Math.random() - 0.5) * 1200; // -500 a 500
+    const tree = createTree(x, z);
+    trees.push(tree);
+}
+
 // Função para criar prédios cúbicos
 function createBuilding(width, height, depth, x, z, color) {
     const geometry = new THREE.BoxGeometry(width, height, depth);
@@ -273,12 +328,12 @@ const building68 = createBuilding(1, 1, 21, 180, 10, 0xFF4500);
 building68.position.y = 8;
 building68.rotation.x = -5.92;
 
-// Novo Conjunto com 2 cilindros e 1 cubo (substitua apenas esta parte no seu código)
-const cylinder1 = createCylinder(1, 1, 30,-90, -80, 0xaaaaaa); // Cilindro 1
-const cylinder2 = createCylinder(1, 1, 30, -30, -80, 0xaaaaaa); // Cilindro 2
+// Novo Conjunto com 2 cilindros e 1 cubo
+const cylinder1 = createCylinder(1, 1, 30,-90, -80, 0xaaaaaa);
+const cylinder2 = createCylinder(1, 1, 30, -30, -80, 0xaaaaaa);
 const cube1 = createBuilding(60, 30, 2, -60, -80, 0xffffff); 
-cube1.position.y = 18;// Cubo
-const buildingTextureNew = textureLoader.load('outdor.png'); // Substitua pelo nome da sua textura
+cube1.position.y = 18;
+const buildingTextureNew = textureLoader.load('outdor.png');
 
 const buildingsNewConjunto = [cube1];
 buildingsNewConjunto.forEach(building => {
@@ -286,20 +341,18 @@ buildingsNewConjunto.forEach(building => {
     const height = building.geometry.parameters.height;
     const depth = building.geometry.parameters.depth;
     const textMaterial = new THREE.MeshBasicMaterial({ map: buildingTextureNew, transparent: true, side: THREE.DoubleSide });
-    // Textura no lado frontal (Z positivo)
     const frontGeometry = new THREE.PlaneGeometry(width, height);
     const frontMesh = new THREE.Mesh(frontGeometry, textMaterial);
     frontMesh.position.set(0, 0, depth / 2 + 0.02);
     building.add(frontMesh);
-    // Textura no lado traseiro (Z negativo)
     const backGeometry = new THREE.PlaneGeometry(width, height);
     const backMesh = new THREE.Mesh(backGeometry, textMaterial);
     backMesh.position.set(0, 0, -depth / 2 - 0.02);
-    backMesh.rotation.y = Math.PI; // Rotaciona 180 graus para ficar visível
+    backMesh.rotation.y = Math.PI;
     building.add(backMesh);
 });
 
-// Lista completa de prédios para colisão
+// Lista completa de objetos para colisão (prédios + árvores)
 const buildings = [
     building1, building2, building3, building4, building5, building6, building7, building8,
     building9, building10, building11, building12, building13, building14,
@@ -309,8 +362,9 @@ const buildings = [
     building39, building40, building41, building44, building45, building46, building47,
     building55, building56, building57, building58, building59, building60, building61, building62, building63,
     building64, building65, building66, building67, building68,
-    cylinder1, cylinder2, cube1 // Adicionando o novo conjunto
+    cylinder1, cylinder2, cube1,
+    ...trees // Adiciona todas as árvores ao sistema de colisão
 ];
 
-// Exportar prédios para colisão
+// Exportar objetos para colisão
 export { buildings };
