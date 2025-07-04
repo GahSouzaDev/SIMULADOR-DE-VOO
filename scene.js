@@ -36,7 +36,7 @@ scene.add(sunLight);
 
 // Chão otimizado
 const textureLoader = new THREE.TextureLoader();
-const groundGeometry = new THREE.PlaneGeometry(1200, 1200, 10, 10); // Menos polígonos
+const groundGeometry = new THREE.PlaneGeometry(1200, 1200, 1, 1); // Menos polígonos
 const groundMaterial = new THREE.MeshStandardMaterial({ 
     color: 0x3a7d3a,
     roughness: 0.9

@@ -365,6 +365,263 @@ const buildings = [
     cylinder1, cylinder2, cube1,
     ...trees // Adiciona todas as árvores ao sistema de colisão
 ];
+// =================================================================
+// ADICIONANDO NOVAS CONSTRUÇÕES AO CENÁRIO
+// =================================================================
 
+// Função para criar torre de telecomunicação
+function createTelecomTower(x, z) {
+    const group = new THREE.Group();
+    
+    // Base da torre
+    const baseGeometry = new THREE.CylinderGeometry(3, 4, 10, 8);
+    const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
+    const base = new THREE.Mesh(baseGeometry, baseMaterial);
+    base.position.y = 5;
+    group.add(base);
+    
+    // Estrutura principal
+    const towerGeometry = new THREE.CylinderGeometry(0.5, 1.5, 80, 8);
+    const towerMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+    const tower = new THREE.Mesh(towerGeometry, towerMaterial);
+    tower.position.y = 50;
+    group.add(tower);
+    
+    // Plataforma de antenas
+    const platformGeometry = new THREE.CylinderGeometry(3, 3, 2, 8);
+    const platformMaterial = new THREE.MeshStandardMaterial({ color: 0x777777 });
+    const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+    platform.position.y = 85;
+    group.add(platform);
+    
+    // Antenas
+    const antennaMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    
+    // Antenas principais
+    for (let i = 0; i < 4; i++) {
+        const angle = (Math.PI / 2) * i;
+        const antenna = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.1, 0.1, 15, 6),
+            antennaMaterial
+        );
+        antenna.position.set(
+            Math.cos(angle) * 3.5,
+            85,
+            Math.sin(angle) * 3.5
+        );
+        antenna.rotation.x = Math.PI / 2;
+        group.add(antenna);
+    }
+    
+    // Antenas secundárias
+    for (let i = 0; i < 8; i++) {
+        const angle = (Math.PI / 4) * i;
+        const antenna = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.05, 0.05, 8, 6),
+            antennaMaterial
+        );
+        antenna.position.set(
+            Math.cos(angle) * 2.5,
+            85,
+            Math.sin(angle) * 2.5
+        );
+        group.add(antenna);
+    }
+    
+    // Posicionamento
+    group.position.set(x, 0, z);
+    
+    // Calcular bounding box para colisão
+    const bbox = new THREE.Box3().setFromObject(group);
+    group.boundingBox = bbox;
+    
+    scene.add(group);
+    return group;
+}
+
+// Função para criar montanhas
+function createMountain(x, z, width = 100, height = 60, detail = 50) {
+    const group = new THREE.Group();
+    
+    // Criar geometria da montanha
+    const geometry = new THREE.ConeGeometry(width / 2, height, 8);
+    const material = new THREE.MeshStandardMaterial({ 
+        color: 0x5d4037,
+        roughness: 0.9
+    });
+    
+    const mountain = new THREE.Mesh(geometry, material);
+    mountain.rotation.y = Math.random() * Math.PI;
+    mountain.position.y = height / 2;
+    
+    // Adicionar detalhes (rochas)
+    const rockMaterial = new THREE.MeshStandardMaterial({ color: 0x7f7f7f });
+    for (let i = 0; i < 30; i++) {
+        const rockSize = 2 + Math.random() * 5;
+        const rockGeometry = new THREE.DodecahedronGeometry(rockSize, 0);
+        const rock = new THREE.Mesh(rockGeometry, rockMaterial);
+        
+        // Posição aleatória na montanha
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * (width / 3);
+        const yPos = Math.random() * height * 0.7;
+        
+        rock.position.set(
+            Math.cos(angle) * distance,
+            yPos,
+            Math.sin(angle) * distance
+        );
+        
+        mountain.add(rock);
+    }
+    
+    group.add(mountain);
+    
+    // Adicionar neve no topo
+    const snowGeometry = new THREE.SphereGeometry(width / 5, 16, 16);
+    const snowMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const snow = new THREE.Mesh(snowGeometry, snowMaterial);
+    snow.position.y = height * 0.8;
+    group.add(snow);
+    
+    // Posicionamento
+    group.position.set(x, 0, z);
+    
+    // Calcular bounding box para colisão
+    const bbox = new THREE.Box3().setFromObject(group);
+    group.boundingBox = bbox;
+    
+    scene.add(group);
+    return group;
+}
+
+// Função para criar fazenda
+function createFarm(x, z) {
+    const group = new THREE.Group();
+    
+    // Casa principal
+    const houseGeometry = new THREE.BoxGeometry(15, 8, 12);
+    const houseMaterial = new THREE.MeshStandardMaterial({ color: 0xd3bc8d });
+    const house = new THREE.Mesh(houseGeometry, houseMaterial);
+    house.position.set(0, 4, 0);
+    group.add(house);
+    
+    // Telhado
+    const roofGeometry = new THREE.ConeGeometry(10, 6, 4);
+    roofGeometry.rotateY(Math.PI / 4);
+    const roofMaterial = new THREE.MeshStandardMaterial({ color: 0x8b0000 });
+    const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+    roof.position.y = 12;
+    group.add(roof);
+    
+    // Chaminé
+    const chimneyGeometry = new THREE.BoxGeometry(2, 4, 2);
+    const chimneyMaterial = new THREE.MeshStandardMaterial({ color: 0x444444 });
+    const chimney = new THREE.Mesh(chimneyGeometry, chimneyMaterial);
+    chimney.position.set(4, 10, 3);
+    group.add(chimney);
+    
+    // Celeiro
+    const barnGeometry = new THREE.BoxGeometry(20, 10, 15);
+    const barnMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+    const barn = new THREE.Mesh(barnGeometry, barnMaterial);
+    barn.position.set(25, 5, 10);
+    group.add(barn);
+    
+    // Telhado do celeiro
+    const barnRoofGeometry = new THREE.ConeGeometry(12, 8, 4);
+    barnRoofGeometry.rotateY(Math.PI / 4);
+    barnRoofGeometry.scale(1.5, 1, 1);
+    const barnRoof = new THREE.Mesh(barnRoofGeometry, roofMaterial);
+    barnRoof.position.set(25, 15, 10);
+    group.add(barnRoof);
+    
+    // Silo
+    const siloGeometry = new THREE.CylinderGeometry(4, 4, 20, 16);
+    const siloMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+    const silo = new THREE.Mesh(siloGeometry, siloMaterial);
+    silo.position.set(25, 10, -10);
+    group.add(silo);
+    
+    // Cerca
+    function createFenceSegment(startX, startZ, endX, endZ) {
+        const fenceGroup = new THREE.Group();
+        const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endZ - startZ, 2));
+        const angle = Math.atan2(endZ - startZ, endX - startX);
+        
+        // Postes
+        const postCount = Math.ceil(length / 5);
+        for (let i = 0; i <= postCount; i++) {
+            const postGeometry = new THREE.CylinderGeometry(0.3, 0.3, 3, 8);
+            const postMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+            const post = new THREE.Mesh(postGeometry, postMaterial);
+            post.position.set(
+                startX + (i / postCount) * (endX - startX),
+                1.5,
+                startZ + (i / postCount) * (endZ - startZ)
+            );
+            fenceGroup.add(post);
+        }
+        
+        // Tábuas horizontais
+        for (let y = 0.5; y <= 2.5; y += 1) {
+            const board = new THREE.Mesh(
+                new THREE.BoxGeometry(length, 0.2, 0.5),
+                new THREE.MeshStandardMaterial({ color: 0x8b4513 })
+            );
+            board.position.set(
+                startX + (endX - startX) / 2,
+                y,
+                startZ + (endZ - startZ) / 2
+            );
+            board.rotation.y = -angle;
+            fenceGroup.add(board);
+        }
+        
+        return fenceGroup;
+    }
+    
+    // Cercar a fazenda
+    group.add(createFenceSegment(-15, -15, 40, -15));
+    group.add(createFenceSegment(40, -15, 40, 25));
+    group.add(createFenceSegment(40, 25, -15, 25));
+    group.add(createFenceSegment(-15, 25, -15, -15));
+    
+    // Posicionamento
+    group.position.set(x, 0, z);
+    
+    // Calcular bounding box para colisão
+    const bbox = new THREE.Box3().setFromObject(group);
+    group.boundingBox = bbox;
+    
+    scene.add(group);
+    return group;
+}
+
+// Criar torres de telecomunicação
+const telecomTower1 = createTelecomTower(250, 150);
+const telecomTower2 = createTelecomTower(-250, -150);
+
+// Criar montanhas
+const mountain1 = createMountain(250, 300, 120, 80);
+const mountain2 = createMountain(350, 300, 150, 100);
+const mountain3 = createMountain(400, 350, 100, 70);
+const mountain4 = createMountain(-400, -350, 130, 90);
+
+// Criar fazendas
+const farm1 = createFarm(300, 200);
+const farm2 = createFarm(-300, -200);
+
+// Adicionar as novas construções à lista de colisão
+buildings.push(
+    telecomTower1,
+    telecomTower2,
+    mountain1,
+    mountain2,
+    mountain3,
+    mountain4,
+    farm1,
+    farm2
+);
 // Exportar objetos para colisão
 export { buildings };

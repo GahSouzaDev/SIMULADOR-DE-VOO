@@ -585,3 +585,4 @@ document.addEventListener('click', closeDropdown);
 document.addEventListener('touchstart', closeDropdown);
 
 window.loadPlane = loadPlane;
+
