@@ -1,1 +1,0 @@
-Link para GIFs: https://giphy.com/
