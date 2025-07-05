@@ -1,5 +1,121 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.132.2';
 
+// scene.js
+
+// Função para criar o terreno com grama e muro
+function createTerrain() {
+    const terrainGroup = new THREE.Group();
+
+    // Dimensões do terreno
+    const terrainWidth = 20.1;  // 20 metros de comprimento
+    const terrainDepth = 8.1;   // 8 metros de largura
+    const wallHeight = 2;     // 2 metros de altura para o muro
+    const wallThickness = 0.14; // 14 cm de espessura
+
+    // OTIMIZAÇÃO 1: Carregamento de Texturas (pode ser pré-carregada ou ter resolução menor)
+    // Para ambientes de produção, considere texturas comprimidas (DDS, KTX2) ou WebP.
+    // Para esta otimização, presumimos que a URL da textura já é a mais otimizada disponível
+    // ou que essa textura específica é fundamental para a qualidade visual e não pode ser reduzida.
+    const grassTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg');
+    
+    // OTIMIZAÇÃO 2: Ajuste da Repetição da Textura (reduz tiling visível sem aumentar a resolução da textura)
+    // Reduzimos a repetição para 2x2. Se 4x1 era a intenção, a manutenção dependeria
+    // de quão "repetitiva" a textura da grama original parece. Para um plano, 2x2 pode ser um bom equilíbrio.
+    grassTexture.wrapS = THREE.RepeatWrapping;
+    grassTexture.wrapT = THREE.RepeatWrapping;
+    grassTexture.repeat.set(2, 2); 
+    // OTIMIZAÇÃO 3: Filtragem de Textura (Mipmapping e Anisotropic Filtering)
+    // Mipmapping ajuda a usar versões de menor resolução da textura para objetos distantes.
+    // Anisotropic Filtering melhora a qualidade da textura em ângulos oblíquos, mas tem um custo.
+    // Desabilitar anisotropic filtering (se já estiver ativado globalmente ou na textura) pode ajudar,
+    // ou definir um valor menor. Por padrão, THREE.js já usa mipmaps.
+    // grassTexture.minFilter = THREE.LinearMipmapLinearFilter; // Geralmente padrão e bom
+    // grassTexture.anisotropy = 1; // Pode ser definido para 1 para menor custo, ou deixar o padrão (geralmente renderer.capabilities.getMaxAnisotropy())
+    
+    // OTIMIZAÇÃO 4: Material mais simples para o chão
+    // MeshBasicMaterial é mais leve que MeshPhongMaterial se você não precisa de reflexos especulares.
+    // No caso da grama, um material mais simples pode ser suficiente.
+    // Se a iluminação precisar ser mais realista, MeshStandardMaterial ou MeshLambertMaterial (sem especular)
+    // podem ser alternativas mais leves que Phong, mas ainda com iluminação.
+    const groundMaterial = new THREE.MeshBasicMaterial({ map: grassTexture }); 
+    const groundGeometry = new THREE.PlaneGeometry(terrainWidth, terrainDepth);
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = -Math.PI / 2; // Rotaciona para ficar horizontal
+    ground.position.y = 0;
+    
+    // OTIMIZAÇÃO 5: Geometrias e Materiais Reutilizáveis
+    // Você já está fazendo isso com o wallMaterial, o que é ótimo.
+    // Considere para outras partes do seu jogo.
+
+    // OTIMIZAÇÃO 6: Compartilhamento de Geometrias para os muros
+    // Todos os muros têm a mesma altura e espessura. Podemos criar uma geometria base para muros laterais e outra para muros frontais/traseiros,
+    // e reutilizá-las. Isso reduz a memória e o trabalho da GPU.
+    const wallMaterial = new THREE.MeshPhongMaterial({ color: 0x808080 }); // Cinza (material de concreto)
+
+    // Geometria para muros frontais e traseiros (reutilizada)
+    const horizontalWallGeometry = new THREE.BoxGeometry(terrainWidth, wallHeight, wallThickness);
+    
+    // Muro frontal (20m de comprimento)
+    const frontWall = new THREE.Mesh(horizontalWallGeometry, wallMaterial);
+    frontWall.position.set(0, wallHeight / 2, -terrainDepth / 2);
+    terrainGroup.add(frontWall);
+
+    // Muro traseiro (20m de comprimento)
+    const backWall = new THREE.Mesh(horizontalWallGeometry, wallMaterial);
+    backWall.position.set(0, wallHeight / 2, terrainDepth / 2);
+    terrainGroup.add(backWall);
+
+    // Geometria para muros laterais (reutilizada)
+    const verticalWallGeometry = new THREE.BoxGeometry(wallThickness, wallHeight, terrainDepth);
+
+    // Muro lateral esquerdo (8m de largura)
+    const leftWall = new THREE.Mesh(verticalWallGeometry, wallMaterial);
+    leftWall.position.set(-terrainWidth / 2, wallHeight / 2, 0);
+    terrainGroup.add(leftWall);
+
+    // OTIMIZAÇÃO 7: Adição do Muro lateral direito que estava faltando
+    // Mantendo a consistência do terreno fechado.
+    const rightWall = new THREE.Mesh(verticalWallGeometry, wallMaterial);
+    rightWall.position.set(terrainWidth / 2, wallHeight / 2, 0);
+    terrainGroup.add(rightWall);
+
+    // OTIMIZAÇÃO 8: Order Independente de Adição de Objetos
+    // A ordem de adição ao terrainGroup não afeta a performance, mas é bom manter a clareza.
+    terrainGroup.add(ground); // Adiciona o chão por último para melhor organização visual do código.
+
+    return terrainGroup;
+}
+
+// Exporta a função para uso em outros arquivos (se necessário)
+// Otimização: Apenas exportar se estiver em um ambiente Node.js.
+// Em um navegador, `module` não é definido, então isso evita erros.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { createTerrain };
+}
+
+// OTIMIZAÇÃO 9: Adição de Névoa (Fog) - O que você pediu!
+// A névoa é adicionada à cena, não ao grupo de terreno. 
+// Ela esconde objetos distantes, reduzindo a necessidade de renderizar detalhes.
+// Para usar isso, você precisará adicionar algo como:
+/*
+    const scene = new THREE.Scene();
+    const fogColor = 0xcce0ff; // Cor do céu azul claro
+    const near = 10; // Distância onde o fog começa
+    const far = 50;  // Distância onde o fog é totalmente opaco
+    scene.fog = new THREE.Fog(fogColor, near, far);
+*/
+
+// OTIMIZAÇÃO 10: Níveis de Detalhe (LOD - Level of Detail) - Conceitual
+// Para cenários maiores e mais complexos, o LOD é crucial.
+// Você criaria versões simplificadas de objetos para distâncias maiores.
+// Ex: new THREE.LOD(); lod.add(highDetailMesh, 0); lod.add(lowDetailMesh, 100);
+// Não aplicado diretamente aqui, pois é para objetos mais complexos.
+
+// OTIMIZAÇÃO 11: Gerenciamento de Iluminação
+// Luzes complexas (shadows, muitas luzes) são caras.
+// Considere usar menos luzes, ou luzes mais simples (AmbientLight, HemisphereLight)
+// em vez de muitas PointLights ou SpotLights se não forem essenciais.
+// Se sombras forem cruciais, otimize as configurações (map size, frustum).
 // Configuração da cena
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 1000);
