@@ -1,11 +1,15 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.132.2';
 
 // scene.js
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
+// Add fog system
+scene.fog = new THREE.Fog(0x87CEEB, 150, 600); // Fog matches sky color, starts at 150, ends at 600
 
 // Posição inicial da câmera
 camera.position.set(0, 50, 100);
@@ -14,7 +18,7 @@ camera.lookAt(0, 0, 0);
 // Fundo gradiente (otimizado)
 function createGradientTexture() {
     const canvas = document.createElement("canvas");
-    canvas.width = 128;  // Reduzido para melhor performance
+    canvas.width = 128;
     canvas.height = 128;
     const ctx = canvas.getContext("2d");
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
@@ -36,7 +40,7 @@ scene.add(sunLight);
 
 // Chão otimizado
 const textureLoader = new THREE.TextureLoader();
-const groundGeometry = new THREE.PlaneGeometry(1200, 1200, 1, 1); // Menos polígonos
+const groundGeometry = new THREE.PlaneGeometry(1200, 1200, 1, 1);
 const groundMaterial = new THREE.MeshStandardMaterial({ 
     color: 0x3a7d3a,
     roughness: 0.9
@@ -93,20 +97,18 @@ function createRunwayStripes(runwayX, runwayZ, length, count, isVertical) {
 createRunwayStripes(0, -46.5, 100, 10, true);
 createRunwayStripes(-400, 400, 100, 10, false);
 
-// Lagos com geometria compartilhada
-const lakeGeometry = new THREE.CircleGeometry(1, 24); // Base para instâncias
-const lakeMaterial = new THREE.MeshStandardMaterial({
+// Lagos com material simplificado e menos reflexo
+const lakeGeometry = new THREE.CircleGeometry(1, 16); // Reduced segments for performance
+const lakeMaterial = new THREE.MeshBasicMaterial({
     color: 0x0077be,
     transparent: true,
-    opacity: 0.85,
-    roughness: 0.1,
-    metalness: 0.9,
+    opacity: 0.75, // Slightly reduced opacity
     side: THREE.DoubleSide
 });
 
 const lakePositions = [
-    { x: -130, z: -130, size: 60 },
-    { x: 165, z: -10, size: 45 },
+    { x: 240, z: -80, size: 60 },
+    { x: 165, z: -20, size: 45 },
     { x: -150, z: 450, size: 70 },
     { x: 250, z: -200, size: 40 },
     { x: -300, z: 150, size: 55 },
@@ -141,11 +143,10 @@ function createTreeInstance(x, z, height = 8) {
 }
 
 // Criar árvores com detecção de colisão otimizada
-for (let i = 0; i < 30; i++) { // Quantidade reduzida
+for (let i = 0; i < 30; i++) {
     const x = Math.random() * 800 - 400;
     const z = Math.random() * 800 - 400;
     
-    // Verificação otimizada de posição
     const inRunway1 = Math.abs(x) < 50 && Math.abs(z + 46.5) < 60;
     const inRunway2 = Math.abs(x + 400) < 50 && Math.abs(z - 400) < 60;
     
@@ -197,7 +198,7 @@ function createCloudCluster(x, y, z, size) {
 }
 
 const clouds = [];
-for (let i = 0; i < 15; i++) { // Quantidade reduzida
+for (let i = 0; i < 15; i++) {
     clouds.push(createCloudCluster(
         Math.random() * 800 - 400,
         80 + Math.random() * 40,
