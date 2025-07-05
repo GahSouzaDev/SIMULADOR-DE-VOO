@@ -9,7 +9,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Add fog system
-scene.fog = new THREE.Fog(0x87CEEB, 150, 600); // Fog matches sky color, starts at 150, ends at 600
+scene.fog = new THREE.Fog(0x87CEEB, 140, 500); // Fog matches sky color, starts at 150, ends at 600
 
 // Posição inicial da câmera
 camera.position.set(0, 50, 100);
