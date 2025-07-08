@@ -1,5 +1,7 @@
 import { scene, camera, renderer, clouds } from './scene.js';
 import { buildings } from './buildings.js';
+// Importe as missões do novo arquivo
+import { missions } from './missions.js';
 
 // Configurar o ouvinte de áudio global
 const listener = new THREE.AudioListener();
@@ -7,6 +9,46 @@ camera.add(listener);
 
 // Variável global que armazena o módulo do avião atualmente carregado
 let currentPlaneModule = null;
+// --- ESTADO DA MISSÃO ---
+let currentMission = null;
+let missionObjects = [];
+let score = 0;
+let collectedCount = 0;
+let missionActive = false;
+
+// --- SONS PARA EVENTOS DE MISSÃO E MÚSICA DE FUNDO ---
+const audioLoader = new THREE.AudioLoader();
+let correctSound, wrongSound, missionCompleteSound;
+let backgroundMusic; // Variável para a música de fundo
+
+// Carregar os sons e música
+audioLoader.load('correct.mp3', function(buffer) {
+    correctSound = new THREE.Audio(listener);
+    correctSound.setBuffer(buffer);
+    correctSound.setVolume(0.3);
+});
+
+audioLoader.load('wrong.mp3', function(buffer) {
+    wrongSound = new THREE.Audio(listener);
+    wrongSound.setBuffer(buffer);
+    wrongSound.setVolume(2);
+});
+
+audioLoader.load('mission_complete.mp3', function(buffer) {
+    missionCompleteSound = new THREE.Audio(listener);
+    missionCompleteSound.setBuffer(buffer);
+    missionCompleteSound.setVolume(1);
+});
+
+// Carregar e tocar música de fundo em loop
+audioLoader.load('background-music.mp3', function(buffer) {
+    backgroundMusic = new THREE.Audio(listener);
+    backgroundMusic.setBuffer(buffer);
+    backgroundMusic.setLoop(true); // Repetir continuamente
+    backgroundMusic.setVolume(0.2); // Volume ajustável
+    backgroundMusic.play(); // Iniciar a reprodução
+});
+
 
 // --- FUNÇÕES DE MANIPULAÇÃO DE COOKIES ---
 function setCookie(name, value, days) {
@@ -80,6 +122,49 @@ async function loadPlane(planeFile) {
     }
 }
 
+async function startMission(missionId) {
+    // Limpar objetos da missão anterior
+    missionObjects.forEach(obj => scene.remove(obj));
+    missionObjects = [];
+
+    // Encontrar a missão pelo ID
+    currentMission = missions[missionId]; // Agora usando índice direto
+    
+    if (!currentMission) {
+        console.error(`Missão com ID ${missionId} não encontrada.`);
+        return;
+    }
+
+    missionActive = true;
+    score = 0;
+    collectedCount = 0;
+
+    // Carregar o avião específico da missão
+    await loadPlane(currentMission.plane);
+
+    // Gerar e adicionar os objetos da missão à cena
+    missionObjects = currentMission.itemGenerator();
+    missionObjects.forEach(obj => scene.add(obj));
+
+    // Atualizar a interface
+    document.getElementById('no-plane-selected').style.display = 'none';
+    document.getElementById('mission-hud').style.display = 'block';
+    document.getElementById('mission-title').textContent = currentMission.title;
+    document.getElementById('mission-description').textContent = currentMission.description;
+    document.getElementById('mission-target').textContent = currentMission.targetCount;
+    updateMissionHUD();
+}
+
+// Disponibilizar a função globalmente para ser chamada pelo HTML
+window.startMission = startMission;
+
+// --- NOVA FUNÇÃO PARA ATUALIZAR O HUD DA MISSÃO ---
+function updateMissionHUD() {
+    if (!missionActive) return;
+    document.getElementById('mission-score').textContent = score;
+    document.getElementById('mission-collected').textContent = collectedCount;
+}
+
 // --- INICIALIZAÇÃO DO JOGO ---
 const savedPlane = getCookie('selectedPlane');
 if (savedPlane) {
@@ -96,12 +181,31 @@ let isCameraBehind = true;
 // --- EVENTOS DE TECLADO ---
 document.addEventListener('keydown', (event) => {
     if (!currentPlaneModule) return;
-    switch (event.key) {
+    
+    // Converter a tecla para minúscula para funcionar com Caps Lock ativado
+    const key = event.key.toLowerCase();
+    
+    switch (key) {
         case 'w': keys.w = true; break;
         case 's': keys.s = true; break;
         case 'a': keys.a = true; break;
         case 'd': keys.d = true; break;
         case ' ': currentPlaneModule.setIsAccelerating(true); break;
+    }
+});
+
+document.addEventListener('keyup', (event) => {
+    if (!currentPlaneModule) return;
+    
+    // Converter a tecla para minúscula para funcionar com Caps Lock ativado
+    const key = event.key.toLowerCase();
+    
+    switch (key) {
+        case 'w': keys.w = false; break;
+        case 's': keys.s = false; break;
+        case 'a': keys.a = false; break;
+        case 'd': keys.d = false; break;
+        case ' ': currentPlaneModule.setIsAccelerating(false); break;
     }
 });
 
@@ -138,14 +242,25 @@ function resetGame() {
     keys = { w: false, s: false, a: false, d: false };
     currentPlaneModule.setIsAccelerating(false);
     renderer.domElement.style.filter = 'none';
-    renderer.render(scene, camera, position); // Corrigido: usar 'camera' em vez de 'position'
+    renderer.render(scene, camera);
     
+    // Se uma missão estava ativa, reinicia ela
+    if (missionActive && currentMission) {
+        startMission(currentMission.id);
+    } else {
+        // Se não, esconde o HUD da missão
+        missionActive = false;
+        document.getElementById('mission-hud').style.display = 'none';
+        document.getElementById('no-plane-selected').style.display = 'block';
+    }
 }
 
 // --- FUNÇÃO PARA ATUALIZAR A CÂMERA ---
 function updateCamera() {
     if (!currentPlaneModule) return;
+    
     if (isCameraBehind) {
+        // Modo atrás do avião
         const distanceBehind = 10;
         const heightOffset = 5;
         const yaw = currentPlaneModule.plane.rotation.y;
@@ -159,20 +274,27 @@ function updateCamera() {
             currentPlaneModule.plane.position.z + cameraOffsetZ
         );
     } else {
+        // Modo de câmera livre (fixa)
         camera.position.set(
             currentPlaneModule.plane.position.x,
             currentPlaneModule.plane.position.y + 5,
             currentPlaneModule.plane.position.z + 10
         );
     }
+    
     camera.lookAt(currentPlaneModule.plane.position);
 }
 
 // --- FUNÇÃO DE ANIMAÇÃO ---
 function animate() {
     requestAnimationFrame(animate);
-    if (!currentPlaneModule) return;
-
+    
+    // Se nenhum avião estiver carregado, não faz nada.
+    if (!currentPlaneModule) {
+        renderer.render(scene, camera);
+        return;
+    }
+    
     // Controle do som
     const planeSound = currentPlaneModule.plane.userData.sound;
     if (planeSound) {
@@ -343,8 +465,54 @@ function animate() {
         cloud.position.x += 0.01;
         if (cloud.position.x > 100) cloud.position.x = -100;
     });
-
+    
+    // --- ATUALIZAR CÂMERA A CADA FRAME ---
     updateCamera();
+
+    // --- LÓGICA DE COLISÃO COM OBJETOS DA MISSÃO ---
+    if (missionActive) {
+        const planeBox = currentPlaneModule.planeBox.clone().setFromObject(currentPlaneModule.plane);
+        
+        for (let i = missionObjects.length - 1; i >= 0; i--) {
+            const missionObj = missionObjects[i];
+            missionObj.boundingBox.setFromObject(missionObj);
+
+            if (planeBox.intersectsBox(missionObj.boundingBox)) {
+                if (missionObj.userData.isCorrect) {
+                    // Tocar som de acerto
+                    if (correctSound) {
+                        correctSound.play();
+                    }
+                    score += 10;
+                    collectedCount++;
+                } else {
+                    // Tocar som de erro
+                    if (wrongSound) {
+                        wrongSound.play();
+                    }
+                    score -= 5;
+                }
+                
+                scene.remove(missionObj);
+                missionObjects.splice(i, 1);
+                
+                updateMissionHUD();
+                
+                if (collectedCount >= currentMission.targetCount) {
+                    missionActive = false;
+                    // Tocar som de missão completa
+                    if (missionCompleteSound) {
+                        missionCompleteSound.play();
+                    }
+                    alert(`Parabéns! Você completou a '${currentMission.title}' com ${score} pontos!`);
+                    document.getElementById('mission-hud').style.display = 'none';
+                    document.getElementById('no-plane-selected').innerHTML = `<h1>Missão Concluída!</h1> <p>Selecione a próxima.</p>`;
+                    document.getElementById('no-plane-selected').style.display = 'block';
+                }
+                break;
+            }
+        }
+    }
 
     const altitudeDisplay = document.getElementById('altitude');
     const speedDisplay = document.getElementById('speed');
@@ -547,6 +715,7 @@ function toggleDropdown(event) {
     event.preventDefault();
     event.stopPropagation();
     if (planeSelector) planeSelector.classList.toggle('active');
+    
 }
 
 function closeDropdown(event) {
@@ -558,12 +727,14 @@ function closeDropdown(event) {
 if (dropdownBtn) {
     dropdownBtn.addEventListener('click', toggleDropdown);
     dropdownBtn.addEventListener('touchstart', toggleDropdown);
+    
 }
 
 planeOptions.forEach(option => {
     option.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
+        planeSelector.classList.remove('active');
         const planeFile = option.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
         if (planeFile) {
             loadPlane(planeFile);
@@ -585,4 +756,3 @@ document.addEventListener('click', closeDropdown);
 document.addEventListener('touchstart', closeDropdown);
 
 window.loadPlane = loadPlane;
-

@@ -189,7 +189,7 @@ camera.lookAt(0, 0, 0); // Olhar para o centro do mapa
 let animationProgress = 0;
 const animationDuration = 3000; // 3 segundos
 const startPosition = { x: 0, y: 150, z: 200 };
-const endPosition = { x: 0, y: 10, z: 10 };
+const endPosition = { x: 0, y: 10, z: 100 };
 let animationActive = true;
 
 // Função de easing quadrático para animação suave

@@ -8,16 +8,36 @@ canvas {
     height: 100vh;
     display: block;
 }
+/* style.css */
 
+/* ... (seu CSS existente) ... */
+
+#mission-hud {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid white;
+}
+
+#mission-title {
+    font-weight: bold;
+    font-size: 22px;
+    color: #ffc107; /* Amarelo */
+}
+
+#mission-description {
+    font-style: italic;
+    margin-bottom: 5px;
+}
 /* Estilo para o HUD (Heads-Up Display) */
 #hud {
     position: absolute;
+    max-width: 400px;
     top: 10px;
     left: 10px;
     color: white;
     font-family: Arial, sans-serif;
     font-size: 18px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.309);
     padding: 10px;
     border-radius: 5px;
     z-index: 20; /* Acima dos controles */
@@ -70,7 +90,7 @@ canvas {
     border: none;
     width: 100%;
     text-align: left;
-    font-size: 25px;
+    font-size: 20px;
     background-color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: background-color 0.3s;

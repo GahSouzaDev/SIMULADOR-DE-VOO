@@ -2,27 +2,33 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Simulador de Voo</title>
+    <title>Simulador de Voo Pedagógico</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="plane-selector">
-        <button class="dropdown-btn">Selecionar Avião ▼</button>
+        <button class="dropdown-btn">Selecionar Missão ▼</button>
         <div class="dropdown-content">
-            <button onclick="loadPlane('plane.js')">Cessna</button>
-            <button onclick="loadPlane('plane-bi-motor.js')">ATR</button>
-            <button onclick="loadPlane('plane-jato.js')">Jato Caça</button>
-            <button onclick="loadPlane('plane-sr71.js')">SR-71</button>
-            <button onclick="loadPlane('plane-boing.js')">Boeing-A380</button>
-            <button onclick="loadPlane('plane-ovni.js')">OVNI</button>
-        </div>
+            <button onclick="startMission(0)">Missão 1: A Letra 'A'</button>
+            <button onclick="startMission(1)">Missão 2: A Letra 'E'</button>
+            <button onclick="startMission(2)">Missão 3: A Letra 'I'</button>
+            <button onclick="startMission(3)">Missão 4: A Letra 'O'</button>
+            <button onclick="startMission(4)">Missão 5: A Letra 'U'</button>
+            <button onclick="startMission(5)">Missão 6: FINAL 'ÃO'</button>
+            </div>
     </div>
+
     <div id="hud">
         <div>Altura: <span id="altitude">0</span> m</div>
-        <div>Velocidade: <span id="speed">0</span> km/h</div>       
+        <div>Velocidade: <span id="speed">0</span> km/h</div>
+        <div id="mission-hud" style="display: none;">
+            <div id="mission-title"></div>
+            <div id="mission-description"></div>
+            <div>Pontos: <span id="mission-score">0</span></div>
+            <div>Coletados: <span id="mission-collected">0</span> / <span id="mission-target">0</span></div>
+        </div>
     </div>
    
-    <!-- Botão de alternância da câmera -->
     <button id="camera-toggle-btn" class="camera-toggle">↻</button>
     <div id="controls" class="mobile-controls">
         <div class="direction-controls">
@@ -34,10 +40,11 @@
             <button id="accelerator-btn">Acelerador</button>
         </div>
     </div>
-    <div id="no-plane-selected"><h1>Selecione um avião para começar</h1></div>
+    <div id="no-plane-selected"><h1>Selecione uma missão para começar</h1></div>
   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    <script type="module" src="missions.js"></script> 
     <script type="module" src="controls.js"></script>
 </body>
 </html>
