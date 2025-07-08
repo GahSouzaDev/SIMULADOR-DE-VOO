@@ -730,25 +730,20 @@ if (dropdownBtn) {
     
 }
 
+// Substitua o trecho de código do planeOptions por este:
 planeOptions.forEach(option => {
     option.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
         planeSelector.classList.remove('active');
-        const planeFile = option.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
-        if (planeFile) {
-            loadPlane(planeFile);
-            if (planeSelector) planeSelector.classList.remove('active');
-        }
+        option.onclick(); // Executa a função onclick original
     });
+    
     option.addEventListener('touchstart', (event) => {
         event.preventDefault();
         event.stopPropagation();
-        const planeFile = option.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
-        if (planeFile) {
-            loadPlane(planeFile);
-            if (planeSelector) planeSelector.classList.remove('active');
-        }
+        planeSelector.classList.remove('active');
+        option.onclick(); // Executa a mesma função do click
     });
 });
 
