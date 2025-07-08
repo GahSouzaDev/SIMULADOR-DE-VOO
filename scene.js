@@ -1,4 +1,4 @@
-// Configuração da cena
+// Configuração da cena - otimizado para desewmpenho
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
@@ -25,7 +25,7 @@ function createGradientTexture() {
 }
 
 // Luz ambiente
-const light = new THREE.AmbientLight(0xffffff, 0.8);
+const light = new THREE.AmbientLight(0xffffff, 1);
 scene.add(light);
 
 // Chão
@@ -140,7 +140,7 @@ lakeShape3.moveTo(0, 0);
 lakeShape3.bezierCurveTo(130, -140, 100, 50, 60, 60);
 lakeShape3.bezierCurveTo(250, 120, -210, 130, -150, 50);
 lakeShape3.bezierCurveTo(-100, 20, -180, -150, 0, 0);
-const lakeGeometry3 = new THREE.ShapeGeometry(lakeShape3); // Corrigido para usar lakeShape3
+const lakeGeometry3 = new THREE.ShapeGeometry(lakeShape3);
 const waterTexture3 = textureLoader.load('https://threejs.org/examples/textures/waternormals.jpg');
 waterTexture3.wrapS = waterTexture3.wrapT = THREE.RepeatWrapping;
 waterTexture3.repeat.set(1.2, 1.2);
@@ -180,6 +180,65 @@ for (let i = 0; i < cloudCount; i++) {
     const z = Math.random() * 200 - 100; // Intervalo de -100 a 100 no eixo Z
     clouds.push(createCloud(x, z));
 }
+
+// Configurar a câmera para o preview inicial
+camera.position.set(0, 150, 200); // Posição elevada para ver o mapa
+camera.lookAt(0, 0, 0); // Olhar para o centro do mapa
+
+// Configuração da animação da câmera (sem TWEEN.js)
+let animationProgress = 0;
+const animationDuration = 3000; // 3 segundos
+const startPosition = { x: 0, y: 150, z: 200 };
+const endPosition = { x: 0, y: 10, z: 10 };
+let animationActive = true;
+
+// Função de easing quadrático para animação suave
+function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
+// Função de animação principal
+function animate(time) {
+    if (!animationActive) return; // Para a animação após 3 segundos
+
+    requestAnimationFrame(animate);
+
+    // Animação da câmera com easing quadrático
+    if (animationProgress < animationDuration) {
+        animationProgress += 16; // Aproximadamente 60 FPS
+        const t = Math.min(animationProgress / animationDuration, 1);
+        const easedT = easeInOutQuad(t); // Aplica easing quadrático
+        // Interpolação para a posição da câmera
+        camera.position.x = startPosition.x + (endPosition.x - startPosition.x) * easedT;
+        camera.position.y = startPosition.y + (endPosition.y - startPosition.y) * easedT;
+        camera.position.z = startPosition.z + (endPosition.z - startPosition.z) * easedT;
+        camera.lookAt(0, 0, 0); // Manter o foco no centro do mapa
+
+        // Transição suave do nevoeiro
+        const fogNear = 200 + (100 - 200) * easedT;
+        const fogFar = 1000 + (600 - 1000) * easedT;
+        scene.fog = new THREE.Fog(0x87CEEB, fogNear, fogFar);
+
+        if (t === 1) {
+            // Finaliza a animação e desativa o loop
+            animationActive = false;
+            scene.fog = new THREE.Fog(0x87CEEB, 100, 600); // Garante o nevoeiro final
+            renderer.render(scene, camera); // Renderização final
+        }
+    }
+
+    renderer.render(scene, camera);
+}
+
+// Iniciar a animação
+animate();
+
+// Ajustar a janela ao redimensionar
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 // Exportar elementos necessários
 export { scene, camera, renderer, clouds };

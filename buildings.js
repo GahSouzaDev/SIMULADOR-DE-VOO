@@ -443,7 +443,6 @@ function createTelecomTower(x, z) {
 function createMountain(x, z, width = 100, height = 60, detail = 50) {
     const group = new THREE.Group();
     
-    // Criar geometria da montanha
     const geometry = new THREE.ConeGeometry(width / 2, height, 8);
     const material = new THREE.MeshStandardMaterial({ 
         color: 0x5d4037,
@@ -454,18 +453,16 @@ function createMountain(x, z, width = 100, height = 60, detail = 50) {
     mountain.rotation.y = Math.random() * Math.PI;
     mountain.position.y = height / 2;
     
-    // Adicionar detalhes (rochas)
     const rockMaterial = new THREE.MeshStandardMaterial({ color: 0x7f7f7f });
     for (let i = 0; i < 30; i++) {
         const rockSize = 2 + Math.random() * 5;
         const rockGeometry = new THREE.DodecahedronGeometry(rockSize, 0);
         const rock = new THREE.Mesh(rockGeometry, rockMaterial);
         
-        // Posição aleatória na montanha
         const angle = Math.random() * Math.PI * 2;
         const distance = Math.random() * (width / 3);
         const yPos = Math.random() * height * 0.7;
-        
+            
         rock.position.set(
             Math.cos(angle) * distance,
             yPos,
@@ -477,19 +474,26 @@ function createMountain(x, z, width = 100, height = 60, detail = 50) {
     
     group.add(mountain);
     
-    // Adicionar neve no topo
     const snowGeometry = new THREE.SphereGeometry(width / 5, 16, 16);
     const snowMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
     const snow = new THREE.Mesh(snowGeometry, snowMaterial);
     snow.position.y = height * 0.8;
     group.add(snow);
     
-    // Posicionamento
     group.position.set(x, 0, z);
     
-    // Calcular bounding box para colisão
     const bbox = new THREE.Box3().setFromObject(group);
-    group.boundingBox = bbox;
+    const collisionScale = 0.7;
+    const center = new THREE.Vector3();
+    bbox.getCenter(center);
+    const size = new THREE.Vector3();
+    bbox.getSize(size);
+    size.multiplyScalar(collisionScale);
+    const newBbox = new THREE.Box3(
+        center.clone().sub(size.clone().multiplyScalar(0.5)),
+        center.clone().add(size.clone().multiplyScalar(0.5))
+    );
+    group.boundingBox = newBbox;
     
     scene.add(group);
     return group;
